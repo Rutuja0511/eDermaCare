@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "665520914074",
+    "project_id": "edermacareproject",
+    "storage_bucket": "edermacareproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:665520914074:android:5e15a23d35afe660896923",
+        "android_client_info": {
+          "package_name": "com.example.edermacarelatestt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBR-E9hYZSLQ7EJMGhu-bHlQs2W8qUuHL0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
