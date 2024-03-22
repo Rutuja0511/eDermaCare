@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".SignupTabPatient">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="70dp"
+                android:text="We are the premier platform for detecting skin issues and scheduling consultations with qualified doctors"
+                android:textColor="@color/darkgray"
+                android:textSize="22sp"
+                android:textAlignment="center"/>
+
+            <Button
+                android:id="@+id/login_button_patient"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:layout_marginTop="55dp"
+                android:fontFamily="@font/inter_extrabold"
+                android:layout_gravity="center"
+                android:text="Login"
+                android:textSize="30sp"
+                app:cornerRadius="20dp"/>
+
+            <TextView
+                android:id="@+id/P_SignupRedirectText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:text="Don't have account? Sign up"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
