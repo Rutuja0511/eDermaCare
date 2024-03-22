@@ -22,7 +22,7 @@
             android:orientation="vertical"
             android:layout_gravity="center_horizontal"
             android:padding="24dp"
-            android:background="@drawable/lavender_border">
+            android:background="@drawable/light_grey_border">
 
             <TextView
                 android:layout_width="match_parent"
@@ -37,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:id="@+id/login_username"
-                android:background="@drawable/lavender_border"
+                android:background="@drawable/light_grey_border"
                 android:layout_marginTop="40dp"
                 android:padding="8dp"
                 android:hint="Username"
@@ -49,7 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:id="@+id/login_password"
-                android:background="@drawable/lavender_border"
+                android:background="@drawable/light_grey_border"
                 android:layout_marginTop="40dp"
                 android:padding="8dp"
                 android:hint="Password"
