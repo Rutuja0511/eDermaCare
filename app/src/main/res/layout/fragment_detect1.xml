@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".detectFragment"
+    tools:context=".detectFragment1"
     android:paddingVertical="10dp"
     android:paddingHorizontal="18dp"
     >
