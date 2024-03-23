@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single"
+        android:id="@+id/group1">
+
+        <item android:id="@+id/navhome"
+            android:title="@string/home"
+            android:icon="@drawable/ic_baseline_person_24"/>
+
+
+
+        <item android:id="@+id/navhs"
+            android:title="@string/personal_details"
+            android:icon="@drawable/ic_baseline_person_24"/>
+
+
+
+    </group>
+    <group android:checkableBehavior="single"
+        android:id="@+id/group2">
+
+
+
+
+
+        <item android:id="@+id/navh"
+            android:title="@string/detection"
+            android:icon="@drawable/ic_baseline_zoom_in_24"/>
+        <item android:id="@+id/navh2"
+            android:title="@string/history"
+            android:icon="@drawable/ic_baseline_history_24"/>
+        <item android:id="@+id/navh3"
+            android:title="@string/consultation"
+            android:icon="@drawable/ic_baseline_medical_services_24"/>
+
+
+    </group>
+
+</menu>
