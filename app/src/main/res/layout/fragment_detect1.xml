@@ -47,7 +47,7 @@
 
 
         <Button
-            android:id="@+id/upload"
+            android:id="@+id/Process"
             android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="7dp"
@@ -78,13 +78,14 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="120dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="48dp"
-        android:layout_marginEnd="123dp"
-        android:layout_marginBottom="103dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="150dp"
         android:text="@string/result"
         android:textColor="#0097A7"
-        android:textSize="33sp" />
+        android:gravity="center_vertical"
+        android:textSize="20sp" />
 
 
 </RelativeLayout>
