@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">eDermaCareLatestt</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="select_image">SELECT IMAGE</string>
+    <string name="process">Process</string>
+    <string name="reset">Reset</string>
+    <string name="result">Result</string>
+    <string name="todo">TODO</string>
+    <string name="home">Home</string>
+    <string name="personal_details">personal_details</string>
+    <string name="detection">detection</string>
+    <string name="history">history</string>
+    <string name="consultation">consultation</string>
+    <string name="e_dermacare">e_dermacare</string>
+    <string name="todo12">todo12</string>
+    <string name="aakanksha_karambele">aakanksha_karambele</string>
+    <string name="home_fragment">Home Fragment</string>
 </resources>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".detectFragment1"
+    android:paddingVertical="10dp"
+    android:paddingHorizontal="18dp"
+    >
+
+    <ImageView
+        android:id="@+id/IVPreviewImage"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_below="@id/BSelectImage"
+        android:layout_alignStart="@+id/BSelectImage"
+        android:layout_alignEnd="@+id/BSelectImage"
+        android:layout_marginStart="-86dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="-86dp"
+        android:background="@drawable/ic_baseline_image_24"
+        android:contentDescription="@string/todo" />
+
+    <Button
+        android:id="@+id/BSelectImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/roud2"
+        android:drawableLeft="@drawable/ic_baseline_upload_24"
+        android:text="@string/select_image"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:id="@+id/linelayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/IVPreviewImage"
+        android:layout_alignStart="@+id/IVPreviewImage"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp">
+
+
+        <Button
+            android:id="@+id/Process"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="7dp"
+            android:background="@drawable/roud2"
+            android:text="@string/process"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/Reset"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+
+            android:background="@drawable/roud2"
+            android:text="@string/reset"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="185dp"
+        android:layout_height="107dp"
+
+
+        android:layout_below="@+id/linelayout"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="150dp"
+        android:text="@string/result"
+        android:textColor="#0097A7"
+        android:gravity="center_vertical"
+        android:textSize="20sp" />
+
+
+</RelativeLayout>
