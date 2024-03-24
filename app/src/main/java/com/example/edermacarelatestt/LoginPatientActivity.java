@@ -52,6 +52,7 @@ public class LoginPatientActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+
     private void loginUser() {
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
@@ -91,6 +92,9 @@ public class LoginPatientActivity extends AppCompatActivity {
                         Toast.makeText(LoginPatientActivity.this, "An error occurred. Please try again later.", Toast.LENGTH_SHORT).show();
                     }
                 });
+
+        Intent intent = new Intent(LoginPatientActivity.this, Activitydash.class);
+        startActivity(intent);
     }
 
     public static String hashPassword(String password) {

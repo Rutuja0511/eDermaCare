@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Cities in Anantapur District -->
+    <string-array name="cities_anantapur">
+        <item>Anantapur City</item>
+        <item>Dharmavaram</item>
+        <item>Guntakal</item>
+        <item>Hindupur</item>
+        <!-- Add more cities for Anantapur as needed -->
+    </string-array>
+
+    <!-- Cities in Chittoor District -->
+    <string-array name="cities_chittoor">
+        <item>Chittoor City</item>
+        <item>Madanapalle</item>
+        <item>Tirupati</item>
+        <item>Srikalahasti</item>
+        <!-- Add more cities for Chittoor as needed -->
+    </string-array>
+
+    <!-- Cities in East Godavari District -->
+    <string-array name="cities_east_godavari">
+        <item>Kakinada</item>
+        <item>Rajahmundry</item>
+        <item>Amalapuram</item>
+        <item>Pithapuram</item>
+        <!-- Add more cities for East Godavari as needed -->
+    </string-array>
+
+    <!-- Cities in Guntur District -->
+    <string-array name="cities_guntur">
+        <item>Guntur City</item>
+        <item>Tenali</item>
+        <item>Narasaraopet</item>
+        <item>Mangalagiri</item>
+        <!-- Add more cities for Guntur as needed -->
+    </string-array>
+
+    <!-- Cities in Kadapa District -->
+    <string-array name="cities_kadapa">
+        <item>Kadapa (YSR) City</item>
+        <item>Proddatur</item>
+        <item>Rajampet</item>
+        <item>Jammalamadugu</item>
+        <!-- Add more cities for Kadapa as needed -->
+    </string-array>
+
+    <!-- Cities in Krishna District -->
+    <string-array name="cities_krishna">
+        <item>Vijayawada</item>
+        <item>Machilipatnam</item>
+        <item>Guntur</item>
+        <item>Gudivada</item>
+        <!-- Add more cities for Krishna as needed -->
+    </string-array>
+
+    <!-- Cities in Kurnool District -->
+    <string-array name="cities_kurnool">
+        <item>Kurnool City</item>
+        <item>Adoni</item>
+        <item>Nandyal</item>
+        <item>Yemmiganur</item>
+        <!-- Add more cities for Kurnool as needed -->
+    </string-array>
+
+    <!-- Cities in Nellore District -->
+    <string-array name="cities_nellore">
+        <item>Nellore City</item>
+        <item>Gudur</item>
+        <item>Kavali</item>
+        <item>Atmakur</item>
+        <!-- Add more cities for Nellore as needed -->
+    </string-array>
+
+    <!-- Cities in Prakasam District -->
+    <string-array name="cities_prakasam">
+        <item>Ongole</item>
+        <item>Chirala</item>
+        <item>Kandukur</item>
+        <item>Markapur</item>
+        <!-- Add more cities for Prakasam as needed -->
+    </string-array>
+
+    <!-- Cities in Srikakulam District -->
+    <string-array name="cities_srikakulam">
+        <item>Srikakulam City</item>
+        <item>Palasa</item>
+        <item>Amadalavalasa</item>
+        <item>Rajam</item>
+        <!-- Add more cities for Srikakulam as needed -->
+    </string-array>
+
+    <!-- Cities in Visakhapatnam District -->
+    <string-array name="cities_visakhapatnam">
+        <item>Visakhapatnam City</item>
+        <item>Gajuwaka</item>
+        <item>Anakapalle</item>
+        <item>Narsipatnam</item>
+        <!-- Add more cities for Visakhapatnam as needed -->
+    </string-array>
+
+    <!-- Cities in Vizianagaram District -->
+    <string-array name="cities_vizianagaram">
+        <item>Vizianagaram City</item>
+        <item>Salur</item>
+        <item>Bobbilli</item>
+        <item>Parvathipuram</item>
+        <!-- Add more cities for Vizianagaram as needed -->
+    </string-array>
+
+    <!-- Cities in West Godavari District -->
+    <string-array name="cities_west_godavari">
+        <item>Eluru</item>
+        <item>Bhimavaram</item>
+        <item>Tanuku</item>
+        <item>Tadepalligudem</item>
+        <!-- Add more cities for West Godavari as needed -->
+    </string-array>
+
+</resources>

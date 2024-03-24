@@ -41,15 +41,50 @@
                 android:textSize="30sp"
                 app:cornerRadius="20dp"/>
 
-            <TextView
-                android:id="@+id/P_SignupRedirectText"
+<!--            <TextView-->
+<!--                android:id="@+id/P_SignupRedirectText"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:text="Don't have account? Sign up"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="18sp" />-->
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:text="Don't have account? Sign up"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:id="@+id/RedirectTextforSignUpLandingPageP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="8dp"
+                    android:text="Don't have account?"
+                    android:textColor="@color/light_grey"
+                    android:textSize="19sp"
+                    />
+
+                <TextView
+                    android:id="@+id/signupredirectLandingPageP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="8dp"
+                    android:text="Sign Up"
+                    android:textColor="@color/lavender"
+                    android:textSize="19sp" />
+
+            </LinearLayout>
 
 
         </LinearLayout>
