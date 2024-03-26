@@ -38,7 +38,7 @@ public class PatientSignUpManager {
         datePickerDialog.show();
     }
 
-    public void signUp(Context context, String name, String email, String dob, String mobile, String hashedpassword) {
+    public void signUp(Context context, String name, String email, String dob, String mobile, String hashedpassword, String gender) {
         if (!name.isEmpty() && !email.isEmpty() && !hashedpassword.isEmpty() && !dob.isEmpty() && !mobile.isEmpty()) {
             // Create a Firestore instance
             FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -50,6 +50,7 @@ public class PatientSignUpManager {
             patientData.put("DOB", dob);
             patientData.put("Mobile", mobile);
             patientData.put("Password", hashedpassword);
+            patientData.put("Gender", gender);
 
             // Add patient data to Firestore
             db.collection("patients")

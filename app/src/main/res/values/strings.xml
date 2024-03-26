@@ -18,4 +18,13 @@
     <string name="todo12">todo12</string>
     <string name="aakanksha_karambele">aakanksha_karambele</string>
     <string name="home_fragment">Home Fragment</string>
+
+    <string-array name="gender_array">
+        <item>Select Gender</item>
+        <item>Male</item>
+        <item>Female</item>
+        <item>Others</item>
+        <item>Prefer not to say</item>
+    </string-array>
 </resources>
+
