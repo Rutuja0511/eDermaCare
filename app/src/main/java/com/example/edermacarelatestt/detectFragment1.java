@@ -1,5 +1,5 @@
 package com.example.edermacarelatestt;
-
+import android.content.res.AssetManager;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
@@ -13,16 +13,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.content.res.AssetManager;
-import android.widget.Toast;
-import com.example.edermacarelatestt.PatientSignUpManager;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-
-import org.tensorflow.lite.Interpreter;
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -34,9 +28,8 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
-import com.google.firebase.firestore.FirebaseFirestore;
-import java.util.HashMap;
-import java.util.Map;
+import org.tensorflow.lite.Interpreter;
+
 public class detectFragment1 extends Fragment {
 
     // UI elements
@@ -59,6 +52,7 @@ public class detectFragment1 extends Fragment {
                                     try {
                                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImageUri);
                                         IVPreviewImage.setImageBitmap(bitmap);
+                                        IVPreviewImage.setVisibility(View.VISIBLE); // Show image
                                         textView2.setVisibility(View.GONE); // Hide result initially
                                     } catch (IOException e) {
                                         e.printStackTrace();
@@ -79,12 +73,12 @@ public class detectFragment1 extends Fragment {
         textView2 = view.findViewById(R.id.textView2);
         Process = view.findViewById(R.id.Process);
         Reset = view.findViewById(R.id.Reset);
+        signUpManager = new PatientSignUpManager();
 
         // Handle button click to select image
         BSelectImage.setOnClickListener(v -> selectImage());
         Process.setOnClickListener(v -> processImage());
         Reset.setOnClickListener(v -> resetPage());
-        signUpManager = new PatientSignUpManager();
 
         return view;
     }
@@ -94,6 +88,7 @@ public class detectFragment1 extends Fragment {
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("image/*");
         selectImageLauncher.launch(Intent.createChooser(i, "Select Picture"));
+        IVPreviewImage.setVisibility(View.GONE);
     }
 
     // Method to process the selected image
@@ -136,19 +131,17 @@ public class detectFragment1 extends Fragment {
         }
     }
 
-
     // Method to reset the page to its initial state
     void resetPage() {
         IVPreviewImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_image_24)); // Reset image
+        IVPreviewImage.setVisibility(View.GONE); // Hide image
         textView2.setText(""); // Clear result
         textView2.setVisibility(View.GONE); // Hide result
     }
-
-    // Load the TFLite model from the assets folder
     private MappedByteBuffer loadModelFile() throws IOException {
         // Load model file here
         AssetManager assetManager = requireContext().getAssets();
-        AssetFileDescriptor fileDescriptor = assetManager.openFd("converted_model_1.tflite");
+        AssetFileDescriptor fileDescriptor = assetManager.openFd("modelling1.tflite");
         FileInputStream inputStream = new FileInputStream(fileDescriptor.getFileDescriptor());
         FileChannel fileChannel = inputStream.getChannel();
         long startOffset = fileDescriptor.getStartOffset();
