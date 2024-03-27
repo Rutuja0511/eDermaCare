@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.content.res.AssetManager;
+import android.widget.Toast;
+import com.example.edermacarelatestt.PatientSignUpManager;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
@@ -32,14 +34,18 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
-
+import com.google.firebase.firestore.FirebaseFirestore;
+import java.util.HashMap;
+import java.util.Map;
 public class detectFragment1 extends Fragment {
 
     // UI elements
     Button BSelectImage;
     Button Process;
+    Button Reset;
     ImageView IVPreviewImage;
     TextView textView2;
+    private PatientSignUpManager signUpManager;
 
     // Activity result launcher for selecting an image
     private final ActivityResultLauncher<Intent> selectImageLauncher =
@@ -53,7 +59,7 @@ public class detectFragment1 extends Fragment {
                                     try {
                                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImageUri);
                                         IVPreviewImage.setImageBitmap(bitmap);
-                                        processImage(bitmap);
+                                        textView2.setVisibility(View.GONE); // Hide result initially
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
@@ -72,11 +78,13 @@ public class detectFragment1 extends Fragment {
         IVPreviewImage = view.findViewById(R.id.IVPreviewImage);
         textView2 = view.findViewById(R.id.textView2);
         Process = view.findViewById(R.id.Process);
+        Reset = view.findViewById(R.id.Reset);
 
         // Handle button click to select image
         BSelectImage.setOnClickListener(v -> selectImage());
-        Process.setOnClickListener(v -> processImage(((BitmapDrawable) IVPreviewImage.getDrawable()).getBitmap()));
-
+        Process.setOnClickListener(v -> processImage());
+        Reset.setOnClickListener(v -> resetPage());
+        signUpManager = new PatientSignUpManager();
 
         return view;
     }
@@ -89,24 +97,27 @@ public class detectFragment1 extends Fragment {
     }
 
     // Method to process the selected image
-    void processImage(Bitmap bitmap) {
-
+    void processImage() {
         Bitmap imageBitmap = ((BitmapDrawable) IVPreviewImage.getDrawable()).getBitmap();
         // Load the TFLite model (assuming you have 'model.tflite' in the assets folder)
         try {
             Interpreter.Options options = new Interpreter.Options();
-// Add any options if needed, e.g., setNumThreads, setUseNNAPI, etc.
             Interpreter tflite = new Interpreter(loadModelFile(), options);
             int inputSize = 224; // Change this to match your model's input size
 
             // Preprocess the input image to match the model input requirements
-            Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, inputSize, inputSize, false);
+            Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, inputSize, inputSize, false);
             ByteBuffer inputBuffer = convertBitmapToByteBuffer(resizedBitmap);
 
             float[][] outputArray = new float[1][tflite.getOutputTensor(0).shape()[1]];
 
             // Run inference on the preprocessed image
             tflite.run(inputBuffer, outputArray);
+
+            // Print the output array for debugging
+            for (int i = 0; i < outputArray[0].length; i++) {
+                System.out.println("Class " + i + ": " + outputArray[0][i]);
+            }
 
             // Call the findResultClassIndex method after running inference
             int resultClassIndex = findResultClassIndex(outputArray);
@@ -116,19 +127,28 @@ public class detectFragment1 extends Fragment {
             String predictedClassName = classList.get(resultClassIndex);
 
             // Update the TextView with the processed result
-            String resultText = "Result: " + predictedClassName;
+            String resultText = "Class: " + predictedClassName;
             textView2.setText(resultText);
+            textView2.setVisibility(View.VISIBLE); // Show result
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+
+    // Method to reset the page to its initial state
+    void resetPage() {
+        IVPreviewImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_image_24)); // Reset image
+        textView2.setText(""); // Clear result
+        textView2.setVisibility(View.GONE); // Hide result
+    }
+
     // Load the TFLite model from the assets folder
     private MappedByteBuffer loadModelFile() throws IOException {
         // Load model file here
         AssetManager assetManager = requireContext().getAssets();
-        AssetFileDescriptor fileDescriptor = assetManager.openFd("converted_model.tflite");
+        AssetFileDescriptor fileDescriptor = assetManager.openFd("converted_model_1.tflite");
         FileInputStream inputStream = new FileInputStream(fileDescriptor.getFileDescriptor());
         FileChannel fileChannel = inputStream.getChannel();
         long startOffset = fileDescriptor.getStartOffset();
