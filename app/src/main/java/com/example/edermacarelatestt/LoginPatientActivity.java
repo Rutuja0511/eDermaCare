@@ -82,6 +82,8 @@ public class LoginPatientActivity extends AppCompatActivity {
                                 // Password matches, login successful
                                 Toast.makeText(LoginPatientActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
                                 // Proceed with further actions (e.g., navigating to another activity)
+                                Intent intent = new Intent(LoginPatientActivity.this, Activitydash.class);
+                                startActivity(intent);
                                 return;
                             }
                         }
@@ -93,8 +95,7 @@ public class LoginPatientActivity extends AppCompatActivity {
                     }
                 });
 
-        Intent intent = new Intent(LoginPatientActivity.this, Activitydash.class);
-        startActivity(intent);
+
     }
 
     public static String hashPassword(String password) {

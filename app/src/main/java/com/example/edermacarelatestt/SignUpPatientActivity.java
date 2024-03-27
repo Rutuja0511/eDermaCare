@@ -127,7 +127,21 @@ public class SignUpPatientActivity extends AppCompatActivity {
             showAlert("Please select your gender");
             return;
         }
+//        signUpManager.signUp(SignUpPatientActivity.this, name, email, dob, mobile, hashedPassword, gender);
 
-        signUpManager.signUp(SignUpPatientActivity.this, name, email, dob, mobile, hashedPassword, gender);
+        // Call signUp method
+        boolean signUpSuccessful = signUpManager.signUp(SignUpPatientActivity.this, name, email, dob, mobile, hashedPassword, gender);
+
+        if (signUpSuccessful) {
+            // If signup is successful, start LoginPatientActivity
+            Intent intent = new Intent(SignUpPatientActivity.this, LoginPatientActivity.class);
+            startActivity(intent);
+            finish(); // Optional: Finish the current activity to prevent user from coming back to it using back button
+        }else {
+            // Handle unsuccessful signup
+            showAlert("Signup failed. Please try again.");
+        }
     }
+
+
 }

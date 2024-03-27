@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="statesMC_array">
+        <item>Select State Medical Council</item>
+        <item>Andhra Pradesh Medical Council</item>
+        <item>Arunachal Pradesh Medical Council</item>
+        <item>Assam Medical Council</item>
+        <item>Bihar Medical Council</item>
+        <item>Chhattisgarh Medical Council</item>
+        <item>Goa Medical Council</item>
+        <item>Gujarat Medical Council</item>
+        <item>Haryana Medical Council</item>
+        <item>Himachal Pradesh Medical Council</item>
+        <item>Jharkhand Medical Council</item>
+        <item>Karnataka Medical Council</item>
+        <item>Kerala Medical Council</item>
+        <item>Madhya Pradesh Medical Council</item>
+        <item>Maharashtra Medical Council</item>
+        <item>Manipur Medical Council</item>
+        <item>Meghalaya Medical Council</item>
+        <item>Mizoram Medical Council</item>
+        <item>Nagaland Medical Council</item>
+        <item>Odisha Medical Council</item>
+        <item>Punjab Medical Council</item>
+        <item>Rajasthan Medical Council</item>
+        <item>Sikkim Medical Council</item>
+        <item>Tamil Nadu Medical Council</item>
+        <item>Telangana Medical Council</item>
+        <item>Tripura Medical Council</item>
+        <item>Uttar Pradesh Medical Council</item>
+        <item>Uttarakhand Medical Council</item>
+        <item>West Bengal Medical Council</item>
+        <item>Andaman and Nicobar Islands Medical Council</item>
+        <item>Chandigarh Medical Council</item>
+        <item>Dadra and Nagar Haveli and Daman and Diu Medical Council</item>
+        <item>Delhi Medical Council</item>
+        <item>Lakshadweep Medical Council</item>
+        <item>Puducherry Medical Council</item>
+    </string-array>
+
+</resources>

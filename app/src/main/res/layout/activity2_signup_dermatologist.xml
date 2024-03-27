@@ -57,38 +57,68 @@
                 android:padding="8dp"
                 android:textColor="@color/black" />
 
-            <EditText
-                android:id="@+id/dermatologist_state"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="24dp"
-                android:background="@drawable/light_grey_border"
-                android:drawablePadding="8dp"
-                android:hint="State"
-                android:padding="8dp"
-                android:textColor="@color/black" />
+<!--            <EditText-->
+<!--                android:id="@+id/dermatologist_state"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_marginTop="24dp"-->
+<!--                android:background="@drawable/light_grey_border"-->
+<!--                android:drawablePadding="8dp"-->
+<!--                android:hint="State"-->
+<!--                android:padding="8dp"-->
+<!--                android:textColor="@color/black" />-->
 
-            <EditText
-                android:id="@+id/dermatologist_district"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="24dp"
-                android:background="@drawable/light_grey_border"
-                android:drawablePadding="8dp"
-                android:hint="District"
-                android:padding="8dp"
-                android:textColor="@color/black" />
+<!--            <EditText-->
+<!--                android:id="@+id/dermatologist_district"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_marginTop="24dp"-->
+<!--                android:background="@drawable/light_grey_border"-->
+<!--                android:drawablePadding="8dp"-->
+<!--                android:hint="District"-->
+<!--                android:padding="8dp"-->
+<!--                android:textColor="@color/black" />-->
 
-            <EditText
-                android:id="@+id/dermatologist_city"
+<!--            <EditText-->
+<!--                android:id="@+id/dermatologist_city"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_marginTop="24dp"-->
+<!--                android:background="@drawable/light_grey_border"-->
+<!--                android:drawablePadding="8dp"-->
+<!--                android:hint="City"-->
+<!--                android:padding="8dp"-->
+<!--                android:textColor="@color/black" />-->
+
+
+            <Spinner
+                android:id="@+id/spinnerState"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="24dp"
                 android:background="@drawable/light_grey_border"
-                android:drawablePadding="8dp"
-                android:hint="City"
                 android:padding="8dp"
-                android:textColor="@color/black" />
+                android:spinnerMode="dropdown" />
+
+            <!-- District Spinner -->
+            <Spinner
+                android:id="@+id/spinnerDistrict"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/light_grey_border"
+                android:padding="8dp"
+                android:spinnerMode="dropdown" />
+
+            <!-- City Spinner -->
+            <Spinner
+                android:id="@+id/spinnerCity"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/light_grey_border"
+                android:padding="8dp"
+                android:spinnerMode="dropdown" />
 
             <EditText
                 android:id="@+id/dermatologist_signup_password"

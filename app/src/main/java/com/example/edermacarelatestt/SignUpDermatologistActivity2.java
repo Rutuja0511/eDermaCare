@@ -10,8 +10,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
-
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,6 +30,7 @@ import java.util.Map;
 public class SignUpDermatologistActivity2 extends AppCompatActivity {
 
     EditText editTextPasswordD, editTextExperience, editTextMobileNo, editTextCity, editTextDistrict, editTextState;
+    Spinner spinnerState, spinnerDistrict, spinnerCity;
 
     Button buttonSignUpD;
     private FirebaseFirestore db;
@@ -43,9 +46,14 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         setContentView(R.layout.activity2_signup_dermatologist);
         editTextPasswordD = findViewById(R.id.dermatologist_signup_password);
-        editTextCity = findViewById(R.id.dermatologist_city);
-        editTextDistrict = findViewById(R.id.dermatologist_district);
-        editTextState = findViewById(R.id.dermatologist_state);
+//        editTextCity = findViewById(R.id.dermatologist_city);
+//        editTextDistrict = findViewById(R.id.dermatologist_district);
+//        editTextState = findViewById(R.id.dermatologist_state);
+
+        spinnerState = findViewById(R.id.spinnerState);
+        spinnerDistrict = findViewById(R.id.spinnerDistrict);
+        spinnerCity = findViewById(R.id.spinnerCity);
+
         editTextMobileNo = findViewById(R.id.dermatologist_mobileNo);
         editTextExperience = findViewById(R.id.dermatologist_experience);
 
@@ -64,7 +72,11 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
             }
         });
 
+        initializeDropdowns();
+
     }
+
+
 
     private void showVerificationAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(SignUpDermatologistActivity2.this);
@@ -82,9 +94,13 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
         String password = editTextPasswordD.getText().toString();
         String experience = editTextExperience.getText().toString();
         String mobileNo = editTextMobileNo.getText().toString();
-        String city = editTextCity.getText().toString();
-        String district = editTextDistrict.getText().toString();
-        String state = editTextState.getText().toString();
+//        String city = editTextCity.getText().toString();
+//        String district = editTextDistrict.getText().toString();
+//        String state = editTextState.getText().toString();
+        String city = spinnerCity.getSelectedItem().toString();
+        String district = spinnerDistrict.getSelectedItem().toString();
+        String state = spinnerState.getSelectedItem().toString();
+
 
         if (TextUtils.isEmpty(experience) || TextUtils.isEmpty(mobileNo) ||
                 TextUtils.isEmpty(city) || TextUtils.isEmpty(district) || TextUtils.isEmpty(state)) {
@@ -138,6 +154,9 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
                 Log.e(TAG, "Verification failed: " + errorMessage);
             }
         });
+
+
+
     }
 
     private void postDataToFirebase() {
@@ -194,4 +213,80 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
             return null;
         }
     }
+
+    // Initialize and populate dropdowns
+    private void initializeDropdowns() {
+        spinnerState = findViewById(R.id.spinnerState);
+        spinnerDistrict = findViewById(R.id.spinnerDistrict);
+        spinnerCity = findViewById(R.id.spinnerCity);
+
+        // Populate state dropdown
+        ArrayAdapter<CharSequence> stateAdapter = ArrayAdapter.createFromResource(
+                this, R.array.states_array, android.R.layout.simple_spinner_item);
+        stateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerState.setAdapter(stateAdapter);
+
+        // Set listeners for state and district selection changes
+        spinnerState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Based on state selection, populate district dropdown
+                String selectedState = parent.getItemAtPosition(position).toString();
+                populateDistrictDropdown(selectedState);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Handle no selection
+            }
+        });
+
+        spinnerDistrict.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Based on district selection, populate city dropdown
+                String selectedDistrict = parent.getItemAtPosition(position).toString();
+                populateCityDropdown(selectedDistrict);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Handle no selection
+            }
+        });
+    }
+
+    // Populate district dropdown based on selected state
+    private void populateDistrictDropdown(String selectedState) {
+        int districtsArrayId = getResources().getIdentifier(
+                "districts_" + selectedState.toLowerCase().replace(" ", "_"),
+                "array",
+                getPackageName());
+        if (districtsArrayId != 0) {
+            ArrayAdapter<CharSequence> districtAdapter = ArrayAdapter.createFromResource(
+                    this, districtsArrayId, android.R.layout.simple_spinner_item);
+            districtAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerDistrict.setAdapter(districtAdapter);
+        } else {
+//            Toast.makeText(this, "No districts found for selected state", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Populate city dropdown based on selected district
+    private void populateCityDropdown(String selectedDistrict) {
+        int citiesArrayId = getResources().getIdentifier(
+                "cities_" + selectedDistrict.toLowerCase().replace(" ", "_"),
+                "array",
+                getPackageName());
+        if (citiesArrayId != 0) {
+            ArrayAdapter<CharSequence> cityAdapter = ArrayAdapter.createFromResource(
+                    this, citiesArrayId, android.R.layout.simple_spinner_item);
+            cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerCity.setAdapter(cityAdapter);
+        } else {
+//            Toast.makeText(this, "No cities found for selected district", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 }

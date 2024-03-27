@@ -38,7 +38,7 @@ public class PatientSignUpManager {
         datePickerDialog.show();
     }
 
-    public void signUp(Context context, String name, String email, String dob, String mobile, String hashedpassword, String gender) {
+    public boolean signUp(Context context, String name, String email, String dob, String mobile, String hashedpassword, String gender) {
         if (!name.isEmpty() && !email.isEmpty() && !hashedpassword.isEmpty() && !dob.isEmpty() && !mobile.isEmpty()) {
             // Create a Firestore instance
             FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -63,10 +63,12 @@ public class PatientSignUpManager {
                         // Display error message
                         Toast.makeText(context, "Failed to sign up: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
+            return true;
         } else {
             // Handle case when any field is empty
             // Display an error message
             Toast.makeText(context, "All fields are required!", Toast.LENGTH_SHORT).show();
+            return false;
         }
     }
 
