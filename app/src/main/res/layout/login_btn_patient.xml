@@ -30,7 +30,7 @@
                 android:layout_marginTop="70dp"
                 android:text="We are the premier platform for detecting skin issues and scheduling consultations with qualified doctors"
                 android:textColor="@color/darkgray"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textAlignment="center"/>
 
             <Button

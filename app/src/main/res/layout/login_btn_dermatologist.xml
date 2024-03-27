@@ -26,7 +26,7 @@
             android:layout_marginTop="70dp"
             android:text="Trusted dermatologists have joined our platform, bringing expertise and dedication to your fingertips. "
             android:textColor="@color/darkgray"
-            android:textSize="22sp"
+            android:textSize="20sp"
             android:textAlignment="center"/>
 
         <Button
