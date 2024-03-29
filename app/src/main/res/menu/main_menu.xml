@@ -10,7 +10,7 @@
 
 
         <item android:id="@+id/navhs"
-            android:title="@string/personal_details"
+            android:title="Personal_details"
             android:icon="@drawable/ic_baseline_person_24"/>
 
 
@@ -24,13 +24,13 @@
 
 
         <item android:id="@+id/navh"
-            android:title="@string/detection"
+            android:title="Detection"
             android:icon="@drawable/ic_baseline_zoom_in_24"/>
         <item android:id="@+id/navh2"
-            android:title="@string/history"
+            android:title="History"
             android:icon="@drawable/ic_baseline_history_24"/>
         <item android:id="@+id/navh3"
-            android:title="@string/consultation"
+            android:title="Consultation"
             android:icon="@drawable/ic_baseline_medical_services_24"/>
 
 
