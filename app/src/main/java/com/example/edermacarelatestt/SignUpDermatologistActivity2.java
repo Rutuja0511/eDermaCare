@@ -102,8 +102,7 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
         String state = spinnerState.getSelectedItem().toString();
 
 
-        if (TextUtils.isEmpty(experience) || TextUtils.isEmpty(mobileNo) ||
-                TextUtils.isEmpty(city) || TextUtils.isEmpty(district) || TextUtils.isEmpty(state)) {
+        if (TextUtils.isEmpty(experience) || TextUtils.isEmpty(mobileNo)) {
             Toast.makeText(SignUpDermatologistActivity2.this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -170,9 +169,12 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
             dermatologist.put("StateMedicalCouncil", getIntent().getStringExtra("stateMedicalCouncil"));
             dermatologist.put("Exp", editTextExperience.getText().toString());
             dermatologist.put("Mobile", editTextMobileNo.getText().toString());
-            dermatologist.put("City", editTextCity.getText().toString());
-            dermatologist.put("District", editTextDistrict.getText().toString());
-            dermatologist.put("State", editTextState.getText().toString());
+//            dermatologist.put("City", spinnerCity.getText().toString());
+//            dermatologist.put("District", spinnerDistrict.getText().toString());
+//            dermatologist.put("State", spinnerState.getText().toString());
+            dermatologist.put("City", spinnerCity.getSelectedItem().toString());
+            dermatologist.put("District", spinnerDistrict.getSelectedItem().toString());
+            dermatologist.put("State", spinnerState.getSelectedItem().toString());
             dermatologist.put("Password", hashPassword(editTextPasswordD.getText().toString()));
             dermatologist.put("verified", verified);
             dermatologist.put("qualification", qualification);
