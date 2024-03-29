@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment_home">
-
+    tools:context=".fragment_home2">
 
 
 
@@ -17,26 +15,27 @@
         android:layout_alignParentEnd="true"
 
 
-        android:layout_marginHorizontal="10dp"
+
 
         android:layout_marginBottom="190dp"
-        android:src="@drawable/home2" />
+        android:src="@drawable/home1" />
 
     <TextView
         android:id="@+id/textView5"
-        android:layout_width="333dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="251dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="39dp"
-        android:layout_marginTop="403dp"
-        android:layout_marginEnd="39dp"
-        android:layout_marginBottom="28dp"
+        android:layout_marginStart="37dp"
+        android:layout_marginTop="411dp"
+        android:layout_marginEnd="41dp"
+        android:layout_marginBottom="20dp"
         android:gravity="center"
         android:text="Welcome to e-DermaCare"
         android:textColor="@color/lavender"
         android:textSize="35sp"
         android:textStyle="bold" />
-</RelativeLayout>
+
+</FrameLayout>
