@@ -40,7 +40,7 @@ public class Activitydash2 extends AppCompatActivity implements NavigationView.O
         if (itemId == R.id.navhome) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container2, new fragment_home2()).commit();
         } else if (itemId == R.id.navhs) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container2, new profileFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container2, new profileFragment2()).commit();
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);

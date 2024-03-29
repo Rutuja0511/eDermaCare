@@ -10,7 +10,6 @@
         android:id="@+id/layout1"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-
         android:layout_marginTop="-30dp"
         android:background="@drawable/halfcircle"
         android:paddingBottom="8dp"
@@ -18,14 +17,13 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/editTextTextPersonName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:layout_below="@+id/imageView"
         android:layout_marginStart="30dp"
         android:layout_marginTop="25dp"
@@ -33,10 +31,10 @@
         android:drawableLeft="@drawable/ic_baseline_person_24"
         android:ems="10"
         android:gravity="center"
-        android:inputType="textPersonName"
-        android:text="Aakanksha Karambele"
+
+
         android:textColor="@color/bg"
-        android:textSize="20sp"
+        android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -56,15 +54,14 @@
         android:drawableLeft="@drawable/ic_baseline_date_range_24"
         android:ems="10"
         android:gravity="center"
-        android:inputType="date|textPersonName"
-        android:text="24/10/2002"
+
         android:textColor="@color/bg"
-        android:textSize="20sp"
+        android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName4" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
 
     <TextView
         android:id="@+id/editTextTextPersonName3"
@@ -78,11 +75,9 @@
         android:drawableLeft="@drawable/ic_baseline_local_phone_24"
         android:ems="10"
         android:gravity="center"
-        android:inputType="number|textPersonName"
-        android:text="7039629419"
+
         android:textColor="@color/bg"
-        android:textColorHint="@color/bg"
-        android:textSize="20sp"
+        android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -102,54 +97,44 @@
         android:drawableLeft="@drawable/ic_baseline_email_24"
         android:ems="10"
         android:gravity="center"
-        android:inputType="textPersonName"
-        android:text="aakanksha@gmail.com"
+
         android:textColor="@color/bg"
-        android:textSize="20sp"
+        android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName3" />
 
-    <Button
-
-        android:id="@+id/button2234"
-        android:layout_width="wrap_content"
-        android:layout_height="75dp"
-
+    <TextView
+        android:id="@+id/editTextTextPersonName5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/editTextTextPersonName4"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginHorizontal="120dp"
-        android:layout_marginStart="111dp"
-        android:layout_marginTop="54dp"
-        android:layout_marginEnd="123dp"
-        android:layout_marginBottom="124dp"
-        android:background="@drawable/roud2"
-        android:drawableLeft="@drawable/ic_baseline_keyboard_double_arrow_left_24"
-        android:drawablePadding="0dp"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="27dp"
+
+        android:layout_marginBottom="137dp"
+        android:drawableLeft="@drawable/ic_baseline_email_24"
+        android:ems="10"
         android:gravity="center"
-        android:paddingHorizontal="24dp"
-        android:paddingVertical="8dp"
-        android:text="Back"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textColor="@color/bg"
+        android:textSize="25sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2"
-        app:layout_constraintVertical_bias="0.225" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName3" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-
         android:layout_alignParentEnd="true"
         android:layout_marginStart="123dp"
         android:layout_marginTop="28dp"

@@ -47,6 +47,12 @@ public class Activitydash extends AppCompatActivity implements NavigationView.On
         else if (itemId == R.id.navh) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new detectFragment1()).commit();
         }
+        else if (itemId == R.id.navh2) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HistoryFragment()).commit();
+        }
+        else if (itemId == R.id.navh3) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ConsultationFragment()).commit();
+        }
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
