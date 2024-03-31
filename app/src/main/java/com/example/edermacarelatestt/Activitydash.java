@@ -11,6 +11,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 public class Activitydash extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -19,6 +20,7 @@ public class Activitydash extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activityfiledashboard);
+
 
         Toolbar toolbar = findViewById(R.id.toolbar); //Ignore red line errors
         setSupportActionBar(toolbar);
@@ -42,9 +44,19 @@ public class Activitydash extends AppCompatActivity implements NavigationView.On
         if (itemId == R.id.navhome) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_home()).commit();
         } else if (itemId == R.id.navhs) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new profileFragment()).commit();
-        }
-        else if (itemId == R.id.navh) {
+            String userEmail = getIntent().getStringExtra("user_email");
+            if (userEmail != null) {
+                // Pass user email to profileFragment
+                Bundle bundle = new Bundle();
+                bundle.putString("user_email", userEmail);
+                profileFragment fragment = new profileFragment();
+                fragment.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+            } else {
+                // Handle the case where user email is not found
+                Toast.makeText(this, "User email not found", Toast.LENGTH_SHORT).show();
+            }
+        } else if (itemId == R.id.navh) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new detectFragment1()).commit();
         }
         else if (itemId == R.id.navh2) {
@@ -65,4 +77,5 @@ public class Activitydash extends AppCompatActivity implements NavigationView.On
         } else {
             super.onBackPressed();
         }
-    }}
+    }
+}
