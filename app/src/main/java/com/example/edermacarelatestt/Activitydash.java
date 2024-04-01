@@ -33,7 +33,7 @@ public class Activitydash extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_home()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new detectFragment1()).commit();
             navigationView.setCheckedItem(R.id.navhome);
         }
     }
@@ -42,7 +42,7 @@ public class Activitydash extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.navhome) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_home()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new detectFragment1()).commit();
         } else if (itemId == R.id.navhs) {
             String userEmail = getIntent().getStringExtra("user_email");
             if (userEmail != null) {

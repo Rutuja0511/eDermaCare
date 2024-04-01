@@ -11,9 +11,8 @@
         android:id="@+id/IVPreviewImage"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="13dp"
-        android:background="@drawable/ic_baseline_image_24"
+        android:background="@drawable/upload_icon"
         android:contentDescription="@string/todo" />
 
     <Button
