@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -42,9 +43,21 @@ public class Activitydash extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.navhome) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new detectFragment1()).commit();
+            String userId = getIntent().getStringExtra("user_id");
+            if (userId != null) {
+                // Pass userId to profileFragment
+                Bundle bundle = new Bundle();
+                bundle.putString("user_id", userId);
+                detectFragment1 fragment = new detectFragment1();
+                fragment.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+            } else {
+                // Handle the case where userId is not found
+                Toast.makeText(this, "User ID not found", Toast.LENGTH_SHORT).show();
+            }
         } else if (itemId == R.id.navhs) {
             String userEmail = getIntent().getStringExtra("user_email");
+
             if (userEmail != null) {
                 // Pass user email to profileFragment
                 Bundle bundle = new Bundle();
@@ -57,8 +70,19 @@ public class Activitydash extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(this, "User email not found", Toast.LENGTH_SHORT).show();
             }
         } else if (itemId == R.id.navh) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new detectFragment1()).commit();
-        }
+            String userId = getIntent().getStringExtra("user_id");
+            if (userId != null) {
+                // Pass userId to profileFragment
+                Bundle bundle = new Bundle();
+                bundle.putString("user_id", userId);
+                detectFragment1 fragment = new detectFragment1();
+                fragment.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+            } else {
+                // Handle the case where userId is not found
+                Toast.makeText(this, "User ID not found", Toast.LENGTH_SHORT).show();
+            }
+             }
         else if (itemId == R.id.navh2) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HistoryFragment()).commit();
         }

@@ -1,23 +1,34 @@
 package com.example.edermacarelatestt;
-import android.content.res.AssetManager;
+
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.tensorflow.lite.Interpreter;
+
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,9 +37,12 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
-import org.tensorflow.lite.Interpreter;
+import java.util.Locale;
 
 public class detectFragment1 extends Fragment {
 
@@ -38,7 +52,12 @@ public class detectFragment1 extends Fragment {
     Button Reset;
     ImageView IVPreviewImage;
     TextView textView2;
-    private PatientSignUpManager signUpManager;
+
+    // Firebase
+    private FirebaseFirestore mFirestore;
+
+    // User ID
+    private String userId;
 
     // Activity result launcher for selecting an image
     private final ActivityResultLauncher<Intent> selectImageLauncher =
@@ -50,22 +69,33 @@ public class detectFragment1 extends Fragment {
                                 Uri selectedImageUri = data.getData();
                                 if (selectedImageUri != null) {
                                     try {
-                                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImageUri);
+                                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), selectedImageUri);
                                         IVPreviewImage.setImageBitmap(bitmap);
                                         IVPreviewImage.setVisibility(View.VISIBLE); // Show image
                                         textView2.setVisibility(View.GONE); // Hide result initially
                                     } catch (IOException e) {
-                                        e.printStackTrace();
+                                        Log.e(TAG, "Error loading image", e);
                                     }
                                 }
                             }
                         }
                     });
 
+    private static final String TAG = "detectFragment1";
+    private static final int OUTPUT_SIZE = 5;// specify the size of the output array
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_detect1, container, false);
+
+        // Initialize Firebase
+        mFirestore = FirebaseFirestore.getInstance();
+
+        // Get user ID from arguments
+        if (getArguments() != null) {
+            userId = getArguments().getString("user_id");
+        }
 
         // Register UI elements
         BSelectImage = view.findViewById(R.id.BSelectImage);
@@ -73,7 +103,6 @@ public class detectFragment1 extends Fragment {
         textView2 = view.findViewById(R.id.textView2);
         Process = view.findViewById(R.id.Process);
         Reset = view.findViewById(R.id.Reset);
-        signUpManager = new PatientSignUpManager();
 
         // Handle button click to select image
         BSelectImage.setOnClickListener(v -> selectImage());
@@ -94,8 +123,9 @@ public class detectFragment1 extends Fragment {
     // Method to process the selected image
     void processImage() {
         Bitmap imageBitmap = ((BitmapDrawable) IVPreviewImage.getDrawable()).getBitmap();
-        // Load the TFLite model (assuming you have 'model.tflite' in the assets folder)
+
         try {
+            // Load the TFLite model (assuming you have 'model.tflite' in the assets folder)
             Interpreter.Options options = new Interpreter.Options();
             Interpreter tflite = new Interpreter(loadModelFile(), options);
             int inputSize = 224; // Change this to match your model's input size
@@ -104,15 +134,10 @@ public class detectFragment1 extends Fragment {
             Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, inputSize, inputSize, false);
             ByteBuffer inputBuffer = convertBitmapToByteBuffer(resizedBitmap);
 
-            float[][] outputArray = new float[1][tflite.getOutputTensor(0).shape()[1]];
+            float[][] outputArray = new float[1][OUTPUT_SIZE]; // Adjust OUTPUT_SIZE according to your model
 
             // Run inference on the preprocessed image
             tflite.run(inputBuffer, outputArray);
-
-            // Print the output array for debugging
-            for (int i = 0; i < outputArray[0].length; i++) {
-                System.out.println("Class " + i + ": " + outputArray[0][i]);
-            }
 
             // Call the findResultClassIndex method after running inference
             int resultClassIndex = findResultClassIndex(outputArray);
@@ -126,27 +151,83 @@ public class detectFragment1 extends Fragment {
             textView2.setText(resultText);
             textView2.setVisibility(View.VISIBLE); // Show result
 
+            // Store data in Firebase
+            storeDataInFirebase(imageBitmap, resultText);
+
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error processing image", e);
         }
     }
 
     // Method to reset the page to its initial state
     void resetPage() {
-        IVPreviewImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_image_24)); // Reset image
+        IVPreviewImage.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_image_24, null)); // Reset image
         IVPreviewImage.setVisibility(View.GONE); // Hide image
         textView2.setText(""); // Clear result
         textView2.setVisibility(View.GONE); // Hide result
     }
+
+    // Method to store data in Firebase
+    void storeDataInFirebase(Bitmap imageBitmap, String resultText) {
+        // Generate current timestamp
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        String timestamp = dateFormat.format(calendar.getTime());
+
+        // Convert bitmap to byte array
+        byte[] imageData = convertBitmapToByteArray(imageBitmap);
+
+        // Convert byte array to list of integers
+        List<Integer> imageList = new ArrayList<>();
+        for (byte b : imageData) {
+            imageList.add((int) b);
+        }
+
+        // Store data in Firestore
+        try {
+            mFirestore.collection("patients")
+                    .document(userId) // Assuming 'userId' is the unique identifier of the current user
+                    .collection("history")
+                    .add(new HashMap<String, Object>() {{
+
+                        put("result", resultText);
+                        put("time", timestamp);
+                        put("date", calendar.getTimeInMillis()); // Add date as timestamp
+                    }})
+                    .addOnSuccessListener(documentReference -> {
+                        // Data successfully added
+                        Toast.makeText(requireContext(), "Data stored in Firestore", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        // Error occurred
+                        String errorMessage = "Error storing data in Firestore: " + e.getMessage();
+
+                        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                    });
+        } catch (Exception e) {
+            String errorMessage = "Error storing data in Firestore: " + e.getMessage();
+
+            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Load model file from assets
     private MappedByteBuffer loadModelFile() throws IOException {
         // Load model file here
         AssetManager assetManager = requireContext().getAssets();
         AssetFileDescriptor fileDescriptor = assetManager.openFd("modelling1.tflite");
-        FileInputStream inputStream = new FileInputStream(fileDescriptor.getFileDescriptor());
-        FileChannel fileChannel = inputStream.getChannel();
-        long startOffset = fileDescriptor.getStartOffset();
-        long declaredLength = fileDescriptor.getDeclaredLength();
-        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength);
+        FileInputStream inputStream = null;
+        try {
+            inputStream = fileDescriptor.createInputStream();
+            FileChannel fileChannel = inputStream.getChannel();
+            long startOffset = fileDescriptor.getStartOffset();
+            long declaredLength = fileDescriptor.getDeclaredLength();
+            return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength);
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        }
     }
 
     // Preprocess the input image into a ByteBuffer
@@ -201,5 +282,12 @@ public class detectFragment1 extends Fragment {
             }
         }
         return classList;
+    }
+
+    // Convert Bitmap to byte array
+    private byte[] convertBitmapToByteArray(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
     }
 }

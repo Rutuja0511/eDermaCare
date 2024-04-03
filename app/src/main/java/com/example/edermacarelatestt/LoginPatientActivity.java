@@ -1,24 +1,22 @@
 package com.example.edermacarelatestt;
 
-        import android.content.Intent;
-        import android.os.Bundle;
-        import android.text.TextUtils;
-        import android.util.Log;
-        import android.widget.Button;
-        import android.widget.EditText;
-        import android.widget.TextView;
-        import android.widget.Toast;
-        import androidx.annotation.NonNull;
-        import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
-        import com.google.android.gms.tasks.OnCompleteListener;
-        import com.google.android.gms.tasks.Task;
-        import com.google.firebase.auth.FirebaseAuth;
-        import com.google.firebase.auth.FirebaseUser;
-        import com.google.firebase.firestore.DocumentSnapshot;
-        import com.google.firebase.firestore.FirebaseFirestore;
-        import java.security.MessageDigest;
-        import java.security.NoSuchAlgorithmException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class LoginPatientActivity extends AppCompatActivity {
 
@@ -27,7 +25,6 @@ public class LoginPatientActivity extends AppCompatActivity {
     private Button loginButton;
     private TextView signupRedirectText;
 
-    private FirebaseAuth mAuth;
     private FirebaseFirestore mFirestore;
 
     @Override
@@ -40,7 +37,6 @@ public class LoginPatientActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.patient_login_button);
         signupRedirectText = findViewById(R.id.signupredirect);
 
-        mAuth = FirebaseAuth.getInstance();
         mFirestore = FirebaseFirestore.getInstance();
 
         loginButton.setOnClickListener(v -> loginUser());
@@ -51,7 +47,6 @@ public class LoginPatientActivity extends AppCompatActivity {
         Intent intent = new Intent(LoginPatientActivity.this, SignUpPatientActivity.class);
         startActivity(intent);
     }
-
 
     private void loginUser() {
         String email = emailEditText.getText().toString().trim();
@@ -74,46 +69,32 @@ public class LoginPatientActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (DocumentSnapshot document : task.getResult()) {
-                            // Email is present in Firestore, now hash the password
                             String hashedPassword = hashPassword(password);
-                            String storedPassword = document.getString("Password"); // Assuming "password" is the field storing hashed passwords
-
+                            String storedPassword = document.getString("Password");
+                            String userId = document.getId();
                             if (hashedPassword.equals(storedPassword)) {
-                                // Password matches, login successful
                                 Toast.makeText(LoginPatientActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
-                                redirectToProfilePage(email);
+                                redirectToProfilePage(email, userId); // Pass both email and userId
                                 return;
-                                // Proceed with further actions (e.g., navigating to another activity)
-//                                Intent intent = new Intent(LoginPatientActivity.this, Activitydash.class);
-//                                startActivity(intent);
-//
                             }
                         }
-                        // If loop completes without finding a matching email or password, login failed
                         Toast.makeText(LoginPatientActivity.this, "Invalid email or password!", Toast.LENGTH_SHORT).show();
                     } else {
                         Log.d(TAG, "Error getting documents: ", task.getException());
                         Toast.makeText(LoginPatientActivity.this, "An error occurred. Please try again later.", Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
     }
 
     public static String hashPassword(String password) {
         try {
-            // Create MessageDigest instance for SHA-256
             MessageDigest md = MessageDigest.getInstance("SHA-256");
-            // Add password bytes to digest
             md.update(password.getBytes());
-            // Get the hash's bytes
             byte[] bytes = md.digest();
-            // Convert bytes to hexadecimal format
             StringBuilder sb = new StringBuilder();
             for (byte aByte : bytes) {
                 sb.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
             }
-            // Get complete hashed password in hex format
             return sb.toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -121,11 +102,10 @@ public class LoginPatientActivity extends AppCompatActivity {
         }
     }
 
-
-    private void redirectToProfilePage(String userEmail) {
+    private void redirectToProfilePage(String userEmail, String userId) {
         Intent intent = new Intent(LoginPatientActivity.this, Activitydash.class);
         intent.putExtra("user_email", userEmail);
+        intent.putExtra("user_id", userId);
         startActivity(intent);
     }
-
 }
