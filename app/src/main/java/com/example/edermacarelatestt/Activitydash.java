@@ -82,7 +82,7 @@ public class Activitydash extends AppCompatActivity implements NavigationView.On
                 // Handle the case where userId is not found
                 Toast.makeText(this, "User ID not found", Toast.LENGTH_SHORT).show();
             }
-             }
+        }
         else if (itemId == R.id.navh2) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HistoryFragment()).commit();
         }

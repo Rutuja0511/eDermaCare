@@ -24,6 +24,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.tensorflow.lite.Interpreter;
 
@@ -55,6 +58,7 @@ public class detectFragment1 extends Fragment {
 
     // Firebase
     private FirebaseFirestore mFirestore;
+    private StorageReference mStorageRef;
 
     // User ID
     private String userId;
@@ -91,6 +95,7 @@ public class detectFragment1 extends Fragment {
 
         // Initialize Firebase
         mFirestore = FirebaseFirestore.getInstance();
+        mStorageRef = FirebaseStorage.getInstance().getReference();
 
         // Get user ID from arguments
         if (getArguments() != null) {
@@ -167,7 +172,7 @@ public class detectFragment1 extends Fragment {
         textView2.setVisibility(View.GONE); // Hide result
     }
 
-    // Method to store data in Firebase
+    // Method to store data in Firebase including the image URL
     void storeDataInFirebase(Bitmap imageBitmap, String resultText) {
         // Generate current timestamp
         Calendar calendar = Calendar.getInstance();
@@ -177,38 +182,49 @@ public class detectFragment1 extends Fragment {
         // Convert bitmap to byte array
         byte[] imageData = convertBitmapToByteArray(imageBitmap);
 
-        // Convert byte array to list of integers
-        List<Integer> imageList = new ArrayList<>();
-        for (byte b : imageData) {
-            imageList.add((int) b);
-        }
-
-        // Store data in Firestore
-        try {
-            mFirestore.collection("patients")
-                    .document(userId) // Assuming 'userId' is the unique identifier of the current user
-                    .collection("history")
-                    .add(new HashMap<String, Object>() {{
-
-                        put("result", resultText);
-                        put("time", timestamp);
-                        put("date", calendar.getTimeInMillis()); // Add date as timestamp
-                    }})
-                    .addOnSuccessListener(documentReference -> {
-                        // Data successfully added
-                        Toast.makeText(requireContext(), "Data stored in Firestore", Toast.LENGTH_SHORT).show();
-                    })
-                    .addOnFailureListener(e -> {
-                        // Error occurred
-                        String errorMessage = "Error storing data in Firestore: " + e.getMessage();
-
-                        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
-                    });
-        } catch (Exception e) {
-            String errorMessage = "Error storing data in Firestore: " + e.getMessage();
-
+        // Upload image to Firebase Storage
+        String imagePath = "diseaseImage/" + timestamp + ".png"; // Storage path for the image
+        StorageReference imageRef = mStorageRef.child(imagePath);
+        UploadTask uploadTask = imageRef.putBytes(imageData);
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+            // Image uploaded successfully, now get the download URL
+            imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                String imageURL = uri.toString();
+                // Store data in Firestore along with the image URL
+                try {
+                    mFirestore.collection("patients")
+                            .document(userId)
+                            .collection("history")
+                            .add(new HashMap<String, Object>() {{
+                                put("result", resultText);
+                                put("time", timestamp);
+                                put("date", calendar.getTimeInMillis());
+                                put("imageURL", imageURL); // Store image URL in Firestore
+                            }})
+                            .addOnSuccessListener(documentReference -> {
+                                // Data successfully added to Firestore
+                                Toast.makeText(requireContext(), "Data stored in Firestore", Toast.LENGTH_SHORT).show();
+                            })
+                            .addOnFailureListener(e -> {
+                                // Error occurred while adding data to Firestore
+                                String errorMessage = "Error storing data in Firestore: " + e.getMessage();
+                                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                            });
+                } catch (Exception e) {
+                    // Error occurred
+                    String errorMessage = "Error storing data in Firestore: " + e.getMessage();
+                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                }
+            }).addOnFailureListener(e -> {
+                // Error occurred while getting image download URL
+                String errorMessage = "Error getting image URL: " + e.getMessage();
+                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
+            });
+        }).addOnFailureListener(e -> {
+            // Error occurred while uploading image
+            String errorMessage = "Error uploading image: " + e.getMessage();
             Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
-        }
+        });
     }
 
     // Load model file from assets
