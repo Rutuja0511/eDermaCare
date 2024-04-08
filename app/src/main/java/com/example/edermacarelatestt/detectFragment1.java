@@ -176,14 +176,14 @@ public class detectFragment1 extends Fragment {
     void storeDataInFirebase(Bitmap imageBitmap, String resultText) {
         // Generate current timestamp
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        String timestamp = dateFormat.format(calendar.getTime());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        String date = dateFormat.format(calendar.getTime()); // Format the date as "12/4/2023"
 
         // Convert bitmap to byte array
         byte[] imageData = convertBitmapToByteArray(imageBitmap);
 
         // Upload image to Firebase Storage
-        String imagePath = "diseaseImage/" + timestamp + ".png"; // Storage path for the image
+        String imagePath = "diseaseImage/" + date + ".png"; // Storage path for the image using date as filename
         StorageReference imageRef = mStorageRef.child(imagePath);
         UploadTask uploadTask = imageRef.putBytes(imageData);
         uploadTask.addOnSuccessListener(taskSnapshot -> {
@@ -197,8 +197,7 @@ public class detectFragment1 extends Fragment {
                             .collection("history")
                             .add(new HashMap<String, Object>() {{
                                 put("result", resultText);
-                                put("time", timestamp);
-                                put("date", calendar.getTimeInMillis());
+                                put("date", date); // Store date in Firestore
                                 put("imageURL", imageURL); // Store image URL in Firestore
                             }})
                             .addOnSuccessListener(documentReference -> {

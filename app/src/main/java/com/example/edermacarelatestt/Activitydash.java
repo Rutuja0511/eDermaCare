@@ -84,8 +84,19 @@ public class Activitydash extends AppCompatActivity implements NavigationView.On
             }
         }
         else if (itemId == R.id.navh2) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HistoryFragment()).commit();
-        }
+            String userId = getIntent().getStringExtra("user_id");
+            if (userId != null) {
+                // Pass userId to profileFragment
+                Bundle bundle = new Bundle();
+                bundle.putString("user_id", userId);
+                HistoryFragment fragment = new HistoryFragment();
+                fragment.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+            } else {
+                // Handle the case where userId is not found
+                Toast.makeText(this, "User ID not found", Toast.LENGTH_SHORT).show();
+            }
+            }
         else if (itemId == R.id.navh3) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ConsultationFragment()).commit();
         }
