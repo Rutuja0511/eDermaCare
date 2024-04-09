@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/back_button_icon"
+            android:background="@color/bg"
+            app:title="eDermaCare"
+            app:titleTextColor="@color/white" />
+
+        <!-- Heading TextView for Acne -->
+        <TextView
+            android:id="@+id/acneHeading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="What is Tinea Ringworm?"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:textColor="#0097A7"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Description TextView for Acne -->
+        <TextView
+            android:id="@+id/acneDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tinea, commonly known as ringworm, is a fungal infection of the skin or scalp. Despite its name, it's not caused by a worm but rather by various types of fungi known as dermatophytes. These fungi thrive in warm, moist environments and can spread through direct contact with an infected person or animal, as well as through contaminated objects like towels, clothing, or surfaces."
+            android:textAppearance="?android:textAppearanceMedium"
+            android:gravity="start"
+            android:textSize="20sp"
+            android:textColor="#0097A7"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- ImageView for Acne -->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ringworm1"
+            android:adjustViewBounds="false"
+            android:layout_marginTop="16dp"/>
+
+        <!-- Repeat the above structure for other diseases -->
+
+    </LinearLayout>
+
+</ScrollView>

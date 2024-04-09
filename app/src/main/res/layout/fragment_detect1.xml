@@ -1,75 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".detectFragment1"
     android:paddingVertical="10dp"
     android:paddingHorizontal="18dp">
 
-    <ImageView
-        android:id="@+id/IVPreviewImage"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginTop="13dp"
-        android:background="@drawable/upload_icon"
-        android:contentDescription="@string/todo" />
-
-    <Button
-        android:id="@+id/BSelectImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/IVPreviewImage"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/roud2"
-        android:drawableLeft="@drawable/ic_baseline_upload_24"
-        android:text="@string/select_image"
-        android:textColor="@android:color/white"
-        android:textSize="18sp" />
-
-    <LinearLayout
-        android:id="@+id/linelayout"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/BSelectImage"
-        android:layout_marginTop="20dp"
-        android:layout_marginHorizontal="20dp"
-        android:orientation="horizontal">
+        android:id="@+id/mainRelativeLayout"
+        tools:context=".detectFragment1">
+
+        <ImageView
+            android:id="@+id/IVPreviewImage"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginTop="13dp"
+            android:background="@drawable/upload_icon"
+            android:contentDescription="@string/todo" />
 
         <Button
-            android:id="@+id/Process"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:id="@+id/BSelectImage"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/IVPreviewImage"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="32dp"
             android:background="@drawable/roud2"
-            android:text="@string/process"
+            android:drawableLeft="@drawable/ic_baseline_upload_24"
+            android:text="@string/select_image"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
 
-        <Button
-            android:id="@+id/Reset"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+        <LinearLayout
+            android:id="@+id/linelayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:background="@drawable/roud2"
-            android:text="@string/reset"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
+            android:layout_below="@id/BSelectImage"
+            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="20dp"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/Process"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:background="@drawable/roud2"
+                android:text="@string/process"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/linelayout"
-        android:layout_marginTop="48dp"
-        android:layout_marginHorizontal="20dp"
-        android:text="@string/result"
-        android:textColor="#0097A7"
-        android:gravity="center"
-        android:textSize="20sp" />
+            <Button
+                android:id="@+id/Reset"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/roud2"
+                android:text="@string/reset"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
 
-</RelativeLayout>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linelayout"
+            android:layout_marginTop="48dp"
+            android:layout_marginHorizontal="20dp"
+            android:text="@string/result"
+            android:textColor="#0097A7"
+            android:gravity="center"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/textViewDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textView2"
+            android:layout_marginTop="20dp"
+            android:textSize="20sp"
+            android:textColor="#0097A7"
+            android:gravity="center"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+</ScrollView>

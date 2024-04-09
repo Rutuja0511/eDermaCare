@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,13 +49,11 @@ import java.util.List;
 import java.util.Locale;
 
 public class detectFragment1 extends Fragment {
-
-    // UI elements
     Button BSelectImage;
     Button Process;
     Button Reset;
     ImageView IVPreviewImage;
-    TextView textView2;
+    TextView textView2,textViewDescription;
 
     // Firebase
     private FirebaseFirestore mFirestore;
@@ -88,10 +87,12 @@ public class detectFragment1 extends Fragment {
     private static final String TAG = "detectFragment1";
     private static final int OUTPUT_SIZE = 5;// specify the size of the output array
 
+    private View rootView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_detect1, container, false);
+        rootView = inflater.inflate(R.layout.fragment_detect1, container, false);
+
 
         // Initialize Firebase
         mFirestore = FirebaseFirestore.getInstance();
@@ -103,18 +104,20 @@ public class detectFragment1 extends Fragment {
         }
 
         // Register UI elements
-        BSelectImage = view.findViewById(R.id.BSelectImage);
-        IVPreviewImage = view.findViewById(R.id.IVPreviewImage);
-        textView2 = view.findViewById(R.id.textView2);
-        Process = view.findViewById(R.id.Process);
-        Reset = view.findViewById(R.id.Reset);
+        BSelectImage = rootView.findViewById(R.id.BSelectImage);
+        IVPreviewImage = rootView.findViewById(R.id.IVPreviewImage);
+        textView2 = rootView.findViewById(R.id.textView2);
+        Process = rootView.findViewById(R.id.Process);
+        Reset = rootView.findViewById(R.id.Reset);
+        textViewDescription = rootView.findViewById(R.id.textViewDescription);
+
 
         // Handle button click to select image
         BSelectImage.setOnClickListener(v -> selectImage());
         Process.setOnClickListener(v -> processImage());
         Reset.setOnClickListener(v -> resetPage());
 
-        return view;
+        return rootView;
     }
 
     // Method to launch image selection activity
@@ -152,19 +155,41 @@ public class detectFragment1 extends Fragment {
             String predictedClassName = classList.get(resultClassIndex);
 
             // Update the TextView with the processed result
-            String resultText = "Class: " + predictedClassName;
+            String resultText = "Detected Disease: " + predictedClassName;
             textView2.setText(resultText);
             textView2.setVisibility(View.VISIBLE); // Show result
 
             // Store data in Firebase
             storeDataInFirebase(imageBitmap, resultText);
 
+            int diseaseLayoutId = getDiseaseLayoutId(predictedClassName);
+            View diseaseLayout = LayoutInflater.from(getContext()).inflate(diseaseLayoutId, null);
+
+            // Update the UI with the loaded disease description layout
+            updateUIWithDiseaseLayout(diseaseLayout);
+
         } catch (IOException e) {
             Log.e(TAG, "Error processing image", e);
         }
     }
 
-    // Method to reset the page to its initial state
+    private int getDiseaseLayoutId(String detectedDisease) {
+        switch (detectedDisease) {
+            case "Acne":
+                return R.layout.acne;
+            case "Psoriasis":
+                return R.layout.psoriasis;
+            case "TineaRingWorm":
+                return R.layout.ringworm;
+            default:
+                return R.layout.fragment_detect1; // Default layout if disease not found
+        }
+    }
+
+    private void updateUIWithDiseaseLayout(View diseaseLayout) {
+
+        getActivity().setContentView(diseaseLayout);
+    }
     void resetPage() {
         IVPreviewImage.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_image_24, null)); // Reset image
         IVPreviewImage.setVisibility(View.GONE); // Hide image
@@ -230,7 +255,7 @@ public class detectFragment1 extends Fragment {
     private MappedByteBuffer loadModelFile() throws IOException {
         // Load model file here
         AssetManager assetManager = requireContext().getAssets();
-        AssetFileDescriptor fileDescriptor = assetManager.openFd("modelling1.tflite");
+        AssetFileDescriptor fileDescriptor = assetManager.openFd("modelling_skinDisease.tflite");
         FileInputStream inputStream = null;
         try {
             inputStream = fileDescriptor.createInputStream();

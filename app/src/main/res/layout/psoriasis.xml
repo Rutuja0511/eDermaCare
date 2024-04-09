@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/back_button_icon"
+            android:background="@color/bg"
+            app:title="eDermaCare"
+            app:titleTextColor="@color/white" />
+        <!-- Heading TextView for Acne -->
+        <TextView
+            android:id="@+id/acneHeading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="What is Psoriasis?"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:textColor="#0097A7"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Description TextView for Acne -->
+        <TextView
+            android:id="@+id/acneDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Psoriasis is a chronic autoimmune condition that primarily affects the skin. It causes the rapid buildup of skin cells, leading to the formation of thick, silvery scales and red patches that can be itchy, painful, or both. Psoriasis can occur anywhere on the body, but it most commonly appears on the elbows, knees, scalp, lower back, and nails."
+            android:textAppearance="?android:textAppearanceMedium"
+            android:gravity="start"
+            android:textSize="20sp"
+            android:textColor="#0097A7"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- ImageView for Acne -->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/psoriasis1"
+            android:adjustViewBounds="false"
+            android:layout_marginTop="16dp"/>
+
+        <!-- Repeat the above structure for other diseases -->
+
+    </LinearLayout>
+
+</ScrollView>

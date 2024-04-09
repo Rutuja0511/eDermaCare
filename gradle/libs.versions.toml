@@ -1,5 +1,5 @@
 [versions]
-agp = "8.3.1"
+agp = "8.2.0-alpha14"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
@@ -12,6 +12,7 @@ firebaseDatabase = "20.3.1"
 firebaseFirestore = "24.10.3"
 firebaseAuth = "22.3.1"
 firebaseStorage = "20.3.0"
+navigationRuntime = "2.7.7"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -26,6 +27,7 @@ firebase-database = { group = "com.google.firebase", name = "firebase-database",
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
+navigation-runtime = { group = "androidx.navigation", name = "navigation-runtime", version.ref = "navigationRuntime" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

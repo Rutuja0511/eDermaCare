@@ -1,5 +1,5 @@
-Atopic Dermatitis diseases
-Herpes HPV and other STDs diseases
-Lupus and other Connective Tissue diseases
-Melanoma Skin Cancer Nevi and Moles
-Vascular Tumors
+Acne
+InsectBites
+Nail Fungi
+Psoriasis
+TineaRingWorm
