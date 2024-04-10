@@ -27,21 +27,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="70dp"
+                android:layout_marginTop="65dp"
                 android:text="We are the premier platform for detecting skin issues and scheduling consultations with qualified doctors"
                 android:textColor="@color/darkgray"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textAlignment="center"/>
 
             <Button
                 android:id="@+id/login_button_patient"
                 android:layout_width="wrap_content"
-                android:layout_height="70dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="55dp"
                 android:fontFamily="@font/inter_extrabold"
                 android:layout_gravity="center"
                 android:text="Login"
-                android:textSize="30sp"
+                android:textSize="20sp"
                 android:layout_marginBottom="30dp"
                 app:cornerRadius="20dp"/>
 
@@ -58,7 +58,7 @@
                     android:paddingRight="8dp"
                     android:text="Don't have an account?"
                     android:textColor="@color/light_grey"
-                    android:textSize="19sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/signupredirectLandingPageP"
@@ -67,7 +67,7 @@
                     android:paddingRight="8dp"
                     android:text="Sign Up"
                     android:textColor="@color/lavender"
-                    android:textSize="19sp" />
+                    android:textSize="15sp" />
 
             </LinearLayout>
 

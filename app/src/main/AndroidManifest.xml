@@ -53,6 +53,12 @@
         <activity android:name=".HistoryFragment"
             android:exported="true">
         </activity>
+        <activity android:name=".acneActivity"
+            android:exported="true">
+        </activity>
+        <activity android:name=".psoriasisActivity"
+            android:exported="true">
+        </activity>
 
         <meta-data
             android:name="preloaded_fonts"

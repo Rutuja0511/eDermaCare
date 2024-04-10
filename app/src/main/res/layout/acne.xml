@@ -8,13 +8,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="#FFF">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:navigationIcon="@drawable/back_button_icon"
             android:background="@color/bg"
             app:title="eDermaCare"
             app:titleTextColor="@color/white" />
@@ -54,6 +54,28 @@
             android:src="@drawable/acne1"
             android:adjustViewBounds="false"
             android:layout_marginTop="16dp"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/acne2"
+            android:adjustViewBounds="false"
+            android:layout_marginTop="16dp"/>
+
+        <Button
+            android:id="@+id/gobackButton"
+            android:layout_width="200dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="46dp"
+            android:layout_marginBottom="40dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/roud2"
+            android:text="Back"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"/>
+
 
         <!-- Repeat the above structure for other diseases -->
 

@@ -23,6 +23,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.navigation.NavController;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -52,8 +53,10 @@ public class detectFragment1 extends Fragment {
     Button BSelectImage;
     Button Process;
     Button Reset;
+
+    Button descriptionButton, consultDoctorButton;
     ImageView IVPreviewImage;
-    TextView textView2,textViewDescription;
+    TextView textView2;
 
     // Firebase
     private FirebaseFirestore mFirestore;
@@ -109,8 +112,8 @@ public class detectFragment1 extends Fragment {
         textView2 = rootView.findViewById(R.id.textView2);
         Process = rootView.findViewById(R.id.Process);
         Reset = rootView.findViewById(R.id.Reset);
-        textViewDescription = rootView.findViewById(R.id.textViewDescription);
-
+        descriptionButton = rootView.findViewById(R.id.descriptionButton);
+        consultDoctorButton = rootView.findViewById(R.id.consultDoctorButton);
 
         // Handle button click to select image
         BSelectImage.setOnClickListener(v -> selectImage());
@@ -162,34 +165,61 @@ public class detectFragment1 extends Fragment {
             // Store data in Firebase
             storeDataInFirebase(imageBitmap, resultText);
 
-            int diseaseLayoutId = getDiseaseLayoutId(predictedClassName);
-            View diseaseLayout = LayoutInflater.from(getContext()).inflate(diseaseLayoutId, null);
+            descriptionButton.setEnabled(true);
+            descriptionButton.setVisibility(View.VISIBLE);
+            consultDoctorButton.setEnabled(true);
+            consultDoctorButton.setVisibility(View.VISIBLE);
 
-            // Update the UI with the loaded disease description layout
-            updateUIWithDiseaseLayout(diseaseLayout);
+            // Set click listeners for the buttons
+            descriptionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Handle description button click
+                    // Redirect to the respective detected disease page (acne.xml or psoriasis.xml)
+                    if (predictedClassName.equals("Acne")) {
+                        navigateToAcnePage();
+                    } else if (predictedClassName.equals("Psoriasis")) {
+                        navigateToPsoriasisPage();
+                    } else if (predictedClassName.equals("TineaRingWorm")) {
+                        navigateToRingwormPage();
+                    }
+                }
+            });
+
+            consultDoctorButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Handle consult doctor button click
+                    // You can add your logic here to consult a doctor
+                }
+            });
+
 
         } catch (IOException e) {
             Log.e(TAG, "Error processing image", e);
         }
     }
 
-    private int getDiseaseLayoutId(String detectedDisease) {
-        switch (detectedDisease) {
-            case "Acne":
-                return R.layout.acne;
-            case "Psoriasis":
-                return R.layout.psoriasis;
-            case "TineaRingWorm":
-                return R.layout.ringworm;
-            default:
-                return R.layout.fragment_detect1; // Default layout if disease not found
-        }
+    private void navigateToAcnePage() {
+        // Using Navigation Component to navigate to a fragment
+        Intent intent = new Intent(requireActivity(), acneActivity.class);
+        startActivity(intent);
     }
 
-    private void updateUIWithDiseaseLayout(View diseaseLayout) {
-
-        getActivity().setContentView(diseaseLayout);
+    private void navigateToPsoriasisPage() {
+        // Using Navigation Component to navigate to a fragment
+        Intent intent = new Intent(requireActivity(), psoriasisActivity.class);
+        startActivity(intent);
     }
+
+    private void navigateToRingwormPage() {
+        // Using Navigation Component to navigate to a fragment
+        Intent intent = new Intent(requireActivity(), ringwormActivity.class);
+        startActivity(intent);
+    }
+
+
+
     void resetPage() {
         IVPreviewImage.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_image_24, null)); // Reset image
         IVPreviewImage.setVisibility(View.GONE); // Hide image
