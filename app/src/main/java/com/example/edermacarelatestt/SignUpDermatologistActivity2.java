@@ -17,7 +17,9 @@ import android.widget.ArrayAdapter;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,9 +48,6 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         setContentView(R.layout.activity2_signup_dermatologist);
         editTextPasswordD = findViewById(R.id.dermatologist_signup_password);
-//        editTextCity = findViewById(R.id.dermatologist_city);
-//        editTextDistrict = findViewById(R.id.dermatologist_district);
-//        editTextState = findViewById(R.id.dermatologist_state);
 
         spinnerState = findViewById(R.id.spinnerState);
         spinnerDistrict = findViewById(R.id.spinnerDistrict);
@@ -94,9 +93,6 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
         String password = editTextPasswordD.getText().toString();
         String experience = editTextExperience.getText().toString();
         String mobileNo = editTextMobileNo.getText().toString();
-//        String city = editTextCity.getText().toString();
-//        String district = editTextDistrict.getText().toString();
-//        String state = editTextState.getText().toString();
         String city = spinnerCity.getSelectedItem().toString();
         String district = spinnerDistrict.getSelectedItem().toString();
         String state = spinnerState.getSelectedItem().toString();
@@ -117,50 +113,79 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
         String registrationNo = getIntent().getStringExtra("registrationNo");
         String yearOfRegistration = getIntent().getStringExtra("registrationYear");
         String stateMedicalCouncil = getIntent().getStringExtra("stateMedicalCouncil");
+        String name = getIntent().getStringExtra("name");
 
-        DermatologistVerification.performVerification(registrationNo, yearOfRegistration, stateMedicalCouncil, new DermatologistVerification.VerificationCallback() {
+//        DermatologistVerification.performVerification(registrationNo, yearOfRegistration, stateMedicalCouncil, new DermatologistVerification.VerificationCallback() {
+//            @Override
+//            public void onVerificationComplete(JSONObject result) {
+//                try {
+//                    JSONObject resultObj = result.getJSONObject("result");
+//                    System.out.println(resultObj);
+//                    JSONObject sourceOutput = resultObj.getJSONObject("source_output");
+//                    String status = sourceOutput.getString("status");
+//                    verified = status.equals("id_found") ? "true" : "false";
+//                    if (status.equals("id_found")) {
+//                        JSONObject imrDetails = sourceOutput.getJSONObject("imr_details");
+//                        qualification = imrDetails.getString("qualification");
+//                        qualificationYear = imrDetails.getString("qualification_year");
+//                        universityName = imrDetails.getString("university_name");
+//                        permanent_address=imrDetails.getString("permanent_address");
+//                    }
+//                    Log.d(TAG, "Verification Status: " + verified);
+//                    System.out.println(verified);
+//                    Log.d(TAG, "Qualification: " + qualification);
+//                    Log.d(TAG, "Qualification Year: " + qualificationYear);
+//                    Log.d(TAG, "University Name: " + universityName);
+//                    Log.d(TAG, "add: " + permanent_address);
+//
+//                    // Post data to Firebase only after verification is complete
+//                    postDataToFirebase();
+//                } catch (JSONException e) {
+//                    Log.e(TAG, "JSONException occurred: " + e.getMessage());
+//                }
+//            }
+//
+//            @Override
+//            public void onVerificationFailed(String errorMessage) {
+//                Log.e(TAG, "Verification failed: " + errorMessage);
+//            }
+//        });
+
+        checkIfRecordExists(name, registrationNo, new RecordExistsCallback() {
             @Override
-            public void onVerificationComplete(JSONObject result) {
-                try {
-                    JSONObject resultObj = result.getJSONObject("result");
-                    System.out.println(resultObj);
-                    JSONObject sourceOutput = resultObj.getJSONObject("source_output");
-                    String status = sourceOutput.getString("status");
-                    verified = status.equals("id_found") ? "true" : "false";
-                    if (status.equals("id_found")) {
-                        JSONObject imrDetails = sourceOutput.getJSONObject("imr_details");
-                        qualification = imrDetails.getString("qualification");
-                        qualificationYear = imrDetails.getString("qualification_year");
-                        universityName = imrDetails.getString("university_name");
-                        permanent_address=imrDetails.getString("permanent_address");
-                    }
-                    Log.d(TAG, "Verification Status: " + verified);
-                    System.out.println(verified);
-                    Log.d(TAG, "Qualification: " + qualification);
-                    Log.d(TAG, "Qualification Year: " + qualificationYear);
-                    Log.d(TAG, "University Name: " + universityName);
-                    Log.d(TAG, "add: " + permanent_address);
-
-                    // Post data to Firebase only after verification is complete
+            public void onRecordChecked(boolean exists) {
+                if (exists) {
                     postDataToFirebase();
-                } catch (JSONException e) {
-                    Log.e(TAG, "JSONException occurred: " + e.getMessage());
+                } else {
+                    showAlert("Record doesn't exist");
                 }
-            }
-
-            @Override
-            public void onVerificationFailed(String errorMessage) {
-                Log.e(TAG, "Verification failed: " + errorMessage);
             }
         });
 
-
-
     }
+
+    private void checkIfRecordExists(String name, String registrationNo, RecordExistsCallback callback) {
+        // Create a query to check for matching name and registration number
+        CollectionReference dermatologistRef = db.collection("Dermatologist_IADVL");
+        Query query = dermatologistRef.whereEqualTo("Name", name)
+                .whereEqualTo("Membership Number", registrationNo);
+
+        query.get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        boolean exists = !task.getResult().isEmpty();
+                        callback.onRecordChecked(exists);
+                    } else {
+                        Log.w(TAG, "Error getting documents: ", task.getException());
+                        callback.onRecordChecked(false); // Consider it doesn't exist on error
+                    }
+                });
+    }
+
 
     private void postDataToFirebase() {
         // Check if necessary values are available and post data to Firebase
-        if (!TextUtils.isEmpty(licenseUrl) && verified.equals("true")) {
+        if (!TextUtils.isEmpty(licenseUrl) ) {
             Map<String, Object> dermatologist = new HashMap<>();
             dermatologist.put("Name", getIntent().getStringExtra("name"));
             dermatologist.put("Email", getIntent().getStringExtra("email"));
@@ -169,14 +194,11 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
             dermatologist.put("StateMedicalCouncil", getIntent().getStringExtra("stateMedicalCouncil"));
             dermatologist.put("Exp", editTextExperience.getText().toString());
             dermatologist.put("Mobile", editTextMobileNo.getText().toString());
-//            dermatologist.put("City", spinnerCity.getText().toString());
-//            dermatologist.put("District", spinnerDistrict.getText().toString());
-//            dermatologist.put("State", spinnerState.getText().toString());
             dermatologist.put("City", spinnerCity.getSelectedItem().toString());
             dermatologist.put("District", spinnerDistrict.getSelectedItem().toString());
             dermatologist.put("State", spinnerState.getSelectedItem().toString());
             dermatologist.put("Password", hashPassword(editTextPasswordD.getText().toString()));
-            dermatologist.put("verified", verified);
+//            dermatologist.put("verified", verified);
             dermatologist.put("qualification", qualification);
             dermatologist.put("qualificationYear", qualificationYear);
             dermatologist.put("universityName", universityName);
@@ -214,6 +236,10 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
             e.printStackTrace();
             return null;
         }
+    }
+
+    interface RecordExistsCallback {
+        void onRecordChecked(boolean exists);
     }
 
     // Initialize and populate dropdowns

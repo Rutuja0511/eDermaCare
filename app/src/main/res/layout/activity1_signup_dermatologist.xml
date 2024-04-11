@@ -88,8 +88,7 @@
             android:layout_marginTop="18dp"
             android:background="@drawable/light_grey_border"
             android:drawablePadding="8dp"
-            android:hint="Registration ID Number"
-            android:inputType="phone"
+            android:hint="Membership Number"
             android:padding="8dp"
             android:textColor="@color/black" />
 

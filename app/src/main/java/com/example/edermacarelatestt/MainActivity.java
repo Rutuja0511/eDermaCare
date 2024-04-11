@@ -1,5 +1,6 @@
 package com.example.edermacarelatestt;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -9,6 +10,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.widget.ViewPager2;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ import android.util.TypedValue;
 import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity {
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
@@ -65,5 +68,10 @@ public class MainActivity extends AppCompatActivity {
                 tabLayout.selectTab(tabLayout.getTabAt(position));
             }
         });
+
+        // Initialize Firestore
+        db = FirebaseFirestore.getInstance();
+
+
     }
 }
