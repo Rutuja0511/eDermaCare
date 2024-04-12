@@ -1,5 +1,6 @@
 package com.example.edermacarelatestt;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -182,7 +184,24 @@ public class detectFragment1 extends Fragment {
                         navigateToPsoriasisPage();
                     } else if (predictedClassName.equals("TineaRingWorm")) {
                         navigateToRingwormPage();
+                    } else if(predictedClassName.equals("InsectBites")){
+                        navigateToInsectPage();
+                    } else {
+                        // If none of the known diseases are detected, show a popup
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle("Unknown Disease");
+                        builder.setMessage("The uploaded image does not match any known diseases. Please upload a different image.");
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                // Handle the dialog button click if needed
+                            }
+                        });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
                     }
+
                 }
             });
 
@@ -203,6 +222,11 @@ public class detectFragment1 extends Fragment {
     private void navigateToAcnePage() {
         // Using Navigation Component to navigate to a fragment
         Intent intent = new Intent(requireActivity(), acneActivity.class);
+        startActivity(intent);
+    }
+    private void navigateToInsectPage() {
+        // Using Navigation Component to navigate to a fragment
+        Intent intent = new Intent(requireActivity(), insectBiteActivity.class);
         startActivity(intent);
     }
 

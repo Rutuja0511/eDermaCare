@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#FFF">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/bg"
+            app:title="eDermaCare"
+            app:titleTextColor="@color/white" />
+
+        <!-- Heading TextView for Acne -->
+        <TextView
+            android:id="@+id/acneHeading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="What are Insect Bites?"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:textColor="#0097A7"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Description TextView for Acne -->
+        <TextView
+            android:id="@+id/acneDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Insect bites occur when insects, such as mosquitoes, fleas, ticks, bedbugs, or spiders, pierce the skin to feed on blood or inject venom. These bites can cause various reactions in humans, ranging from mild irritation to severe allergic reactions or transmission of diseases. The symptoms of insect bites can vary depending on the type of insect and individual sensitivity. Common symptoms include redness, swelling, itching, and pain at the site of the bite. In some cases, a small, raised bump or blister may form."
+            android:textAppearance="?android:textAppearanceMedium"
+            android:gravity="start"
+            android:textSize="20sp"
+            android:textColor="#0097A7"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- ImageView for Acne -->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/insect_bite1"
+            android:adjustViewBounds="false"
+            android:layout_marginTop="16dp"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/insect_bite2"
+            android:adjustViewBounds="false"
+            android:layout_marginTop="16dp"/>
+
+        <Button
+            android:id="@+id/gobackButton"
+            android:layout_width="200dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="46dp"
+            android:layout_marginBottom="40dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/roud2"
+            android:text="Back"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"/>
+
+
+        <!-- Repeat the above structure for other diseases -->
+
+    </LinearLayout>
+
+</ScrollView>
