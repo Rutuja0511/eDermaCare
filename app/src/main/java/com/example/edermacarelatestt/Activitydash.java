@@ -43,7 +43,7 @@ public class Activitydash extends AppCompatActivity implements NavigationView.On
                 // Pass userId to profileFragment
                 Bundle bundle = new Bundle();
                 bundle.putString("user_id", userId);
-                fragment_home fragment = new fragment_home();
+                detectFragment1 fragment = new detectFragment1();
                 fragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
             } else {
