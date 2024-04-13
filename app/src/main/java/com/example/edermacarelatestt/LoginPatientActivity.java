@@ -1,5 +1,12 @@
 package com.example.edermacarelatestt;
-
+import android.util.Log;
+import android.widget.Toast;
+import android.widget.TextView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -69,12 +76,14 @@ public class LoginPatientActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (DocumentSnapshot document : task.getResult()) {
+                            
                             String hashedPassword = hashPassword(password);
                             String storedPassword = document.getString("Password");
+                            String username = document.getString("Name");
                             String userId = document.getId();
                             if (hashedPassword.equals(storedPassword)) {
                                 Toast.makeText(LoginPatientActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
-                                redirectToProfilePage(email, userId); // Pass both email and userId
+                                redirectToProfilePage(email, userId, username); // Pass both email and userId
                                 return;
                             }
                         }
@@ -102,10 +111,11 @@ public class LoginPatientActivity extends AppCompatActivity {
         }
     }
 
-    private void redirectToProfilePage(String userEmail, String userId) {
+    private void redirectToProfilePage(String userEmail, String userId, String username) {
         Intent intent = new Intent(LoginPatientActivity.this, Activitydash.class);
         intent.putExtra("user_email", userEmail);
         intent.putExtra("user_id", userId);
+        intent.putExtra("usern", username);
         startActivity(intent);
     }
 }

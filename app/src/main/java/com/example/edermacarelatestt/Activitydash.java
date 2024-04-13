@@ -1,5 +1,6 @@
 package com.example.edermacarelatestt;
-
+import android.view.View;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -17,10 +18,13 @@ import android.widget.Toast;
 import com.google.android.material.navigation.NavigationView;
 public class Activitydash extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private DrawerLayout drawerLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activityfiledashboard);
+        // Assuming username holds the string value you want to set
+        updateNavHeader();
 
 
         Toolbar toolbar = findViewById(R.id.toolbar); //Ignore red line errors
@@ -34,7 +38,18 @@ public class Activitydash extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new detectFragment1()).commit();
+            String userId = getIntent().getStringExtra("user_id");
+            if (userId != null) {
+                // Pass userId to profileFragment
+                Bundle bundle = new Bundle();
+                bundle.putString("user_id", userId);
+                fragment_home fragment = new fragment_home();
+                fragment.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+            } else {
+                // Handle the case where userId is not found
+                Toast.makeText(this, "User ID not found", Toast.LENGTH_SHORT).show();
+            }
             navigationView.setCheckedItem(R.id.navhome);
         }
     }
@@ -112,5 +127,16 @@ public class Activitydash extends AppCompatActivity implements NavigationView.On
         } else {
             super.onBackPressed();
         }
+    }
+    public void updateNavHeader() {
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView navUsername = headerView.findViewById(R.id.textViewuser);
+
+        String userE = getIntent().getStringExtra("usern");
+        navUsername.setText(userE);
+
+
     }
 }
