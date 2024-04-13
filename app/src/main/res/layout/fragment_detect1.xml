@@ -70,42 +70,77 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/linelayout"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="26dp"
             android:layout_marginHorizontal="20dp"
             android:text="@string/result"
             android:textColor="#0097A7"
             android:gravity="center"
             android:textSize="20sp" />
 
-        <Button
-            android:id="@+id/descriptionButton"
-            android:layout_width="200dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textView2"
-            android:layout_marginTop="46dp"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/roud2"
-            android:text="Description"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:visibility="gone"/>
+<!--        <Button-->
+<!--            android:id="@+id/descriptionButton"-->
+<!--            android:layout_width="200dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_below="@id/textView2"-->
+<!--            android:layout_marginTop="46dp"-->
+<!--            android:layout_centerHorizontal="true"-->
+<!--            android:background="@drawable/roud2"-->
+<!--            android:text="Description"-->
+<!--            android:textColor="@android:color/white"-->
+<!--            android:textSize="18sp"-->
+<!--            android:visibility="gone"/>-->
 
-        <!-- Consult Doctor button -->
-        <Button
-            android:id="@+id/consultDoctorButton"
-            android:layout_width="200dp"
-            android:layout_weight="1"
+<!--        &lt;!&ndash; Consult Doctor button &ndash;&gt;-->
+<!--        <Button-->
+<!--            android:id="@+id/consultDoctorButton"-->
+<!--            android:layout_width="200dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_below="@id/descriptionButton"-->
+<!--            android:layout_marginStart="26dp"-->
+<!--            android:layout_marginTop="46dp"-->
+<!--            android:layout_centerHorizontal="true"-->
+<!--            android:background="@drawable/roud2"-->
+<!--            android:text="Consult Doctor"-->
+<!--            android:textColor="@android:color/white"-->
+<!--            android:textSize="18sp"-->
+<!--            android:visibility="gone"/>-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/descriptionButton"
-            android:layout_marginStart="26dp"
-            android:layout_marginTop="46dp"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/roud2"
-            android:text="Consult Doctor"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:visibility="gone"/>
+            android:orientation="horizontal"
+            android:layout_below="@id/textView2"
+            android:layout_marginTop="24dp"
+            android:layout_centerHorizontal="true">
+
+            <!-- Description button -->
+            <Button
+                android:id="@+id/descriptionButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/roud2"
+                android:text="Description"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:visibility="gone"/>
+
+            <!-- Consult Doctor button -->
+            <Button
+                android:id="@+id/consultDoctorButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="26dp"
+                android:background="@drawable/roud2"
+                android:text="Consult Doctor"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:visibility="gone"/>
+
+        </LinearLayout>
 
 
     </RelativeLayout>
