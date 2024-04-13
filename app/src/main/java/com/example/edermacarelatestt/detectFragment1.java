@@ -210,6 +210,8 @@ public class detectFragment1 extends Fragment {
                 public void onClick(View v) {
                     // Handle consult doctor button click
                     // You can add your logic here to consult a doctor
+                    Intent intent = new Intent(getActivity(), BookConsultation.class);
+                    startActivity(intent);
                 }
             });
 

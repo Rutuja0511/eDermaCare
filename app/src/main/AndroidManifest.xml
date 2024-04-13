@@ -53,7 +53,9 @@
         <activity android:name=".LoginDermatologistActivity"
             android:exported="true">
         </activity>
-
+        <activity android:name=".BookConsultation"
+            android:exported="true">
+        </activity>
         <activity android:name=".SignUpPatientActivity"
             android:exported="true">
         </activity>
