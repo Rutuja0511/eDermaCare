@@ -8,7 +8,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="#FFF">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -22,7 +24,7 @@
             android:id="@+id/acneHeading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="What is Tinea Ringworm?"
+            android:text="What are Nail Infections?"
             android:textAppearance="?android:textAppearanceLarge"
             android:textStyle="bold"
             android:textSize="20sp"
@@ -36,7 +38,7 @@
             android:id="@+id/acneDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tinea, commonly known as ringworm, is a fungal infection of the skin or scalp. Despite its name, it's not caused by a worm but rather by various types of fungi known as dermatophytes. These fungi thrive in warm, moist environments and can spread through direct contact with an infected person or animal, as well as through contaminated objects like towels, clothing, or surfaces."
+            android:text="Nail infections, caused by fungi, bacteria, viruses, or yeast, result in symptoms such as thickened, discolored nails, pain, swelling, and pus. Fungal infections, like onychomycosis, are common and lead to brittle, crumbly nails. Bacterial infections can cause redness and swelling around the nails. Viral infections, such as warts, present as raised bumps. Yeast infections are less common but can occur, especially in those with weakened immune systems or frequent exposure to moisture. Treatment varies depending on the type of infection and may include antifungal medications, antibiotics, or medical intervention."
             android:textAppearance="?android:textAppearanceMedium"
             android:gravity="start"
             android:textSize="20sp"
@@ -45,13 +47,6 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"/>
 
-        <!-- ImageView for Acne -->
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ringworm1"
-            android:adjustViewBounds="false"
-            android:layout_marginTop="16dp"/>
 
         <Button
             android:id="@+id/gobackButton"
@@ -66,6 +61,7 @@
             android:layout_gravity="center_horizontal"
             android:textColor="@android:color/white"
             android:textSize="18sp"/>
+
 
         <!-- Repeat the above structure for other diseases -->
 

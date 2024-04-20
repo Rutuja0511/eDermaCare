@@ -90,7 +90,7 @@ public class detectFragment1 extends Fragment {
                     });
 
     private static final String TAG = "detectFragment1";
-    private static final int OUTPUT_SIZE = 5;// specify the size of the output array
+    private static final int OUTPUT_SIZE = 6;// specify the size of the output array
 
     private View rootView;
     @Override
@@ -146,7 +146,6 @@ public class detectFragment1 extends Fragment {
             // Preprocess the input image to match the model input requirements
             Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, inputSize, inputSize, false);
             ByteBuffer inputBuffer = convertBitmapToByteBuffer(resizedBitmap);
-
             float[][] outputArray = new float[1][OUTPUT_SIZE]; // Adjust OUTPUT_SIZE according to your model
 
             // Run inference on the preprocessed image
@@ -178,16 +177,27 @@ public class detectFragment1 extends Fragment {
                 public void onClick(View v) {
                     // Handle description button click
                     // Redirect to the respective detected disease page (acne.xml or psoriasis.xml)
-                    if (predictedClassName.equals("Acne")) {
+                    if (predictedClassName.equals("Acne & Related Diseases")) {
                         navigateToAcnePage();
-                    } else if (predictedClassName.equals("Psoriasis")) {
+                        return;
+                    }
+                    if (predictedClassName.equals("Psoriasis")) {
                         navigateToPsoriasisPage();
-                    } else if (predictedClassName.equals("TineaRingWorm")) {
+                        return;
+                    }
+                    if (predictedClassName.equals("TineaRingWorm")) {
                         navigateToRingwormPage();
-                    } else if(predictedClassName.equals("InsectBites")){
+                        return;
+                    }
+                    if (predictedClassName.equals("InsectBites")) {
                         navigateToInsectPage();
-                    } else {
-                        // If none of the known diseases are detected, show a popup
+                        return;
+                    }
+                    if (predictedClassName.equals("Nail Infections")) {
+                        navigateToNailPage();
+                        return;
+                    }
+                    if(predictedClassName.equals("Non Skin")){
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                         builder.setTitle("Unknown Disease");
                         builder.setMessage("The uploaded image does not match any known diseases. Please upload a different image.");
@@ -201,7 +211,6 @@ public class detectFragment1 extends Fragment {
                         AlertDialog dialog = builder.create();
                         dialog.show();
                     }
-
                 }
             });
 
@@ -244,7 +253,11 @@ public class detectFragment1 extends Fragment {
         startActivity(intent);
     }
 
-
+    private void navigateToNailPage() {
+        // Using Navigation Component to navigate to a fragment
+        Intent intent = new Intent(requireActivity(), nailActivity.class);
+        startActivity(intent);
+    }
 
     void resetPage() {
         IVPreviewImage.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_image_24, null)); // Reset image
@@ -311,7 +324,7 @@ public class detectFragment1 extends Fragment {
     private MappedByteBuffer loadModelFile() throws IOException {
         // Load model file here
         AssetManager assetManager = requireContext().getAssets();
-        AssetFileDescriptor fileDescriptor = assetManager.openFd("modelling_skinDisease.tflite");
+        AssetFileDescriptor fileDescriptor = assetManager.openFd("modelling_Universe.tflite");
         FileInputStream inputStream = null;
         try {
             inputStream = fileDescriptor.createInputStream();
