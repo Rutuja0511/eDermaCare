@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import android.content.Intent;
 public class Activitydash extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private DrawerLayout drawerLayout;
 
@@ -114,7 +115,11 @@ public class Activitydash extends AppCompatActivity implements NavigationView.On
             }
         else if (itemId == R.id.navh3) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ConsultationFragment()).commit();
+        }else  if (item.getItemId() == R.id.logout) {
+            logout();
+            return true;
         }
+
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
@@ -128,6 +133,13 @@ public class Activitydash extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
+    public void logout() {
+        // Navigate back to the login screen
+        Intent intent = new Intent(Activitydash.this, LoginPatientActivity.class);
+        startActivity(intent);
+        finish(); // Close the current activity
+    }
+
     public void updateNavHeader() {
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
