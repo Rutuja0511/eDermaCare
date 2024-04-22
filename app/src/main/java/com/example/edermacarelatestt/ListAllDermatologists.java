@@ -59,11 +59,12 @@ public class ListAllDermatologists extends AppCompatActivity implements MyAdapte
     public void onItemClick(int position) {
         // Get the selected dermatologist
         Dermatologist selectedDermatologist = dermatologistArrayList.get(position);
-
+        String userId = getIntent().getStringExtra("user_id");
         // Start BookAppointmentActivity and pass necessary data
         Intent intent = new Intent(ListAllDermatologists.this, BookAppointmentActivity.class);
         intent.putExtra("Name", selectedDermatologist.getName());
         intent.putExtra("City", selectedDermatologist.getCity());
+        intent.putExtra("user_id", userId);
         startActivity(intent);
     }
 }

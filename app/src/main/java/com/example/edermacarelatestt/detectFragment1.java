@@ -220,6 +220,7 @@ public class detectFragment1 extends Fragment {
                     // Handle consult doctor button click
                     // You can add your logic here to consult a doctor
                     Intent intent = new Intent(getActivity(), BookConsultation.class);
+                    intent.putExtra("user_id", userId);
                     startActivity(intent);
                 }
             });

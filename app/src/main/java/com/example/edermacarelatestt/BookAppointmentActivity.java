@@ -40,9 +40,6 @@ public class BookAppointmentActivity extends AppCompatActivity {
         // Initialize Firestore
         db = FirebaseFirestore.getInstance();
 
-        // Initialize UserManager
-        UserManager userManager = new UserManager();
-
         // Get TextViews for displaying date and time
         dateTextView = findViewById(R.id.dateTextView);
         timeTextView = findViewById(R.id.timeTextView);
@@ -57,6 +54,7 @@ public class BookAppointmentActivity extends AppCompatActivity {
         // Get the name and city from the intent
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
+            userId = extras.getString("user_id");
             String name = extras.getString("usern");
             String city = extras.getString("city");
             fbname.setText(name);
@@ -87,13 +85,7 @@ public class BookAppointmentActivity extends AppCompatActivity {
         bookAppointmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Get current user ID
-                userId = userManager.getCurrentUserId();
-                if (userId != null) {
-                    saveAppointmentToFirestore();
-                } else {
-                    Toast.makeText(BookAppointmentActivity.this, "User not logged in", Toast.LENGTH_SHORT).show();
-                }
+                saveAppointmentToFirestore();
             }
         });
     }
@@ -130,7 +122,6 @@ public class BookAppointmentActivity extends AppCompatActivity {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 // Update TextView with selected time
-                selectedDate = Calendar.getInstance();
                 selectedDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 selectedDate.set(Calendar.MINUTE, minute);
 
