@@ -1,20 +1,32 @@
 package com.example.edermacarelatestt;
 
 public class Dermatologist {
-    private String name;
-    private String city;
+    private String Name;
 
-    public Dermatologist(String name, String city) {
-        this.name = name;
-        this.city = city;
+    private String City;
+
+    // Empty constructor required for Firestore deserialization
+    public Dermatologist() {
+    }
+
+    public Dermatologist(String Name, String City) {
+        this.Name = Name;
+        this.City = City;
     }
 
     public String getName() {
-        return name;
+        return Name;
     }
 
     public String getCity() {
-        return city;
+        return City;
+    }
+
+    public void setName(String Name) {
+        this.Name = Name;
+    }
+
+    public void setCity(String City) {
+        this.City = City;
     }
 }
-
