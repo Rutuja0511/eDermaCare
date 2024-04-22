@@ -8,26 +8,29 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BookAppointmentActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
     private Calendar selectedDate;
-    private TextView dateTextView, timeTextView;
+    private TextView dateTextView, timeTextView, fbname, fbcity, fbdistrict, fbstate, fbnemail, fbmobile, fbexperience;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,67 +40,28 @@ public class BookAppointmentActivity extends AppCompatActivity {
         // Initialize Firestore
         db = FirebaseFirestore.getInstance();
 
+        // Initialize UserManager
+        UserManager userManager = new UserManager();
+
         // Get TextViews for displaying date and time
         dateTextView = findViewById(R.id.dateTextView);
         timeTextView = findViewById(R.id.timeTextView);
+        fbname = findViewById(R.id.fbname);
+        fbcity = findViewById(R.id.fbcity);
+        fbdistrict = findViewById(R.id.fbdistrict);
+        fbstate = findViewById(R.id.fbstate);
+        fbnemail = findViewById(R.id.fbnemail);
+        fbmobile = findViewById(R.id.fbmobile);
+        fbexperience = findViewById(R.id.fbexperience);
 
         // Get the name and city from the intent
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            String name = extras.getString("Name");
-            String city = extras.getString("City");
-
-            // Query the Firestore collection to find the dermatologist with the given name and city
-            db.collection("dermatologist")
-                    .whereEqualTo("Name", name)
-                    .whereEqualTo("City", city)
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (DocumentSnapshot document : task.getResult()) {
-                                    // Extract the details from the document
-                                    String district = document.getString("District");
-                                    String email = document.getString("Email");
-                                    String exp = document.getString("Exp");
-                                    String licenseURL = document.getString("LicenseURL");
-                                    String mobile = document.getString("Mobile");
-                                    String password = document.getString("Password");
-                                    String regID = document.getString("RegID");
-                                    String regYear = document.getString("RegYear");
-                                    String state = document.getString("State");
-                                    String stateMedicalCouncil = document.getString("StateMedicalCouncil");
-
-                                    // Set the details to TextViews
-                                    TextView nameTextView = findViewById(R.id.fbname);
-                                    TextView cityTextView = findViewById(R.id.fbcity);
-                                    TextView districtTextView = findViewById(R.id.fbdistrict);
-                                    TextView emailTextView = findViewById(R.id.fbnemail);
-                                    TextView expTextView = findViewById(R.id.fbexperience);
-                                    TextView mobileTextView = findViewById(R.id.fbmobile);
-//                                    TextView regIDTextView = findViewById(R.id.regIDTextView);
-//                                    TextView regYearTextView = findViewById(R.id.regYearTextView);
-                                    TextView stateTextView = findViewById(R.id.fbstate);
-//                                    TextView stateMedicalCouncilTextView = findViewById(R.id.stateMedicalCouncilTextView);
-
-                                    nameTextView.setText(name);
-                                    cityTextView.setText(city);
-                                    districtTextView.setText(district);
-                                    emailTextView.setText(email);
-                                    expTextView.setText(exp);
-                                    mobileTextView.setText(mobile);
-//                                    regIDTextView.setText(regID);
-//                                    regYearTextView.setText(regYear);
-                                    stateTextView.setText(state);
-//                                    stateMedicalCouncilTextView.setText(stateMedicalCouncil);
-                                    // You can set more details similarly
-                                }
-                            } else {
-                                // Handle errors
-                            }
-                        }
-                    });
+            String name = extras.getString("usern");
+            String city = extras.getString("city");
+            fbname.setText(name);
+            fbcity.setText(city);
+            // You can retrieve other details as needed
         }
 
         // Button to select date
@@ -115,6 +79,21 @@ public class BookAppointmentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showTimePicker();
+            }
+        });
+
+        // Button to book appointment
+        Button bookAppointmentButton = findViewById(R.id.bookAppointment);
+        bookAppointmentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get current user ID
+                userId = userManager.getCurrentUserId();
+                if (userId != null) {
+                    saveAppointmentToFirestore();
+                } else {
+                    Toast.makeText(BookAppointmentActivity.this, "User not logged in", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -151,6 +130,7 @@ public class BookAppointmentActivity extends AppCompatActivity {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 // Update TextView with selected time
+                selectedDate = Calendar.getInstance();
                 selectedDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 selectedDate.set(Calendar.MINUTE, minute);
 
@@ -160,5 +140,46 @@ public class BookAppointmentActivity extends AppCompatActivity {
             }
         }, hour, minute, true);
         timePickerDialog.show();
+    }
+
+    private void saveAppointmentToFirestore() {
+        if (selectedDate != null && userId != null) {
+            // Get the appointment details
+            String name = fbname.getText().toString();
+            String city = fbcity.getText().toString();
+            String district = fbdistrict.getText().toString();
+            String state = fbstate.getText().toString();
+            String email = fbnemail.getText().toString();
+            String mobile = fbmobile.getText().toString();
+            String experience = fbexperience.getText().toString();
+
+            // Create a Map to store the appointment data
+            Map<String, Object> appointment = new HashMap<>();
+            appointment.put("name", name);
+            appointment.put("city", city);
+            appointment.put("district", district);
+            appointment.put("state", state);
+            appointment.put("email", email);
+            appointment.put("mobile", mobile);
+            appointment.put("experience", experience);
+
+            // Add the appointment to Firestore
+            db.collection("patients")
+                    .document(userId)
+                    .collection("appointment")
+                    .add(appointment)
+                    .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentReference> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(BookAppointmentActivity.this, "Appointment booked successfully!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(BookAppointmentActivity.this, "Failed to book appointment. Please try again.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        } else {
+            Toast.makeText(BookAppointmentActivity.this, "Please select date and time", Toast.LENGTH_SHORT).show();
+        }
     }
 }
