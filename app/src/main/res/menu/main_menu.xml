@@ -10,7 +10,7 @@
 
 
         <item android:id="@+id/navhs"
-            android:title="Personal_details"
+            android:title="Personal Details"
             android:icon="@drawable/ic_baseline_person_24"/>
 
 
