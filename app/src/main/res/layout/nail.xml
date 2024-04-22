@@ -47,6 +47,18 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"/>
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/nails1"
+            android:adjustViewBounds="false"
+            android:layout_marginTop="16dp"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/nails2"
+            android:adjustViewBounds="false"
+            android:layout_marginTop="16dp"/>
 
         <Button
             android:id="@+id/gobackButton"

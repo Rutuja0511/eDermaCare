@@ -52,6 +52,12 @@
             android:src="@drawable/ringworm1"
             android:adjustViewBounds="false"
             android:layout_marginTop="16dp"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ringworm2"
+            android:adjustViewBounds="false"
+            android:layout_marginTop="16dp"/>
 
         <Button
             android:id="@+id/gobackButton"
