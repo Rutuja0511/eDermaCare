@@ -44,9 +44,9 @@ public class BookConsultation extends AppCompatActivity {
         dermatologistArrayList = new ArrayList<>();
 
         searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
-                searchDermatologist();
+                // Open ListAllDermatologists activity
+                startActivity(new Intent(BookConsultation.this, SearchResultsActivity.class));
             }
         });
 
@@ -74,26 +74,26 @@ public class BookConsultation extends AppCompatActivity {
         });
     }
 
-    private void searchDermatologist() {
-        String name = nameEditText.getText().toString().trim();
-        String city = cityEditText.getText().toString().trim();
-
-        db.collection("dermatologist")
-                .whereEqualTo("Name", name)
-                .whereEqualTo("City", city)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        dermatologistArrayList.clear();
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Dermatologist dermatologist = document.toObject(Dermatologist.class);
-                            dermatologistArrayList.add(dermatologist);
-                        }
-                        adapter = new MyAdapter(BookConsultation.this, dermatologistArrayList);
-                        recyclerView.setAdapter(adapter);
-                    }
-                });
-    }
+//    private void searchDermatologist() {
+//        String name = nameEditText.getText().toString().trim();
+//        String city = cityEditText.getText().toString().trim();
+//
+//        db.collection("dermatologist")
+//                .whereEqualTo("Name", name)
+//                .whereEqualTo("City", city)
+//                .get()
+//                .addOnCompleteListener(task -> {
+//                    if (task.isSuccessful()) {
+//                        dermatologistArrayList.clear();
+//                        for (QueryDocumentSnapshot document : task.getResult()) {
+//                            Dermatologist dermatologist = document.toObject(Dermatologist.class);
+//                            dermatologistArrayList.add(dermatologist);
+//                        }
+//                        adapter = new MyAdapter(BookConsultation.this, dermatologistArrayList);
+//                        recyclerView.setAdapter(adapter);
+//                    }
+//                });
+//    }
 
 //    private void listAllDermatologists() {
 //        db.collection("dermatologist")

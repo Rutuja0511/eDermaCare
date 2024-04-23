@@ -16,7 +16,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -55,11 +57,64 @@ public class BookAppointmentActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             userId = extras.getString("user_id");
-            String name = extras.getString("usern");
-            String city = extras.getString("city");
+//            String name = extras.getString("usern");
+            String name = extras.getString("Name");
+            String city = extras.getString("City");
             fbname.setText(name);
             fbcity.setText(city);
-            // You can retrieve other details as needed
+
+            // Query the Firestore collection to find the dermatologist with the given name and city
+            db.collection("dermatologist")
+                    .whereEqualTo("Name", name)
+                    .whereEqualTo("City", city)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (DocumentSnapshot document : task.getResult()) {
+                                    // Extract the details from the document
+                                    String district = document.getString("District");
+                                    String email = document.getString("Email");
+                                    String exp = document.getString("Exp");
+                                    String licenseURL = document.getString("LicenseURL");
+                                    String mobile = document.getString("Mobile");
+                                    String password = document.getString("Password");
+                                    String regID = document.getString("RegID");
+                                    String regYear = document.getString("RegYear");
+                                    String state = document.getString("State");
+                                    String stateMedicalCouncil = document.getString("StateMedicalCouncil");
+
+                                    // Set the details to TextViews
+                                    TextView nameTextView = findViewById(R.id.fbname);
+                                    TextView cityTextView = findViewById(R.id.fbcity);
+                                    TextView districtTextView = findViewById(R.id.fbdistrict);
+                                    TextView emailTextView = findViewById(R.id.fbnemail);
+                                    TextView expTextView = findViewById(R.id.fbexperience);
+                                    TextView mobileTextView = findViewById(R.id.fbmobile);
+//                                    TextView regIDTextView = findViewById(R.id.regIDTextView);
+//                                    TextView regYearTextView = findViewById(R.id.regYearTextView);
+                                    TextView stateTextView = findViewById(R.id.fbstate);
+//                                    TextView stateMedicalCouncilTextView = findViewById(R.id.stateMedicalCouncilTextView);
+
+                                    nameTextView.setText(name);
+                                    cityTextView.setText(city);
+                                    districtTextView.setText(district);
+                                    emailTextView.setText(email);
+                                    expTextView.setText(exp);
+                                    mobileTextView.setText(mobile);
+//                                    regIDTextView.setText(regID);
+//                                    regYearTextView.setText(regYear);
+                                    stateTextView.setText(state);
+//                                    stateMedicalCouncilTextView.setText(stateMedicalCouncil);
+                                    // You can set more details similarly
+                                }
+                            } else {
+                                // Handle errors
+                            }
+                        }
+                    });
+
         }
 
         // Button to select date

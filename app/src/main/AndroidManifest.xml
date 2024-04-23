@@ -38,6 +38,9 @@
         <activity android:name=".ListAllDermatologists"
             android:exported="true">
         </activity>
+        <activity android:name=".SearchResultsActivity"
+            android:exported="true">
+        </activity>
         <activity android:name=".BookAppointmentActivity"
             android:exported="true">
         </activity>
