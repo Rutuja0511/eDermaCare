@@ -1,106 +1,81 @@
 package com.example.edermacarelatestt;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class SearchResultsActivity extends AppCompatActivity implements MyAdapter.OnItemClickListener {
+public class SearchResultsActivity extends AppCompatActivity {
 
-    RecyclerView recyclerViewSearchResults;
+    RecyclerView recyclerView;
     FirebaseFirestore db;
-    ArrayList<Dermatologist> searchResultsList;
+    ArrayList<Dermatologist> dermatologistArrayList;
     MyAdapter adapter;
+    private String name, city;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
 
-        recyclerViewSearchResults = findViewById(R.id.recyclerView);
-        recyclerViewSearchResults.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         db = FirebaseFirestore.getInstance();
-        searchResultsList = new ArrayList<>();
+        dermatologistArrayList = new ArrayList<>();
 
-        // Set an empty adapter initially
-        adapter = new MyAdapter(SearchResultsActivity.this, searchResultsList);
-        adapter.setOnItemClickListener(SearchResultsActivity.this);
-        recyclerViewSearchResults.setAdapter(adapter);
+        // Get the name and city from the intent
+        name = getIntent().getStringExtra("name");
+        city = getIntent().getStringExtra("city");
 
-        // Get search parameters from intent
-        Intent intent = getIntent();
-        String name = intent.getStringExtra("Name");
-        String city = intent.getStringExtra("City");
-
-        // Call method to fetch and display search results
-        searchDermatologists(name, city);
+        // Call method to search dermatologists based on name and city
+        searchDermatologists();
     }
 
+    private void searchDermatologists() {
+        // Construct the query dynamically based on the provided name and/or city
+        Query query = db.collection("dermatologist");
 
-    private void searchDermatologists(String name, String city) {
-        // Build Firestore query based on search parameters
-        Query query;
-
-        if (name != null && !name.isEmpty() && (city == null || city.isEmpty())) {
-            query = db.collection("dermatologist").whereEqualTo("Name", name);
-        } else if (city != null && !city.isEmpty() && (name == null || name.isEmpty())) {
-            query = db.collection("dermatologist").whereEqualTo("City", city);
-        } else if (name != null && !name.isEmpty() && city != null && !city.isEmpty()) {
-            query = db.collection("dermatologist").whereEqualTo("Name", name).whereEqualTo("City", city);
-        } else {
-            return;
+        if (!TextUtils.isEmpty(name)) {
+            query = query.whereEqualTo("Name", name);
         }
 
-        // Execute the query
-        query.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                searchResultsList.clear();
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    Dermatologist dermatologist = document.toObject(Dermatologist.class);
-                    // Check if the dermatologist's name or city matches the search criteria
-                    if (name != null && !name.isEmpty() && dermatologist.getName().equalsIgnoreCase(name)) {
-                        searchResultsList.add(dermatologist);
-                    } else if (city != null && !city.isEmpty() && dermatologist.getCity().equalsIgnoreCase(city)) {
-                        searchResultsList.add(dermatologist);
+        if (!TextUtils.isEmpty(city)) {
+            query = query.whereEqualTo("City", city);
+        }
+
+        query.get()
+                .addOnSuccessListener(new OnSuccessListener
+                        <QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        dermatologistArrayList.clear();
+                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                            Dermatologist dermatologist = document.toObject(Dermatologist.class);
+                            dermatologistArrayList.add(dermatologist);
+                        }
+                        adapter = new MyAdapter(SearchResultsActivity.this, dermatologistArrayList);
+                        recyclerView.setAdapter(adapter);
                     }
-                }
-
-                if (searchResultsList.isEmpty()) {
-                    // If searchResultsList is empty, show a Toast message
-                    Toast.makeText(SearchResultsActivity.this, "Data not found", Toast.LENGTH_SHORT).show();
-                } else {
-                    // Update RecyclerView with search results
-                    adapter.notifyDataSetChanged(); // Notify adapter of data changes
-                }
-            } else {
-                Log.e("SearchResultsActivity", "Error getting documents: ", task.getException());
-            }
-        });
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("SearchResultsActivity", "Error getting documents: ", e);
+                    }
+                });
     }
-
-
-
-    @Override
-    public void onItemClick(int position) {
-        // Handle item click, e.g., start BookAppointmentActivity with selected dermatologist's details
-        Dermatologist selectedDermatologist = searchResultsList.get(position);
-        // Start BookAppointmentActivity and pass necessary data
-        Intent intent = new Intent(SearchResultsActivity.this, BookAppointmentActivity.class);
-        intent.putExtra("Name", selectedDermatologist.getName());
-        intent.putExtra("City", selectedDermatologist.getCity());
-        startActivity(intent);
-    }
-
 }
-
