@@ -47,7 +47,7 @@ public class DExtraDetails extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (TextUtils.isEmpty(clinicAddr1.getText()) || TextUtils.isEmpty(clinicAddr2.getText()) || TextUtils.isEmpty(clinicAddr3.getText()) || TextUtils.isEmpty(startTime.getText()) || TextUtils.isEmpty(endTime.getText())) {
+                if (TextUtils.isEmpty(clinicAddr1.getText())  || TextUtils.isEmpty(startTime.getText()) || TextUtils.isEmpty(endTime.getText())) {
                     // Display message if any EditText field is empty
                     Toast.makeText(DExtraDetails.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                 } else {
