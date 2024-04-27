@@ -113,6 +113,7 @@ public class LoginDermatologistActivity extends AppCompatActivity {
 
     private void redirectToDermatologist(String userEmail, String userId) {
         Intent intent = new Intent(LoginDermatologistActivity.this, Activitydash2.class);
+//        Intent intent = new Intent(LoginDermatologistActivity.this, DExtraDetails.class);
         intent.putExtra("user_email", userEmail);
         intent.putExtra("user_id", userId);
         startActivity(intent);
