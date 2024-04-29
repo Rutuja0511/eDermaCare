@@ -23,8 +23,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class BookAppointmentActivity extends AppCompatActivity {
@@ -57,7 +57,6 @@ public class BookAppointmentActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             userId = extras.getString("user_id");
-//            String name = extras.getString("usern");
             String name = extras.getString("Name");
             String city = extras.getString("City");
             fbname.setText(name);
@@ -77,37 +76,15 @@ public class BookAppointmentActivity extends AppCompatActivity {
                                     String district = document.getString("District");
                                     String email = document.getString("Email");
                                     String exp = document.getString("Exp");
-                                    String licenseURL = document.getString("LicenseURL");
                                     String mobile = document.getString("Mobile");
-                                    String password = document.getString("Password");
-                                    String regID = document.getString("RegID");
-                                    String regYear = document.getString("RegYear");
                                     String state = document.getString("State");
-                                    String stateMedicalCouncil = document.getString("StateMedicalCouncil");
 
                                     // Set the details to TextViews
-                                    TextView nameTextView = findViewById(R.id.fbname);
-                                    TextView cityTextView = findViewById(R.id.fbcity);
-                                    TextView districtTextView = findViewById(R.id.fbdistrict);
-                                    TextView emailTextView = findViewById(R.id.fbnemail);
-                                    TextView expTextView = findViewById(R.id.fbexperience);
-                                    TextView mobileTextView = findViewById(R.id.fbmobile);
-//                                    TextView regIDTextView = findViewById(R.id.regIDTextView);
-//                                    TextView regYearTextView = findViewById(R.id.regYearTextView);
-                                    TextView stateTextView = findViewById(R.id.fbstate);
-//                                    TextView stateMedicalCouncilTextView = findViewById(R.id.stateMedicalCouncilTextView);
-
-                                    nameTextView.setText(name);
-                                    cityTextView.setText(city);
-                                    districtTextView.setText(district);
-                                    emailTextView.setText(email);
-                                    expTextView.setText(exp);
-                                    mobileTextView.setText(mobile);
-//                                    regIDTextView.setText(regID);
-//                                    regYearTextView.setText(regYear);
-                                    stateTextView.setText(state);
-//                                    stateMedicalCouncilTextView.setText(stateMedicalCouncil);
-                                    // You can set more details similarly
+                                    fbdistrict.setText(district);
+                                    fbnemail.setText(email);
+                                    fbexperience.setText(exp);
+                                    fbmobile.setText(mobile);
+                                    fbstate.setText(state);
                                 }
                             } else {
                                 // Handle errors
@@ -199,6 +176,12 @@ public class BookAppointmentActivity extends AppCompatActivity {
             String mobile = fbmobile.getText().toString();
             String experience = fbexperience.getText().toString();
 
+            // Format the selected date and time
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+            String selectedDateString = dateFormat.format(selectedDate.getTime());
+            String selectedTimeString = timeFormat.format(selectedDate.getTime());
+
             // Create a Map to store the appointment data
             Map<String, Object> appointment = new HashMap<>();
             appointment.put("name", name);
@@ -208,6 +191,8 @@ public class BookAppointmentActivity extends AppCompatActivity {
             appointment.put("email", email);
             appointment.put("mobile", mobile);
             appointment.put("experience", experience);
+            appointment.put("date", selectedDateString); // Add selected date
+            appointment.put("time", selectedTimeString); // Add selected time
 
             // Add the appointment to Firestore
             db.collection("patients")
@@ -228,4 +213,5 @@ public class BookAppointmentActivity extends AppCompatActivity {
             Toast.makeText(BookAppointmentActivity.this, "Please select date and time", Toast.LENGTH_SHORT).show();
         }
     }
+
 }
