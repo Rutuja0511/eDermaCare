@@ -273,6 +273,8 @@ public class detectFragment1 extends Fragment {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         String date = dateFormat.format(calendar.getTime()); // Format the date as "12/4/2023"
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+        String time = timeFormat.format(calendar.getTime());
 
         // Convert bitmap to byte array
         byte[] imageData = convertBitmapToByteArray(imageBitmap);
@@ -294,6 +296,7 @@ public class detectFragment1 extends Fragment {
                                 put("result", resultText);
                                 put("date", date); // Store date in Firestore
                                 put("imageURL", imageURL); // Store image URL in Firestore
+                                put("time", time); // Store time in Firestore
                             }})
                             .addOnSuccessListener(documentReference -> {
                                 // Data successfully added to Firestore

@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -18,6 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.Objects;
 
@@ -50,7 +52,7 @@ public class HistoryFragment extends Fragment {
                         LinearLayout historyContainer = rootView.findViewById(R.id.history_container);
                         if (!task.getResult().isEmpty()) {
                             for (DocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                                LinearLayout historyItemLayout = createHistoryItemLayout(context, document);
+                                CardView historyItemLayout = createHistoryItemLayout(context, document);
                                 historyContainer.addView(historyItemLayout);
                             }
                             int historyCount = historyContainer.getChildCount();
@@ -67,14 +69,22 @@ public class HistoryFragment extends Fragment {
                 });
     }
 
-    private LinearLayout createHistoryItemLayout(Context context, DocumentSnapshot document) {
+    private CardView createHistoryItemLayout(Context context, DocumentSnapshot document) {
         String result = document.getString("result");
         String date = document.getString("date");
         String time = document.getString("time");
         String imageURL = document.getString("imageURL");
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        LinearLayout historyItemLayout = (LinearLayout) inflater.inflate(R.layout.history_item_layout, null);
+//        LinearLayout historyItemLayout = (LinearLayout) inflater.inflate(R.layout.history_item_layout, null);
+        CardView historyItemLayout = (CardView) inflater.inflate(R.layout.history_item_layout, null);
+
+        ViewGroup.MarginLayoutParams layoutParams = new ViewGroup.MarginLayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        layoutParams.setMargins(0, 2, 0, 22); // Add bottom margin for spacing
+        historyItemLayout.setLayoutParams(layoutParams);
 
         ImageView imageView = historyItemLayout.findViewById(R.id.imageView);
         TextView dateTextView = historyItemLayout.findViewById(R.id.date);

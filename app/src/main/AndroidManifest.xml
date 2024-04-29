@@ -31,9 +31,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Activitydash2"
-            android:exported="true">
-        </activity>
+
 
         <activity android:name=".ListAllDermatologists"
             android:exported="true">
@@ -47,6 +45,11 @@
         <activity android:name=".DExtraDetails"
             android:exported="true">
         </activity>
+
+        <activity android:name=".Activitydash2"
+            android:exported="true">
+        </activity>
+
         <activity android:name=".LoginPatientActivity"
             android:exported="true">
 <!--            <intent-filter>-->
