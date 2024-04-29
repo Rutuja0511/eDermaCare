@@ -2,6 +2,8 @@ package com.example.edermacarelatestt;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,8 +39,21 @@ public class Activitydash2 extends AppCompatActivity implements NavigationView.O
 
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.navhome) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_home2()).commit();
+        if (itemId == R.id.navhs2) {
+            String userEmail = getIntent().getStringExtra("user_email");
+
+            if (userEmail != null) {
+                // Pass user email to profileFragment
+                Bundle bundle = new Bundle();
+                bundle.putString("user_email", userEmail);
+                profileFragment2 fragment = new profileFragment2();
+                fragment.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+            } else {
+                // Handle the case where user email is not found
+                Toast.makeText(this, "User email not found", Toast.LENGTH_SHORT).show();
+            }
+
         } else if (itemId == R.id.navhs) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new profileFragment2()).commit();
         }

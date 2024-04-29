@@ -79,6 +79,9 @@
         <activity android:name=".profileFragment"
             android:exported="true">
         </activity>
+        <activity android:name=".profileFragment2"
+            android:exported="true">
+        </activity>
         <activity android:name=".HistoryFragment"
             android:exported="true">
 
