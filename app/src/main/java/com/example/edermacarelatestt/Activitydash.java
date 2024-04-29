@@ -46,7 +46,7 @@ public class Activitydash extends AppCompatActivity implements NavigationView.On
                 bundle.putString("user_id", userId);
                 detectFragment1 fragment = new detectFragment1();
                 fragment.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_home()).commit();
             } else {
                 // Handle the case where userId is not found
                 Toast.makeText(this, "User ID not found", Toast.LENGTH_SHORT).show();

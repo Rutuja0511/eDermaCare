@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".profileFragment2">
+
+    <!-- Half Circle -->
+    <ImageView
+        android:id="@+id/halfCircle"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginTop="-30dp"
+        android:background="@drawable/halfcircle"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-180dp"
+        android:background="@drawable/title_background"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp"
+        android:text="YOUR PROFILE"
+        android:textColor="@color/dark_lavender"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/halfCircle" />
+
+    <Button
+        android:id="@+id/myButton"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:text="PERSONAL DETAILS"
+        android:textSize="20sp"
+        android:layout_marginTop="150dp"
+        app:layout_constraintTop_toBottomOf="@id/halfCircle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/clinicbutton"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:text="CLINIC DETAILS"
+        android:textSize="20sp"
+        android:layout_marginTop="100dp"
+        app:layout_constraintTop_toBottomOf="@id/myButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

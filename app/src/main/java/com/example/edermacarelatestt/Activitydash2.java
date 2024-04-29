@@ -18,18 +18,18 @@ public class Activitydash2 extends AppCompatActivity implements NavigationView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dermatologist);
 
-        Toolbar toolbar = findViewById(R.id.toolbar23); //Ignore red line errors
+        Toolbar toolbar = findViewById(R.id.toolbar); //Ignore red line errors
         setSupportActionBar(toolbar);
 
         drawerLayout = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view2);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open,
                 R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container2, new fragment_home2()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_home2()).commit();
             navigationView.setCheckedItem(R.id.navhome2);
         }
     }
@@ -38,9 +38,9 @@ public class Activitydash2 extends AppCompatActivity implements NavigationView.O
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.navhome) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container2, new fragment_home2()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_home2()).commit();
         } else if (itemId == R.id.navhs) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container2, new profileFragment2()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new profileFragment2()).commit();
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
