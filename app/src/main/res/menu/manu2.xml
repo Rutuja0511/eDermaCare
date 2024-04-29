@@ -16,4 +16,26 @@
 
 
     </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/group2">
+
+
+
+
+
+        <item android:id="@+id/navh3"
+        android:title="Incoming Appointments"
+        android:icon="@drawable/img"/>
+
+        <item android:id="@+id/navh2"
+            android:title="Clinic Details"
+            android:icon="@drawable/ic_baseline_medical_services_24"/>
+        <item
+            android:id="@+id/logout"
+            android:title="Logout" />
+
+    </group>
+
+
 </menu>
