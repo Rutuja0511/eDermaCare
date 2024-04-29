@@ -36,7 +36,7 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
 
     Button buttonSignUpD;
     private FirebaseFirestore db;
-    private String licenseUrl;
+    private String imageUri;
     private String verified;
     private String qualification;
     private String qualificationYear;
@@ -57,8 +57,8 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
         editTextExperience = findViewById(R.id.dermatologist_experience);
 
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra("licenseUrl")) {
-            licenseUrl = intent.getStringExtra("licenseUrl"); // Get the download URL
+        if (intent != null && intent.hasExtra("imageUri")) {
+            imageUri = intent.getStringExtra("imageUri"); // Get the image URI
         }
 
         buttonSignUpD = findViewById(R.id.dermatologist_signup_button);
@@ -185,7 +185,7 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
 
     private void postDataToFirebase() {
         // Check if necessary values are available and post data to Firebase
-        if (!TextUtils.isEmpty(licenseUrl) ) {
+        if (!TextUtils.isEmpty(imageUri)){
             Map<String, Object> dermatologist = new HashMap<>();
             dermatologist.put("Name", getIntent().getStringExtra("name"));
             dermatologist.put("Email", getIntent().getStringExtra("email"));
@@ -202,7 +202,7 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
             dermatologist.put("qualification", qualification);
             dermatologist.put("qualificationYear", qualificationYear);
             dermatologist.put("universityName", universityName);
-            dermatologist.put("LicenseURL", licenseUrl);
+            dermatologist.put("ImageURL", imageUri);
             dermatologist.put("permanent_address",permanent_address);
 
             db.collection("dermatologist")
@@ -214,7 +214,7 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
                         Toast.makeText(SignUpDermatologistActivity2.this, "Error adding dermatologist: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
         } else {
-            Toast.makeText(SignUpDermatologistActivity2.this, "License URL is empty or verification failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignUpDermatologistActivity2.this, "Image URI  is empty or verification failed", Toast.LENGTH_SHORT).show();
         }
     }
 
