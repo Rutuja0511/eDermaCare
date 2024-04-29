@@ -35,14 +35,14 @@ public class SignUpDermatologistActivity1 extends AppCompatActivity {
     Spinner spinnerStateMedicalCouncil, spinnerGender;
     TextView loginRedirectD, licenseFileName;
     Button buttonNextD, buttonUpload;
-    private static final int PICK_PDF_REQUEST = 1;
-    private Uri fileUri;
-    private String fileNameStr;
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private Uri imageUri;
+    private String imageNameStr;
 
     private FirebaseFirestore db;
     private FirebaseStorage storage;
-    private ActivityResultLauncher<String> pdfLauncher;
-
+//    private ActivityResultLauncher<String> pdfLauncher;
+    private ActivityResultLauncher<String> imageLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +100,6 @@ public class SignUpDermatologistActivity1 extends AppCompatActivity {
                 String registrationNo = editTextRegistrationNo.getText().toString();
                 String registrationYear = editTextRegistrationYear.getText().toString();
                 String gender = spinnerGender.getSelectedItem().toString();
-//                String stateMedicalCouncil = editTextStateMedicalCouncil.getText().toString();
                 String stateMedicalCouncil = spinnerStateMedicalCouncil.getSelectedItem().toString();
 
                 // Check if any field is empty, if Maharyes, display an alert
@@ -132,7 +131,7 @@ public class SignUpDermatologistActivity1 extends AppCompatActivity {
                 }
 
                 // Pass data to next activity
-                if (fileUri != null) {
+                if (imageUri != null) {
                     Intent intent = new Intent(SignUpDermatologistActivity1.this, SignUpDermatologistActivity2.class);
                     intent.putExtra("name", name);
                     intent.putExtra("email", email);
@@ -140,10 +139,10 @@ public class SignUpDermatologistActivity1 extends AppCompatActivity {
                     intent.putExtra("registrationYear", registrationYear);
                     intent.putExtra("stateMedicalCouncil", stateMedicalCouncil);
                     intent.putExtra("gender", gender);
-                    intent.putExtra("licenseUrl", fileUri.toString());
+                    intent.putExtra("imageUri", imageUri.toString());
                     startActivity(intent);
-                }else{
-                    showAlert("Please upload a PDF file");
+                } else {
+                    showAlert("Please upload an image");
                 }
             }
         });
@@ -158,12 +157,12 @@ public class SignUpDermatologistActivity1 extends AppCompatActivity {
             }
         });
 
-        pdfLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+        imageLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
             if (uri != null) {
-                fileUri = uri;
-                fileNameStr = getFileNameFromUri(fileUri);
-                licenseFileName.setText(fileNameStr);
-                uploadFile(); // Upload file and handle URL in uploadFile method
+                imageUri = uri;
+                imageNameStr = getFileNameFromUri(imageUri);
+                licenseFileName.setText(imageNameStr);
+                uploadImage(); // Upload image and handle URL in uploadImage method
             }
         });
 
@@ -208,8 +207,9 @@ public class SignUpDermatologistActivity1 extends AppCompatActivity {
     }
 
     private void openFileChooser() {
-        pdfLauncher.launch("application/pdf");
+        imageLauncher.launch("image/*");
     }
+
 
     private String getFileNameFromUri(Uri uri) {
         String result = null;
@@ -240,46 +240,20 @@ public class SignUpDermatologistActivity1 extends AppCompatActivity {
         return result;
     }
 
-    private void uploadFile() {
-        if (fileUri != null) {
-            String fileName = getFileNameFromUri(fileUri);
-            StorageReference fileRef = storage.getReference().child("uploads").child(fileName);
-            fileRef.putFile(fileUri)
+    private void uploadImage() {
+        if (imageUri != null) {
+            String imageName = getFileNameFromUri(imageUri);
+            StorageReference imageRef = storage.getReference().child("dermatologist_images").child(imageName);
+            imageRef.putFile(imageUri)
                     .addOnSuccessListener(taskSnapshot -> {
-                        fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                        imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                             String downloadUrl = uri.toString();
                             // Store the URL in a global variable or pass it directly to next activity
                         });
                     })
                     .addOnFailureListener(e -> {
-                        showAlert("Failed to upload file");
+                        showAlert("Failed to upload image");
                     });
         }
     }
-
-//    private void setupSpinner() {
-//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-//                R.array.statesMC_array, R.layout.spinner_dropdown_item);
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinnerStateMedicalCouncil.setAdapter(adapter);
-//
-//        int[] colors = getResources().getIntArray(R.array.spinner_text_color_selector);
-//        spinnerStateMedicalCouncil.setPopupBackgroundResource(R.drawable.spinner_background);
-//        spinnerStateMedicalCouncil.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-//                TextView textView = (TextView) selectedItemView;
-//                if (textView != null) {
-//                    textView.setTextColor(colors[position]);
-//                }
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parentView) {
-//                // Do nothing
-//            }
-//        });
-//    }
-
-
 }
