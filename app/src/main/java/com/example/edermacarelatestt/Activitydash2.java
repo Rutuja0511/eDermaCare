@@ -1,5 +1,6 @@
 package com.example.edermacarelatestt;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import androidx.annotation.NonNull;
@@ -32,6 +33,19 @@ public class Activitydash2 extends AppCompatActivity implements NavigationView.O
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_home2()).commit();
             navigationView.setCheckedItem(R.id.navhome2);
         }
+        String fragmentToLoad = getIntent().getStringExtra("fragment");
+
+        // Load the appropriate fragment based on the extra
+        if (fragmentToLoad != null && fragmentToLoad.equals("profileFragment2")) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new profileFragment2())
+                    .commit();
+        }
+        if (fragmentToLoad != null && fragmentToLoad.equals("clinicProfile")) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new clinicProfile())
+                    .commit();
+        }
     }
     @Override
 
@@ -41,6 +55,9 @@ public class Activitydash2 extends AppCompatActivity implements NavigationView.O
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_home2()).commit();
         } else if (itemId == R.id.navhs) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new profileFragment2()).commit();
+        }else if (itemId == R.id.navhs2) {
+            // Redirect to Dermatologist Profile Activity
+            startActivity(new Intent(Activitydash2.this,DermatologistProfile.class));
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);

@@ -29,7 +29,7 @@
         android:paddingTop="8dp"
         android:paddingEnd="16dp"
         android:paddingBottom="8dp"
-        android:text="YOUR PROFILE"
+        android:text="WELCOME"
         android:textColor="@color/dark_lavender"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -37,14 +37,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/halfCircle" />
 
+    <TextView
+        android:id="@+id/welcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp"
+        android:text="We appreciate your dedicated service to our community's health and well-being. Your expertise and commitment are invaluable to us."
+        android:textColor="@color/dark_lavender"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
+
     <Button
         android:id="@+id/myButton"
         android:layout_width="300dp"
         android:layout_height="60dp"
         android:text="PERSONAL DETAILS"
         android:textSize="20sp"
-        android:layout_marginTop="150dp"
-        app:layout_constraintTop_toBottomOf="@id/halfCircle"
+        android:layout_marginTop="50dp"
+        app:layout_constraintTop_toBottomOf="@id/welcome"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -54,10 +71,9 @@
         android:layout_height="60dp"
         android:text="CLINIC DETAILS"
         android:textSize="20sp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         app:layout_constraintTop_toBottomOf="@id/myButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
