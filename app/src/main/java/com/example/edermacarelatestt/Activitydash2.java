@@ -53,7 +53,7 @@ public class Activitydash2 extends AppCompatActivity implements NavigationView.O
 
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.navhs2) {
+        if (itemId == R.id.navhs) {
             String userEmail = getIntent().getStringExtra("user_email");
 
             if (userEmail != null) {
@@ -68,11 +68,12 @@ public class Activitydash2 extends AppCompatActivity implements NavigationView.O
                 Toast.makeText(this, "User email not found", Toast.LENGTH_SHORT).show();
             }
 
-        } else if (itemId == R.id.navhs) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new profileFragment2()).commit();
         }else if (itemId == R.id.navhs2) {
             // Redirect to Dermatologist Profile Activity
             startActivity(new Intent(Activitydash2.this,DermatologistProfile.class));
+        }else  if (item.getItemId() == R.id.logout) {
+            logout();
+            return true;
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -86,4 +87,13 @@ public class Activitydash2 extends AppCompatActivity implements NavigationView.O
         } else {
             super.onBackPressed();
         }
-    }}
+    }
+    public void logout() {
+        // Navigate back to the login screen
+        Intent intent = new Intent(Activitydash2.this, LoginDermatologistActivity.class);
+        startActivity(intent);
+        finish(); // Close the current activity
+    }
+
+
+}

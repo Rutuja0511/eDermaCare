@@ -3,6 +3,8 @@ package com.example.edermacarelatestt;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -11,25 +13,31 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 public class fragment_home extends Fragment {
+    Button GetStarted;
 
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        Button GetStarted;
+        // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+
+        // Initialize the button
         GetStarted = rootView.findViewById(R.id.getStarted);
 
         // Set OnClickListener for the button
         GetStarted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), Activitydash2.class);
-                startActivity(intent);
+                // Get a reference to the parent activity
+                Activitydash parentActivity = (Activitydash) getActivity();
+                if (parentActivity != null) {
+                    // Get the DrawerLayout from the parent activity
+                    DrawerLayout drawerLayout = parentActivity.findViewById(R.id.drawer_layout);
+                    // Open the drawer
+                    drawerLayout.openDrawer(GravityCompat.START);
+                }
             }
         });
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+
+        return rootView;
     }
 }

@@ -96,6 +96,7 @@
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_baseline_date_range_24"
                 android:ems="10"
+                android:drawableTint="@color/bg"
                 android:gravity="center_vertical"
                 android:textColor="@color/black"
                 android:textSize="25sp"
@@ -130,6 +131,7 @@
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_baseline_local_phone_24"
                 android:ems="10"
+                android:drawableTint="@color/bg"
                 android:gravity="center_vertical"
                 android:textColor="@color/black"
                 android:textSize="25sp"
@@ -166,25 +168,12 @@
                 android:ems="10"
                 android:gravity="center_vertical"
                 android:textColor="@color/black"
+                android:drawableTint="@color/bg"
                 android:textSize="25sp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Button -->
-    <Button
-        android:id="@+id/gobackButton"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="66dp"
-        android:background="@drawable/roud2"
-        android:text="Back"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

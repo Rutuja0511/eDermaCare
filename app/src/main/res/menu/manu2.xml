@@ -28,7 +28,7 @@
         android:title="Incoming Appointments"
         android:icon="@drawable/img"/>
 
-        <item android:id="@+id/navh2"
+        <item android:id="@+id/navh6"
             android:title="Clinic Details"
             android:icon="@drawable/ic_baseline_medical_services_24"/>
         <item

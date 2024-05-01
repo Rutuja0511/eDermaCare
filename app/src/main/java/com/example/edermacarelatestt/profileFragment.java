@@ -11,6 +11,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -32,7 +34,6 @@ public class profileFragment extends Fragment {
         emailTextView = view.findViewById(R.id.editTextTextPersonName4);
         dobTextView = view.findViewById(R.id.editTextTextPersonName2);
         mobileTextView = view.findViewById(R.id.editTextTextPersonName3);
-        goBackButton = view.findViewById(R.id.gobackButton);
         // Retrieve user's email ID from arguments
         String userEmail = null;
         Bundle args = getArguments();
@@ -47,14 +48,6 @@ public class profileFragment extends Fragment {
             // Handle the case where user_email is not set in fragment arguments
             Toast.makeText(getContext(), "User email not found", Toast.LENGTH_SHORT).show();
         }
-
-        goBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), detectFragment1.class);
-                startActivity(intent);
-            }
-        });
 
         return view;
 

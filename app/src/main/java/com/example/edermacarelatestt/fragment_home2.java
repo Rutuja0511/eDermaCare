@@ -10,9 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 public class fragment_home2 extends Fragment {
-    Button GetStarted ;
+    Button GetStarted;
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -25,14 +28,17 @@ public class fragment_home2 extends Fragment {
         GetStarted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), Activitydash2.class);
-                startActivity(intent);
+                // Get a reference to the parent activity
+                Activitydash2 parentActivity = (Activitydash2) getActivity();
+                if (parentActivity != null) {
+                    // Get the DrawerLayout from the parent activity
+                    DrawerLayout drawerLayout = parentActivity.findViewById(R.id.drawer_layout);
+                    // Open the drawer
+                    drawerLayout.openDrawer(GravityCompat.START);
+                }
             }
         });
 
         return rootView;
-
     }
-
-
 }
