@@ -214,6 +214,7 @@ public class detectFragment1 extends Fragment {
                 }
             });
 
+
             consultDoctorButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
