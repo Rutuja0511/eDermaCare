@@ -53,46 +53,32 @@ public class Activitydash2 extends AppCompatActivity implements NavigationView.O
 
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.navhs2) {
+        if (itemId == R.id.navhs) {
             String userEmail = getIntent().getStringExtra("user_email");
-            System.out.println(userEmail);
+
             if (userEmail != null) {
                 // Pass user email to profileFragment
                 Bundle bundle = new Bundle();
                 bundle.putString("user_email", userEmail);
                 profileFragment2 fragment = new profileFragment2();
                 fragment.setArguments(bundle);
-                System.out.println(userEmail);
-                System.out.println(bundle);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
             } else {
                 // Handle the case where user email is not found
                 Toast.makeText(this, "User email not found", Toast.LENGTH_SHORT).show();
             }
 
-        }
-        else if( itemId == R.id.navh3){
-            String userEmail = getIntent().getStringExtra("user_email");
-            System.out.println(userEmail);
-            if (userEmail != null) {
-                // Pass user email to profileFragment
-                Bundle bundle = new Bundle();
-                bundle.putString("user_email", userEmail);
-                profileFragment2 fragment = new profileFragment2();
-                fragment.setArguments(bundle);
-                System.out.println(userEmail);
-                System.out.println(bundle);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
-            } else {
-                // Handle the case where user email is not found
-                Toast.makeText(this, "User email not found", Toast.LENGTH_SHORT).show();
-            }
-
-        }else  if (item.getItemId() == R.id.logout) {
+        }else if (itemId == R.id.navhs2) {
+            // Redirect to Dermatologist Profile Activity
+            startActivity(new Intent(Activitydash2.this,DermatologistProfile.class));
+        }else if(itemId==R.id.navh6){
+            startActivity(new Intent(Activitydash2.this,DExtraDetails.class));
+        } else if(itemId==R.id.navh3){
+            startActivity(new Intent(Activitydash2.this, incomingAppointment.class));
+        } else  if (item.getItemId() == R.id.logout) {
             logout();
             return true;
         }
-
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

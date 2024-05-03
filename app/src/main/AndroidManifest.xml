@@ -55,7 +55,9 @@
             android:exported="true">
         </activity>
 
-
+        <activity android:name=".incomingAppointment"
+            android:exported="true">
+        </activity>
         <activity android:name=".LoginPatientActivity"
             android:exported="true">
         </activity>
@@ -96,6 +98,9 @@
             android:exported="true">
         </activity>
         <activity android:name=".insectBiteActivity"
+            android:exported="true">
+        </activity>
+        <activity android:name=".nailActivity"
             android:exported="true">
         </activity>
         <activity android:name=".headerfile"
