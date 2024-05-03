@@ -20,7 +20,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class SearchResultsActivity extends AppCompatActivity {
+public class SearchResultsActivity extends AppCompatActivity implements MyAdapter.OnItemClickListener{
 
     RecyclerView recyclerView;
     FirebaseFirestore db;
@@ -75,6 +75,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                         } else {
                             // Display the search results
                             adapter = new MyAdapter(SearchResultsActivity.this, dermatologistArrayList);
+                            adapter.setOnItemClickListener(SearchResultsActivity.this);
                             recyclerView.setAdapter(adapter);
                         }
                     }
@@ -85,6 +86,17 @@ public class SearchResultsActivity extends AppCompatActivity {
                         Log.d("SearchResultsActivity", "Error getting documents: ", e);
                     }
                 });
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Dermatologist selectedDermatologist = dermatologistArrayList.get(position);
+        String userId = getIntent().getStringExtra("user_id");
+        Intent intent = new Intent(SearchResultsActivity.this, BookAppointmentActivity.class);
+        intent.putExtra("Name", selectedDermatologist.getName());
+        intent.putExtra("City", selectedDermatologist.getCity());
+        intent.putExtra("user_id", userId);
+        startActivity(intent);
     }
 
 }
