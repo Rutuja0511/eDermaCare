@@ -45,22 +45,20 @@ public class ListAllDermatologists extends AppCompatActivity implements MyAdapte
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Dermatologist dermatologist = document.toObject(Dermatologist.class);
                             dermatologistArrayList.add(dermatologist);
-                            // Log the dermatologist details
-//                            Log.d("Dermatologist", "Name: " + dermatologist.getName() + ", City: " + dermatologist.getCity());
                         }
                         adapter = new MyAdapter(ListAllDermatologists.this, dermatologistArrayList);
                         adapter.setOnItemClickListener(ListAllDermatologists.this);
                         recyclerViewListAll.setAdapter(adapter);
+                    } else {
+                        Log.d("ListAllDermatologists", "Error getting dermatologists: ", task.getException());
                     }
                 });
     }
 
     @Override
     public void onItemClick(int position) {
-        // Get the selected dermatologist
         Dermatologist selectedDermatologist = dermatologistArrayList.get(position);
         String userId = getIntent().getStringExtra("user_id");
-        // Start BookAppointmentActivity and pass necessary data
         Intent intent = new Intent(ListAllDermatologists.this, BookAppointmentActivity.class);
         intent.putExtra("Name", selectedDermatologist.getName());
         intent.putExtra("City", selectedDermatologist.getCity());

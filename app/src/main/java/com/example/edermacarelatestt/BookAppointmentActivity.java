@@ -1,4 +1,6 @@
 package com.example.edermacarelatestt;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.firebase.firestore.DocumentReference;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
@@ -14,13 +16,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -28,7 +29,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
 public class BookAppointmentActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
@@ -64,6 +64,10 @@ public class BookAppointmentActivity extends AppCompatActivity {
             String name = extras.getString("Name");
             String city = extras.getString("City");
 
+            // Set name and city TextViews
+            fbname.setText(name);
+            fbcity.setText(city);
+
             // Query the Firestore collection to find the dermatologist with the given name and city
             db.collection("dermatologist")
                     .whereEqualTo("Name", name)
@@ -76,9 +80,10 @@ public class BookAppointmentActivity extends AppCompatActivity {
                                 for (DocumentSnapshot document : task.getResult()) {
                                     // Extract the image URL from the document
                                     String imageURL = document.getString("ImageURL");
+                                    if (imageURL != null && !imageURL.isEmpty()) {
+                                        Glide.with(BookAppointmentActivity.this).load(imageURL).into(dermatologistImageView);
+                                    }
 
-                                    // Load image into ImageView using Picasso
-                                    Picasso.get().load(imageURL).into(dermatologistImageView);
 
                                     // Extract other details and set TextViews
                                     String district = document.getString("District");

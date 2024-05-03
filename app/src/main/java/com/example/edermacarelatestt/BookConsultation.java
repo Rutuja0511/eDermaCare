@@ -27,11 +27,13 @@ public class BookConsultation extends AppCompatActivity {
                 // Get the name and city entered by the user
                 String name = nameEditText.getText().toString().trim();
                 String city = cityEditText.getText().toString().trim();
-
+                String userId = getIntent().getStringExtra("user_id");
                 // Open SearchResultsActivity and pass the name and city as extras
                 Intent intent = new Intent(BookConsultation.this, SearchResultsActivity.class);
                 intent.putExtra("name", name);
                 intent.putExtra("city", city);
+                intent.putExtra("user_id", userId);
+
                 startActivity(intent);
             }
         });

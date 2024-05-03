@@ -1,5 +1,6 @@
 package com.example.edermacarelatestt;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -85,4 +86,5 @@ public class SearchResultsActivity extends AppCompatActivity {
                     }
                 });
     }
+
 }
