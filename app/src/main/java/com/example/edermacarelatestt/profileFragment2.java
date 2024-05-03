@@ -15,9 +15,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -27,15 +31,43 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 public class profileFragment2 extends Fragment {
 
+    private TextView editDocname,editMembershipNo,editPhoneNo,editEmail,editCity,editState;
     FloatingActionButton changeImageButton;
     ImageView doctorImage; // Make sure doctorImage is declared as ImageView
 
     ActivityResultLauncher<String> imagePickerLauncher;
-
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_profile2, container, false);
+
+        //Initialize ui elements
+        editDocname = view.findViewById(R.id.editName);
+        editMembershipNo = view.findViewById(R.id.editMembershipNo);
+        editEmail = view.findViewById(R.id.editEmail);
+        editPhoneNo = view.findViewById(R.id.editPhoneNo);
+        editCity = view.findViewById(R.id.editCity);
+        editState = view.findViewById(R.id.editState);
+        String userEmail = null;
+        Bundle args = getArguments();
+        System.out.println(args+"profilefragment2");
+        if (args != null) {
+            userEmail = args.getString("user_email");
+            System.out.println("profilefragment"+userEmail);
+        }
+
+        if (userEmail != null) {
+            // Fetch user data from Firestore
+            fetchUserData(userEmail);
+        } else {
+            // Handle the case where user_email is not set in fragment arguments
+            Toast.makeText(getContext(), "User email not found", Toast.LENGTH_SHORT).show();
+        }
+
+
+
+
 
         // Initialize views
         changeImageButton = view.findViewById(R.id.changeImageButton);
@@ -98,33 +130,38 @@ public class profileFragment2 extends Fragment {
         }
     }
 
-//    private void fetchUserData(String userEmail) {
-//        // Access Firestore instance
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//
-//        // Query to get user data based on email
-//        Query query = db.collection("patients").whereEqualTo("Email", userEmail);
-//
-//        // Perform the query
-//        query.get().addOnCompleteListener(task -> {
-//            if (task.isSuccessful()) {
-//                for (QueryDocumentSnapshot document : task.getResult()) {
-//                    // Retrieve data from Firestore document
-//                    String name = document.getString("Name");
-//                    String email = document.getString("Email");
-//                    String dob = document.getString("DOB");
-//                    String mobile = document.getString("Mobile");
-//
-//                    // Update UI with retrieved data
-//                    nameTextView.setText(name);
-//                    emailTextView.setText(email);
-//                    dobTextView.setText(dob);
-//                    mobileTextView.setText(mobile);
-//                }
-//            } else {
-//                // Handle errors
-//                Toast.makeText(getContext(), "Failed to fetch user data", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+    private void fetchUserData(String userEmail) {
+        // Access Firestore instance
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Query to get user data based on email
+        Query query = db.collection("dermatologist").whereEqualTo("Email", userEmail);
+
+        // Perform the query
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    // Retrieve data from Firestore document
+                    String name = document.getString("Name");
+                    String email = document.getString("Email");
+                    String memID = document.getString("RegID");
+                    String mobile = document.getString("Mobile");
+                    String city = document.getString("City");
+                    String state = document.getString("State");
+
+                    // Update UI with retrieved data
+
+                    editDocname.setText(name);
+                    editMembershipNo.setText(memID);
+                    editEmail.setText(email);
+                    editPhoneNo.setText(mobile);
+                    editCity.setText(city);
+                    editState.setText(state);
+                }
+            } else {
+                // Handle errors
+                Toast.makeText(getContext(), "Failed to fetch user data", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }

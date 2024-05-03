@@ -72,7 +72,13 @@ public class Activitydash2 extends AppCompatActivity implements NavigationView.O
             // Redirect to Dermatologist Profile Activity
             startActivity(new Intent(Activitydash2.this,DermatologistProfile.class));
         }else if(itemId==R.id.navh6){
-            startActivity(new Intent(Activitydash2.this,DExtraDetails.class));
+            String userId = getIntent().getStringExtra("user_id");
+            Intent intent = new Intent(Activitydash2.this, DExtraDetails.class);
+            intent.putExtra("user_id", userId);
+            startActivity(intent);
+//            startActivity(new Intent(Activitydash2.this,DExtraDetails.class));
+        } else if(itemId==R.id.navh3){
+            startActivity(new Intent(Activitydash2.this, incomingAppointment.class));
         } else  if (item.getItemId() == R.id.logout) {
             logout();
             return true;

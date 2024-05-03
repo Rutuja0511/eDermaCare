@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="card_view_margin">16dp</dimen>
+    <dimen name="padding_icon_text">10dp</dimen>
 </resources>

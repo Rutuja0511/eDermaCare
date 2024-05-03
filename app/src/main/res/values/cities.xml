@@ -117,4 +117,73 @@
         <!-- Add more cities for West Godavari as needed -->
     </string-array>
 
+    <string-array name="cities_anjaw">
+        <item>Hawai</item>
+        <item>Hayuliang</item>
+    </string-array>
+
+    <string-array name="cities_changlang">
+        <item>Changlang</item>
+        <item>Kharsang</item>
+        <item>Miao</item>
+        <item>Nampong</item>
+        <item>Bordumsa</item>
+        <item>Jairampur</item>
+        <item>Vijoynagar</item>
+    </string-array>
+
+    <string-array name="cities_dibang_valley">
+        <item>Anini</item>
+    </string-array>
+
+    <string-array name="cities_east_kameng">
+        <item>Seppa</item>
+        <item>Chayang Tajo</item>
+        <item>Bameng</item>
+    </string-array>
+
+    <string-array name="cities_east_siang">
+        <item>Mebo</item>
+        <item>Pasighat</item>
+        <item>Ruksin</item>
+    </string-array>
+
+    <string-array name="cities_kamle">
+        <item>Raga</item>
+    </string-array>
+
+    <string-array name="cities_kra_daadi">
+        <item>Palin</item>
+    </string-array>
+
+    <string-array name="cities_kurung_kumey">
+        <item>Koloriang</item>
+    </string-array>
+
+    <string-array name="cities_lepa_rada">
+        <item>Basar</item>
+    </string-array>
+
+    <string-array name="cities_lohit">
+        <item>Chowkham</item>
+        <item>Namsai</item>
+        <item>Sunpura</item>
+        <item>Tezu</item>
+    </string-array>
+
+    <string-array name="cities_longding">
+        <item>Longding</item>
+    </string-array>
+
+    <string-array name="cities_lower_dibang_valley">
+        <item>Roing</item>
+    </string-array>
+
+    <string-array name="cities_lower_siang">
+        <item>Likabali</item>
+    </string-array>
+
+
+
+
 </resources>

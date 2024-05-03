@@ -62,9 +62,13 @@
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_baseline_person_24"
                 android:ems="10"
+
+                android:drawablePadding="3dp"
                 android:gravity="center_vertical"
                 android:textColor="@color/black"
-                android:textSize="25sp"
+                android:textSize="24sp"
+
+                android:fontFamily="@font/inter"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -99,7 +103,10 @@
                 android:drawableTint="@color/bg"
                 android:gravity="center_vertical"
                 android:textColor="@color/black"
-                android:textSize="25sp"
+                android:drawablePadding="10dp"
+                android:textSize="24sp"
+
+                android:fontFamily="@font/inter"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -134,7 +141,10 @@
                 android:drawableTint="@color/bg"
                 android:gravity="center_vertical"
                 android:textColor="@color/black"
-                android:textSize="25sp"
+                android:drawablePadding="10dp"
+                android:textSize="24sp"
+
+                android:fontFamily="@font/inter"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -169,7 +179,10 @@
                 android:gravity="center_vertical"
                 android:textColor="@color/black"
                 android:drawableTint="@color/bg"
-                android:textSize="25sp"
+                android:drawablePadding="10dp"
+                android:textSize="24sp"
+
+                android:fontFamily="@font/inter"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>

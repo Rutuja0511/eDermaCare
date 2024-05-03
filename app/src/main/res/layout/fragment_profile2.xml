@@ -87,10 +87,12 @@
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/ic_baseline_person_24"
                     android:ems="10"
+                    android:drawablePadding="3dp"
                     android:drawableTint="@color/bg"
                     android:gravity="center_vertical"
                     android:textColor="@color/black"
-                    android:textSize="25sp"
+                    android:textSize="24sp"
+                    android:fontFamily="@font/inter"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -120,18 +122,19 @@
                     android:id="@+id/editMembershipNo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:drawablePadding="10dp"
                     android:drawableLeft="@drawable/ic_baseline_date_range_24"
                     android:ems="10"
                     android:drawableTint="@color/bg"
                     android:gravity="center_vertical"
                     android:textColor="@color/black"
-                    android:textSize="25sp"
+                    android:textSize="24sp"
+                    android:fontFamily="@font/inter"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
-
         <!-- CardView 3 -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView3"
@@ -157,7 +160,10 @@
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/ic_baseline_local_phone_24"
                     android:ems="10"
+
+
                     android:drawableTint="@color/bg"
+                    android:drawablePadding="10dp"
                     android:gravity="center_vertical"
                     android:textColor="@color/black"
                     android:textSize="25sp"
@@ -193,9 +199,12 @@
                     android:drawableLeft="@drawable/ic_baseline_email_24"
                     android:ems="10"
                     android:drawableTint="@color/bg"
+
                     android:gravity="center_vertical"
                     android:textColor="@color/black"
-                    android:textSize="25sp"
+
+                    android:textSize="24sp"
+                    android:fontFamily="@font/inter"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -229,7 +238,8 @@
                     android:ems="10"
                     android:gravity="center_vertical"
                     android:textColor="@color/black"
-                    android:textSize="25sp"
+                    android:textSize="24sp"
+                    android:fontFamily="@font/inter"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -266,7 +276,49 @@
                     android:ems="10"
                     android:gravity="center_vertical"
                     android:textColor="@color/black"
-                    android:textSize="25sp"
+                    android:textSize="24sp"
+                    android:fontFamily="@font/inter"
+                    android:drawablePadding="10dp"
+
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="40dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardView5">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/experienceDerma"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/locationpin"
+                    android:drawableTint="@color/bg"
+                    android:ems="10"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    android:fontFamily="@font/inter"
+                    android:drawablePadding="10dp"
+
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
