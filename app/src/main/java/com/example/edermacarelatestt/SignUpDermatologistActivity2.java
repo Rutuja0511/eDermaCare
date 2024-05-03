@@ -32,7 +32,7 @@ import java.util.Map;
 public class SignUpDermatologistActivity2 extends AppCompatActivity {
 
     EditText editTextPasswordD, editTextExperience, editTextMobileNo, editTextCity, editTextDistrict, editTextState;
-    Spinner spinnerState, spinnerDistrict, spinnerCity;
+    Spinner spinnerState, spinnerDistrict;
 
     Button buttonSignUpD;
     private FirebaseFirestore db;
@@ -51,7 +51,8 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
 
         spinnerState = findViewById(R.id.spinnerState);
         spinnerDistrict = findViewById(R.id.spinnerDistrict);
-        spinnerCity = findViewById(R.id.spinnerCity);
+//        spinnerCity = findViewById(R.id.spinnerCity);
+        editTextCity= findViewById(R.id.dermatologist_city);
 
         editTextMobileNo = findViewById(R.id.dermatologist_mobileNo);
         editTextExperience = findViewById(R.id.dermatologist_experience);
@@ -93,7 +94,8 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
         String password = editTextPasswordD.getText().toString();
         String experience = editTextExperience.getText().toString();
         String mobileNo = editTextMobileNo.getText().toString();
-        String city = spinnerCity.getSelectedItem().toString();
+//        String city = spinnerCity.getSelectedItem().toString();
+        String city = editTextCity.getText().toString();
         String district = spinnerDistrict.getSelectedItem().toString();
         String state = spinnerState.getSelectedItem().toString();
 
@@ -194,7 +196,7 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
             dermatologist.put("StateMedicalCouncil", getIntent().getStringExtra("stateMedicalCouncil"));
             dermatologist.put("Exp", editTextExperience.getText().toString());
             dermatologist.put("Mobile", editTextMobileNo.getText().toString());
-            dermatologist.put("City", spinnerCity.getSelectedItem().toString());
+            dermatologist.put("City", editTextCity.getText().toString());
             dermatologist.put("District", spinnerDistrict.getSelectedItem().toString());
             dermatologist.put("State", spinnerState.getSelectedItem().toString());
             dermatologist.put("Password", hashPassword(editTextPasswordD.getText().toString()));
@@ -246,7 +248,7 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
     private void initializeDropdowns() {
         spinnerState = findViewById(R.id.spinnerState);
         spinnerDistrict = findViewById(R.id.spinnerDistrict);
-        spinnerCity = findViewById(R.id.spinnerCity);
+//        spinnerCity = findViewById(R.id.spinnerCity);
 
         // Populate state dropdown
         ArrayAdapter<CharSequence> stateAdapter = ArrayAdapter.createFromResource(
@@ -274,7 +276,7 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Based on district selection, populate city dropdown
                 String selectedDistrict = parent.getItemAtPosition(position).toString();
-                populateCityDropdown(selectedDistrict);
+//                populateCityDropdown(selectedDistrict);
             }
 
             @Override
@@ -301,20 +303,20 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
     }
 
     // Populate city dropdown based on selected district
-    private void populateCityDropdown(String selectedDistrict) {
-        int citiesArrayId = getResources().getIdentifier(
-                "cities_" + selectedDistrict.toLowerCase().replace(" ", "_"),
-                "array",
-                getPackageName());
-        if (citiesArrayId != 0) {
-            ArrayAdapter<CharSequence> cityAdapter = ArrayAdapter.createFromResource(
-                    this, citiesArrayId, android.R.layout.simple_spinner_item);
-            cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerCity.setAdapter(cityAdapter);
-        } else {
-//            Toast.makeText(this, "No cities found for selected district", Toast.LENGTH_SHORT).show();
-        }
-    }
+//    private void populateCityDropdown(String selectedDistrict) {
+//        int citiesArrayId = getResources().getIdentifier(
+//                "cities_" + selectedDistrict.toLowerCase().replace(" ", "_"),
+//                "array",
+//                getPackageName());
+//        if (citiesArrayId != 0) {
+//            ArrayAdapter<CharSequence> cityAdapter = ArrayAdapter.createFromResource(
+//                    this, citiesArrayId, android.R.layout.simple_spinner_item);
+//            cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//            spinnerCity.setAdapter(cityAdapter);
+//        } else {
+////            Toast.makeText(this, "No cities found for selected district", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
 
 }
