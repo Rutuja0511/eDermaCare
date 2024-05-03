@@ -160,7 +160,7 @@
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/ic_baseline_local_phone_24"
                     android:ems="10"
-                    android:drawablePadding="10dp"
+
 
                     android:drawableTint="@color/bg"
                     android:drawablePadding="10dp"
