@@ -3,6 +3,7 @@ package com.example.edermacarelatestt;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -58,8 +59,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         }
 
         query.get()
-                .addOnSuccessListener(new OnSuccessListener
-                        <QuerySnapshot>() {
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         dermatologistArrayList.clear();
@@ -67,8 +67,15 @@ public class SearchResultsActivity extends AppCompatActivity {
                             Dermatologist dermatologist = document.toObject(Dermatologist.class);
                             dermatologistArrayList.add(dermatologist);
                         }
-                        adapter = new MyAdapter(SearchResultsActivity.this, dermatologistArrayList);
-                        recyclerView.setAdapter(adapter);
+
+                        if (dermatologistArrayList.isEmpty()) {
+                            // Display a toast indicating no results were found
+                            Toast.makeText(SearchResultsActivity.this, "No dermatologists found", Toast.LENGTH_SHORT).show();
+                        } else {
+                            // Display the search results
+                            adapter = new MyAdapter(SearchResultsActivity.this, dermatologistArrayList);
+                            recyclerView.setAdapter(adapter);
+                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

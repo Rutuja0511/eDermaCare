@@ -44,6 +44,7 @@ dependencies {
 //    implementation files('src\\main\\res\\values\\jsoup-1.17.2.jar')
     implementation 'org.jsoup:jsoup:1.14.3'
 //    implementation libs.firebase_auth
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
 // Replace the existing line with fileTree() method
     implementation fileTree(dir: 'libs', include: ['*.jar'])

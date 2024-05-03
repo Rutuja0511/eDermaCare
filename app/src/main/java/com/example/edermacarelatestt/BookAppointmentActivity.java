@@ -1,11 +1,12 @@
 package com.example.edermacarelatestt;
-
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -32,6 +34,7 @@ public class BookAppointmentActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private Calendar selectedDate;
     private TextView dateTextView, timeTextView, fbname, fbcity, fbdistrict, fbstate, fbnemail, fbmobile, fbexperience;
+    private ImageView dermatologistImageView;
     private String userId;
 
     @Override
@@ -52,6 +55,7 @@ public class BookAppointmentActivity extends AppCompatActivity {
         fbnemail = findViewById(R.id.fbnemail);
         fbmobile = findViewById(R.id.fbmobile);
         fbexperience = findViewById(R.id.fbexperience);
+        dermatologistImageView = findViewById(R.id.dermatologistImageView);
 
         // Get the name and city from the intent
         Bundle extras = getIntent().getExtras();
@@ -59,8 +63,6 @@ public class BookAppointmentActivity extends AppCompatActivity {
             userId = extras.getString("user_id");
             String name = extras.getString("Name");
             String city = extras.getString("City");
-            fbname.setText(name);
-            fbcity.setText(city);
 
             // Query the Firestore collection to find the dermatologist with the given name and city
             db.collection("dermatologist")
@@ -72,7 +74,13 @@ public class BookAppointmentActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
                                 for (DocumentSnapshot document : task.getResult()) {
-                                    // Extract the details from the document
+                                    // Extract the image URL from the document
+                                    String imageURL = document.getString("ImageURL");
+
+                                    // Load image into ImageView using Picasso
+                                    Picasso.get().load(imageURL).into(dermatologistImageView);
+
+                                    // Extract other details and set TextViews
                                     String district = document.getString("District");
                                     String email = document.getString("Email");
                                     String exp = document.getString("Exp");
@@ -88,10 +96,11 @@ public class BookAppointmentActivity extends AppCompatActivity {
                                 }
                             } else {
                                 // Handle errors
+                                Toast.makeText(BookAppointmentActivity.this, "Failed to fetch dermatologist details", Toast.LENGTH_SHORT).show();
+                                Log.e("BookAppointmentActivity", "Error fetching dermatologist details", task.getException());
                             }
                         }
                     });
-
         }
 
         // Button to select date
@@ -206,6 +215,7 @@ public class BookAppointmentActivity extends AppCompatActivity {
                                 Toast.makeText(BookAppointmentActivity.this, "Appointment booked successfully!", Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(BookAppointmentActivity.this, "Failed to book appointment. Please try again.", Toast.LENGTH_SHORT).show();
+                                Log.e("BookAppointmentActivity", "Error booking appointment", task.getException());
                             }
                         }
                     });
@@ -213,5 +223,4 @@ public class BookAppointmentActivity extends AppCompatActivity {
             Toast.makeText(BookAppointmentActivity.this, "Please select date and time", Toast.LENGTH_SHORT).show();
         }
     }
-
 }
