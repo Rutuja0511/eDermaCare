@@ -224,6 +224,40 @@ public class BookAppointmentActivity extends AppCompatActivity {
                             }
                         }
                     });
+
+            // Query the dermatologist collection
+            db.collection("dermatologist")
+                    .whereEqualTo("Name", name)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (DocumentSnapshot document : task.getResult()) {
+                                    // Get the document reference of the dermatologist
+                                    DocumentReference dermatologistRef = document.getReference();
+
+                                    // Add the appointment to the subcollection "appointment"
+                                    dermatologistRef.collection("appointment")
+                                            .add(appointment)
+                                            .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<DocumentReference> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(BookAppointmentActivity.this, "Appointment booked successfully!", Toast.LENGTH_SHORT).show();
+                                                    } else {
+                                                        Toast.makeText(BookAppointmentActivity.this, "Failed to book appointment. Please try again.", Toast.LENGTH_SHORT).show();
+                                                        Log.e("BookAppointmentActivity", "Error booking appointment", task.getException());
+                                                    }
+                                                }
+                                            });
+                                }
+                            } else {
+                                // Handle errors
+                                Log.e("BookAppointmentActivity", "Error fetching dermatologist details", task.getException());
+                            }
+                        }
+                    });
         } else {
             Toast.makeText(BookAppointmentActivity.this, "Please select date and time", Toast.LENGTH_SHORT).show();
         }
