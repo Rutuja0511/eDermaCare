@@ -70,10 +70,29 @@ public class Activitydash2 extends AppCompatActivity implements NavigationView.O
                 Toast.makeText(this, "User email not found", Toast.LENGTH_SHORT).show();
             }
 
+        }
+        else if( itemId == R.id.navh3){
+            String userEmail = getIntent().getStringExtra("user_email");
+            System.out.println(userEmail);
+            if (userEmail != null) {
+                // Pass user email to profileFragment
+                Bundle bundle = new Bundle();
+                bundle.putString("user_email", userEmail);
+                profileFragment2 fragment = new profileFragment2();
+                fragment.setArguments(bundle);
+                System.out.println(userEmail);
+                System.out.println(bundle);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+            } else {
+                // Handle the case where user email is not found
+                Toast.makeText(this, "User email not found", Toast.LENGTH_SHORT).show();
+            }
+
         }else  if (item.getItemId() == R.id.logout) {
             logout();
             return true;
         }
+
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
