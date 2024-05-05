@@ -35,42 +35,21 @@ public class Activitydash2 extends AppCompatActivity implements NavigationView.O
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_home2()).commit();
             navigationView.setCheckedItem(R.id.navhome2);
         }
-        String fragmentToLoad = getIntent().getStringExtra("fragment");
 
-        // Load the appropriate fragment based on the extra
-        if (fragmentToLoad != null && fragmentToLoad.equals("profileFragment2")) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new profileFragment2())
-                    .commit();
-        }
-        if (fragmentToLoad != null && fragmentToLoad.equals("clinicProfile")) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new clinicProfile())
-                    .commit();
-        }
+
+
     }
     @Override
 
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.navhs) {
-            String userEmail = getIntent().getStringExtra("user_email");
+      if (itemId == R.id.navhs2) {
 
-            if (userEmail != null) {
-                // Pass user email to profileFragment
-                Bundle bundle = new Bundle();
-                bundle.putString("user_email", userEmail);
-                profileFragment2 fragment = new profileFragment2();
-                fragment.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
-            } else {
-                // Handle the case where user email is not found
-                Toast.makeText(this, "User email not found", Toast.LENGTH_SHORT).show();
-            }
-
-        }else if (itemId == R.id.navhs2) {
-            // Redirect to Dermatologist Profile Activity
-            startActivity(new Intent(Activitydash2.this,DermatologistProfile.class));
+            String userId = getIntent().getStringExtra("user_email");
+            Intent intent = new Intent(Activitydash2.this, DermatologistProfile.class);
+            System.out.println("user email"+userId);
+            intent.putExtra("user_email", userId);
+            startActivity(intent);
         }else if(itemId==R.id.navh6){
             String userId = getIntent().getStringExtra("user_id");
             Intent intent = new Intent(Activitydash2.this, DExtraDetails.class);

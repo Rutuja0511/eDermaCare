@@ -301,28 +301,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cardView5">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="16dp">
 
-                <TextView
-                    android:id="@+id/experienceDerma"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/locationpin"
-                    android:drawableTint="@color/bg"
-                    android:ems="10"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/black"
-                    android:textSize="24sp"
-                    android:fontFamily="@font/inter"
-                    android:drawablePadding="10dp"
-
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

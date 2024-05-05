@@ -54,14 +54,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
+    <!-- FrameLayout as container for fragments -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/welcome"
+        app:layout_constraintBottom_toTopOf="@+id/myButton" />
+
     <Button
         android:id="@+id/myButton"
         android:layout_width="300dp"
         android:layout_height="60dp"
         android:text="PERSONAL DETAILS"
         android:textSize="20sp"
-        android:layout_marginTop="50dp"
-        app:layout_constraintTop_toBottomOf="@id/welcome"
+        android:layout_marginTop="450dp"
+        app:layout_constraintTop_toBottomOf="@id/fragment_container"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -71,7 +79,7 @@
         android:layout_height="60dp"
         android:text="CLINIC DETAILS"
         android:textSize="20sp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@id/myButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
