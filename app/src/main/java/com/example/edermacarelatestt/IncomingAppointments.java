@@ -6,20 +6,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import java.util.*;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,41 +26,34 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.Map;
-import java.util.Objects;
 
-public class IncomingAppointments extends Fragment {
+public class IncomingAppointments extends AppCompatActivity {
 
-    Button reschuler;
     private FirebaseFirestore db;
     private View rootView;
 
-    @Nullable
     @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.incoming_appointment);
 
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView: Fragment created");
+        Log.d(TAG, "onCreate: Activity created");
         System.out.println("oncereate incoming");
         db = FirebaseFirestore.getInstance();
 
-        rootView = inflater.inflate(R.layout.incoming_appointment, container, false);
-        String userId = getArguments() != null ? getArguments().getString("user_email") : null;
+        rootView = findViewById(android.R.id.content);
+
+        String userId = getIntent().getStringExtra("user_email");
         if (userId != null) {
-            loadPendingAppointments(userId, requireContext());
+            loadPendingAppointments(userId);
+        } else {
+            System.out.println("user id is null");
         }
-        return rootView;
-
-
-//        reschuler = rootView.findViewById(R.id.button_reschedule);
-//        reschuler.setOnClickListener(v -> {
-//            Intent intent  = new Intent(requireContext(), RescheduleAppointment.class);
-//            startActivity(intent);
-//        });
-
-//        return rootView;
     }
 
-    private void loadPendingAppointments(String userId, Context context) {
+    private void loadPendingAppointments(String userId) {
         db.collection("dermatologist")
                 .document(userId)
                 .collection("appointment")
@@ -81,16 +71,15 @@ public class IncomingAppointments extends Fragment {
                                     appointments.add(appointmentData);
                                 }
                             }
-                            System.out.println("no of a"+appointments.size());
+                            System.out.println("no of a" + appointments.size());
                             Log.d(TAG, "Number of appointments: " + appointments.size());
-                            populateAppointments(appointments, context);
+                            populateAppointments(appointments, IncomingAppointments.this);
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
     }
-
 
     private void populateAppointments(ArrayList<Map<String, Object>> appointments, Context context) {
 
@@ -109,20 +98,24 @@ public class IncomingAppointments extends Fragment {
             ImageView imageView = cardView.findViewById(R.id.imageView);
 
             // Populate data from the appointment map
-            patient_nameTextView.setText("Name: " + appointment.get("name"));
-            timeTextView.setText("Time: " + appointment.get("time"));
-            dateTextView.setText("Date: " + appointment.get("date"));
-            diseaseTextView.setText("Disease: " + appointment.get("disease"));
-            genderTextView.setText("Gender: " + appointment.get("gender"));
+            patient_nameTextView.setText(" "+appointment.get("name"));
+            timeTextView.setText(" "+appointment.get("time"));
+            dateTextView.setText(" "+appointment.get("date"));
+            diseaseTextView.setText(" "+appointment.get("disease"));
+            genderTextView.setText(" "+appointment.get("gender"));
 
             // Load image from URL using a library like Picasso or Glide
             // Example with Glide:
-            String imageUrl = (String) appointment.get("imageURL");
+            String imageUrl = (String) appointment.get("ImageURL");
+            System.out.println(imageUrl);
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 Glide.with(context).load(imageUrl).into(imageView);
+            }else {
+                imageView.setImageResource(R.drawable.upload_icon);
             }
         }
     }
+
     private CardView createHistoryItemLayout(Context context, DocumentSnapshot document) {
         String result = document.getString("result");
         String date = document.getString("date");
@@ -158,4 +151,3 @@ public class IncomingAppointments extends Fragment {
         return historyItemLayout;
     }
 }
-
