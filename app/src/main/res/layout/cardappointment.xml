@@ -85,5 +85,23 @@
         </LinearLayout>
 
     </LinearLayout>
+    <Button
+        android:id="@+id/rescheduler"
+        android:layout_width="170dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="190dp"
+        android:layout_gravity="left"
+        android:text="Reschedule Appointment"
+        android:textSize="18sp"
+        android:layout_marginLeft="2dp"/>
+    <Button
+        android:id="@+id/confirmer"
+        android:layout_width="170dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="190dp"
+        android:layout_gravity="right"
+        android:text="Confirm Appointment"
+        android:textSize="18sp"
+        android:layout_marginRight="2dp"/>
 
 </androidx.cardview.widget.CardView>

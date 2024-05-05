@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -34,6 +35,8 @@ public class IncomingAppointments extends AppCompatActivity {
     private FirebaseFirestore db;
     private View rootView;
 
+    Button rescheduler, confirmer;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,12 +48,16 @@ public class IncomingAppointments extends AppCompatActivity {
 
         rootView = findViewById(android.R.id.content);
 
+
+        //confirmer = rootView.findViewById(R.id.confirmer);
+
         String userId = getIntent().getStringExtra("user_email");
         if (userId != null) {
             loadPendingAppointments(userId);
         } else {
             System.out.println("user id is null");
         }
+
     }
 
     private void loadPendingAppointments(String userId) {
@@ -96,6 +103,7 @@ public class IncomingAppointments extends AppCompatActivity {
             TextView diseaseTextView = cardView.findViewById(R.id.result);
             TextView genderTextView = cardView.findViewById(R.id.gender);
             ImageView imageView = cardView.findViewById(R.id.imageView);
+            rescheduler = rootView.findViewById(R.id.rescheduler);
 
             // Populate data from the appointment map
             patient_nameTextView.setText(" "+appointment.get("name"));
@@ -113,6 +121,11 @@ public class IncomingAppointments extends AppCompatActivity {
             }else {
                 imageView.setImageResource(R.drawable.upload_icon);
             }
+
+            rescheduler.setOnClickListener(v -> {
+                Intent intent = new Intent(IncomingAppointments.this, RescheduleAppointment.class);
+                startActivity(intent);
+            });
         }
     }
 
@@ -147,7 +160,6 @@ public class IncomingAppointments extends AppCompatActivity {
         } else {
             imageView.setImageResource(R.drawable.upload_icon);
         }
-
         return historyItemLayout;
     }
 }
