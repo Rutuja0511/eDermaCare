@@ -54,8 +54,10 @@
         <activity android:name=".DExtraDetails"
             android:exported="true">
         </activity>
-
-        <activity android:name=".incomingAppointment"
+        <activity android:name=".RescheduleAppointment"
+            android:exported="true">
+        </activity>
+        <activity android:name=".IncomingAppointments"
             android:exported="true">
         </activity>
         <activity android:name=".LoginPatientActivity"

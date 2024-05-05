@@ -78,7 +78,11 @@ public class Activitydash2 extends AppCompatActivity implements NavigationView.O
             startActivity(intent);
 //            startActivity(new Intent(Activitydash2.this,DExtraDetails.class));
         } else if(itemId==R.id.navh3){
-            startActivity(new Intent(Activitydash2.this, incomingAppointment.class));
+                // Create a Fragment transaction
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new IncomingAppointments())
+                        .addToBackStack(null)  // Optional: allows the user to navigate back to the previous Fragment
+                        .commit();
         } else  if (item.getItemId() == R.id.logout) {
             logout();
             return true;
