@@ -13,7 +13,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 public class profileFragment2 extends AppCompatActivity {
 
-    private TextView editDocname, editMembershipNo, editPhoneNo, editEmail, editCity, editState;
+    private TextView editDocname, editMembershipNo, editPhoneNo, editEmail, editCity, editState,editExperience;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,7 +27,7 @@ public class profileFragment2 extends AppCompatActivity {
         editPhoneNo = findViewById(R.id.editPhoneNo);
         editCity = findViewById(R.id.editCity);
         editState = findViewById(R.id.editState);
-
+        editExperience = findViewById(R.id.editExperience);
         // Retrieve user email from Intent extras
         String userEmail = getIntent().getStringExtra("user_email");
 
@@ -58,6 +58,7 @@ public class profileFragment2 extends AppCompatActivity {
                     String mobile = document.getString("Mobile");
                     String city = document.getString("City");
                     String state = document.getString("State");
+                    String exp = document.getString("Exp");
                     System.out.println(state);
 
                     // Update UI with retrieved data
@@ -67,6 +68,7 @@ public class profileFragment2 extends AppCompatActivity {
                     editPhoneNo.setText(mobile);
                     editCity.setText(city);
                     editState.setText(state);
+                    editExperience.setText(exp);
                 }
             } else {
                 // Handle errors
