@@ -21,14 +21,8 @@ public class IncomingAppointments extends Fragment {
 
         reschuler = rootView.findViewById(R.id.button_reschedule);
         reschuler.setOnClickListener(v -> {
-            // Create a new instance of the RescheduleAppointment fragment
-            RescheduleAppointment fragment = new RescheduleAppointment();
-
-            // Replace the current fragment with RescheduleAppointment
-            requireActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
-                    .addToBackStack(null)  // Optional: allows the user to navigate back to the previous Fragment by pressing the back button
-                    .commit();
+            Intent intent  = new Intent(requireContext(), RescheduleAppointment.class);
+            startActivity(intent);
         });
 
         return rootView;
