@@ -12,4 +12,6 @@
     <color name="darkgray">#666666</color>
     <color name="bg">#8692F7</color>
     <color name="dark_lavender">#4352de</color>
+    <color name="red">#FF0000</color>
+    <color name="green">#0A6522</color>
 </resources>

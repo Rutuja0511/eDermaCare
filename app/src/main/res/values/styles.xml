@@ -5,4 +5,9 @@
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
+    <style android:name="Button.White"
+        android:parent="ThemeOverlay.AppCompat"
+        xmlns:android="http://schemas.android.com/apk/res/android" name="button_color">
+        <item android:name="colorAccent" name="android:theme">@android:color/red</item>
+    </style>
 </resources>

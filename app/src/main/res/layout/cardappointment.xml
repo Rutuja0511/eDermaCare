@@ -87,21 +87,30 @@
     </LinearLayout>
     <Button
         android:id="@+id/rescheduler"
-        android:layout_width="170dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="190dp"
-        android:layout_gravity="left"
+        android:layout_width="370dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="200dp"
         android:text="Reschedule Appointment"
-        android:textSize="18sp"
+        android:textSize="25sp"
         android:layout_marginLeft="2dp"/>
     <Button
         android:id="@+id/confirmer"
-        android:layout_width="170dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="190dp"
-        android:layout_gravity="right"
+        android:layout_width="370dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="260dp"
         android:text="Confirm Appointment"
-        android:textSize="18sp"
+        android:textSize="25sp"
         android:layout_marginRight="2dp"/>
+
+    <Button
+        android:id="@+id/canceller"
+        android:layout_width="370dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="320dp"
+        android:layout_marginLeft="2dp"
+        android:text="Cancel Appointment"
+        android:textSize="25sp"
+        android:backgroundTint="@color/red"
+        android:layout_marginRight="10dp"/>
 
 </androidx.cardview.widget.CardView>
