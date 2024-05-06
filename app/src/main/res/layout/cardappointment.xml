@@ -110,7 +110,7 @@
         android:layout_marginLeft="2dp"
         android:text="Cancel Appointment"
         android:textSize="25sp"
-        android:backgroundTint="@color/red"
+        android:backgroundTint="#FF0000"
         android:layout_marginRight="10dp"/>
 
 </androidx.cardview.widget.CardView>
