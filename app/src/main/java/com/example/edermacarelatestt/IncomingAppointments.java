@@ -106,7 +106,7 @@ public class IncomingAppointments extends AppCompatActivity {
                 .document(appointmentId);
 
         // Update fields
-        appointmentRef.update("confirm", true,
+        appointmentRef.update("confirmed", true,
                         "pending", false)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
