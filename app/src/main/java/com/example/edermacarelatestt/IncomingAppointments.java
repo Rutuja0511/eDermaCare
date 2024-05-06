@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,6 +38,7 @@ public class IncomingAppointments extends AppCompatActivity {
     private View rootView;
 
     Button rescheduler, confirmer;
+    String userId; // User ID obtained from Intent
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,17 +51,16 @@ public class IncomingAppointments extends AppCompatActivity {
 
         rootView = findViewById(android.R.id.content);
 
-
-        String userId = getIntent().getStringExtra("user_email");
+        // Get the user ID from Intent
+        userId = getIntent().getStringExtra("user_email");
         if (userId != null) {
-            loadPendingAppointments(userId);
+            loadPendingAppointments();
         } else {
             System.out.println("user id is null");
         }
-
     }
 
-    private void loadPendingAppointments(String userId) {
+    private void loadPendingAppointments() {
         db.collection("dermatologist")
                 .document(userId)
                 .collection("appointment")
@@ -76,6 +75,8 @@ public class IncomingAppointments extends AppCompatActivity {
                                 Boolean pendingValue = document.getBoolean("pending");
                                 if (pendingValue != null && pendingValue.booleanValue()) {
                                     Map<String, Object> appointmentData = document.getData();
+                                    // Store the document ID (appointment ID) directly in the appointment data map
+                                    appointmentData.put("documentId", document.getId());
                                     appointments.add(appointmentData);
                                 }
                             }
@@ -94,6 +95,8 @@ public class IncomingAppointments extends AppCompatActivity {
         if (userId == null || appointmentId == null) {
             Log.e(TAG, "userId or appointmentId is null");
             return;
+        }else{
+            System.out.println("thike"+ userId +" "+appointmentId);
         }
 
         // Get the appointment document reference
@@ -109,10 +112,9 @@ public class IncomingAppointments extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         // Print confirmation message to console
-                        System.out.println("Appointment confirmed successfully.");
                         Log.d(TAG, "Appointment confirmed successfully.");
                         // Reload pending appointments
-                        loadPendingAppointments(userId);
+                        loadPendingAppointments();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -123,10 +125,7 @@ public class IncomingAppointments extends AppCompatActivity {
                 });
     }
 
-
-
     private void populateAppointments(ArrayList<Map<String, Object>> appointments, Context context) {
-
         LinearLayout parentLayout = rootView.findViewById(R.id.parent_incoming_layout); // assuming parent layout id is parent_layout
         LayoutInflater inflater = LayoutInflater.from(context);
 
@@ -140,14 +139,15 @@ public class IncomingAppointments extends AppCompatActivity {
             TextView diseaseTextView = cardView.findViewById(R.id.result);
             TextView genderTextView = cardView.findViewById(R.id.gender);
             ImageView imageView = cardView.findViewById(R.id.imageView);
-            rescheduler = rootView.findViewById(R.id.rescheduler);
-            confirmer = rootView.findViewById(R.id.confirmer);
+            rescheduler = cardView.findViewById(R.id.rescheduler);
+            confirmer = cardView.findViewById(R.id.confirmer);
+
             // Populate data from the appointment map
-            patient_nameTextView.setText(" "+appointment.get("name"));
-            timeTextView.setText(" "+appointment.get("time"));
-            dateTextView.setText(" "+appointment.get("date"));
-            diseaseTextView.setText(" "+appointment.get("disease"));
-            genderTextView.setText(" "+appointment.get("gender"));
+            patient_nameTextView.setText(" " + appointment.get("name"));
+            timeTextView.setText(" " + appointment.get("time"));
+            dateTextView.setText(" " + appointment.get("date"));
+            diseaseTextView.setText(" " + appointment.get("disease"));
+            genderTextView.setText(" " + appointment.get("gender"));
 
             // Load image from URL using a library like Picasso or Glide
             // Example with Glide:
@@ -155,61 +155,32 @@ public class IncomingAppointments extends AppCompatActivity {
             System.out.println(imageUrl);
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 Glide.with(context).load(imageUrl).into(imageView);
-            }else {
+            } else {
                 imageView.setImageResource(R.drawable.upload_icon);
             }
 
-            rescheduler.setOnClickListener(v -> {
-                Intent intent = new Intent(IncomingAppointments.this, RescheduleAppointment.class);
-                startActivity(intent);
+            // Set onClickListener for the rescheduler button
+            rescheduler.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(IncomingAppointments.this, RescheduleAppointment.class);
+                    startActivity(intent);
+                }
             });
 
+            // Retrieve appointment ID (document ID) from appointment data
+            String appointmentId = (String) appointment.get("documentId"); // Assuming the field name is "documentId"
+            System.out.println(appointmentId+"yp");
+            String userId = getIntent().getStringExtra("user_email");
+            // Set onClickListener for the confirm button
             confirmer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Retrieve user ID and appointment ID from appointment data
-                    String userId = (String) appointment.get("userId"); // Assuming the field name is "userId"
-                    String appointmentId = (String) appointment.get("appointmentId"); // Assuming the field name is "appointmentId"
-
+                    System.out.println("yaha hu "+appointmentId+" "+userId);
                     // Confirm the appointment using obtained user ID and appointment ID
                     confirmAppointment(userId, appointmentId);
                 }
             });
-
         }
-    }
-
-    private CardView createHistoryItemLayout(Context context, DocumentSnapshot document) {
-        String result = document.getString("result");
-        String date = document.getString("date");
-        String time = document.getString("time");
-        String imageURL = document.getString("imageURL");
-
-        LayoutInflater inflater = LayoutInflater.from(context);
-//        LinearLayout historyItemLayout = (LinearLayout) inflater.inflate(R.layout.history_item_layout, null);
-        CardView historyItemLayout = (CardView) inflater.inflate(R.layout.history_item_layout, null);
-
-        ViewGroup.MarginLayoutParams layoutParams = new ViewGroup.MarginLayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        );
-        layoutParams.setMargins(0, 2, 0, 22); // Add bottom margin for spacing
-        historyItemLayout.setLayoutParams(layoutParams);
-
-        ImageView imageView = historyItemLayout.findViewById(R.id.imageView);
-        TextView dateTextView = historyItemLayout.findViewById(R.id.date);
-        TextView timeTextView = historyItemLayout.findViewById(R.id.time);
-        TextView resultTextView = historyItemLayout.findViewById(R.id.result);
-
-        dateTextView.setText(date);
-        timeTextView.setText(time);
-        resultTextView.setText(result);
-
-        if (imageURL != null && !imageURL.isEmpty()) {
-            Glide.with(context).load(imageURL).into(imageView);
-        } else {
-            imageView.setImageResource(R.drawable.upload_icon);
-        }
-        return historyItemLayout;
     }
 }
