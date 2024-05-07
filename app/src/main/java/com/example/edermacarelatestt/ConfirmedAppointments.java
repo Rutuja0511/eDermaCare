@@ -92,7 +92,7 @@ public class ConfirmedAppointments  extends AppCompatActivity {
         LayoutInflater inflater = LayoutInflater.from(context);
 
         for (Map<String, Object> appointment : appointments) {
-            CardView cardView = (CardView) inflater.inflate(R.layout.cardappointment, parentLayout, false);
+            CardView cardView = (CardView) inflater.inflate(R.layout.cardappointmentconfirmed, parentLayout, false);
             parentLayout.addView(cardView);
 
             TextView patient_nameTextView = cardView.findViewById(R.id.patient_name);

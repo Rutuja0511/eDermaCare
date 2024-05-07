@@ -2,10 +2,14 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="4dp"
     app:cardElevation="6dp"
+    app:cornerRadius="12dp"
+    app:contentPaddingLeft="3dp"
+    app:contentPadding="3dp"
     android:layout_margin="16dp">
 
     <LinearLayout
@@ -32,12 +36,15 @@
 
             <TextView
                 android:id="@+id/patient_name"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/baseline_person_pin_24"
+
                 android:textColor="@color/white"
+                android:drawablePadding="8dp"
                 android:drawableTint="#FFF"
-                android:textSize="17sp"
+                android:textSize="19sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="12dp" />
 
@@ -46,6 +53,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/baseline_access_time_24"
+                android:drawablePadding="8dp"
                 android:textColor="@color/white"
                 android:textSize="17sp"
                 android:textStyle="bold"
@@ -56,17 +64,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/baseline_calendar_month_24"
+                android:drawablePadding="8dp"
                 android:textColor="@color/white"
                 android:textSize="17sp"
                 android:drawableTint="@color/white"
                 android:textStyle="bold"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="12dp"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/result"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/baseline_output_24"
+                android:drawablePadding="8dp"
                 android:textColor="@color/white"
                 android:textSize="17sp"
                 android:textStyle="bold"
@@ -78,6 +89,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/gender"
+                android:drawablePadding="8dp"
                 android:textColor="@color/white"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -85,32 +97,48 @@
         </LinearLayout>
 
     </LinearLayout>
-    <Button
-        android:id="@+id/rescheduler"
-        android:layout_width="370dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="200dp"
-        android:text="Reschedule Appointment"
-        android:textSize="25sp"
-        android:layout_marginLeft="2dp"/>
-    <Button
-        android:id="@+id/confirmer"
-        android:layout_width="370dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="260dp"
-        android:text="Confirm Appointment"
-        android:textSize="25sp"
-        android:layout_marginRight="2dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="3dp"
+        android:layout_marginTop="210dp">
+
+        <Button
+            android:id="@+id/rescheduler"
+            android:layout_width="0dp"
+          android:layout_margin="1dp"
+            app:cornerRadius="10dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:text="Reschedule"
+            android:textSize="21sp" />
+
+        <Button
+            android:id="@+id/canceller"
+            android:layout_width="0dp"
+            app:cornerRadius="10dp"
+            android:layout_height="60dp"
+            android:layout_margin="1dp"
+            android:backgroundTint="#FF0000"
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:textSize="21sp" />
+
+    </LinearLayout>
 
     <Button
-        android:id="@+id/canceller"
-        android:layout_width="370dp"
+        android:id="@+id/confirmer"
+        android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginTop="320dp"
-        android:layout_marginLeft="2dp"
-        android:text="Cancel Appointment"
-        android:textSize="25sp"
-        android:backgroundTint="#FF0000"
-        android:layout_marginRight="10dp"/>
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="270dp"
+
+        android:backgroundTint="#007C52"
+        app:cornerRadius="10dp"
+
+        android:text="Confirm Appointment"
+        android:textSize="21sp" />
 
 </androidx.cardview.widget.CardView>
