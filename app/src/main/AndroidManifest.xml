@@ -60,6 +60,12 @@
         <activity android:name=".IncomingAppointments"
             android:exported="true">
         </activity>
+        <activity android:name=".ConfirmedAppointments"
+            android:exported="true">
+        </activity>
+        <activity android:name=".CancelledAppointments"
+            android:exported="true">
+        </activity>
         <activity android:name=".LoginPatientActivity"
             android:exported="true">
         </activity>

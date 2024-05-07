@@ -38,6 +38,7 @@ public class CancelledAppointments  extends AppCompatActivity {
 
 
     String userId;
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cancelled_appointment);
@@ -60,7 +61,7 @@ public class CancelledAppointments  extends AppCompatActivity {
         System.out.println("in load");
         db.collection("dermatologist")
                 .document(userId)
-                .collection("appointment")
+                .collection("appointments")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -111,7 +112,7 @@ public class CancelledAppointments  extends AppCompatActivity {
 
             // Load image from URL using a library like Picasso or Glide
             // Example with Glide:
-            String imageUrl = (String) appointment.get("ImageURL");
+            String imageUrl = (String) appointment.get("imageURL");
             System.out.println(imageUrl);
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 Glide.with(context).load(imageUrl).into(imageView);

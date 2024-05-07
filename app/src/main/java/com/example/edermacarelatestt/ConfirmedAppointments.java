@@ -38,6 +38,7 @@ public class ConfirmedAppointments  extends AppCompatActivity {
 
 
     String userId;
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.confirmed_appointment);
@@ -60,7 +61,7 @@ public class ConfirmedAppointments  extends AppCompatActivity {
         System.out.println("in load");
         db.collection("dermatologist")
                 .document(userId)
-                .collection("appointment")
+                .collection("appointments")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -69,8 +70,8 @@ public class ConfirmedAppointments  extends AppCompatActivity {
                             ArrayList<Map<String, Object>> appointments = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 // Check the "pending" field within each document
-                                Boolean pendingValue = document.getBoolean("confirmed");
-                                if (pendingValue != null && pendingValue.booleanValue()) {
+                                Boolean Value = document.getBoolean("confirmed");
+                                if (Value != null && Value.booleanValue() && Value==true) {
                                     Map<String, Object> appointmentData = document.getData();
                                     // Store the document ID (appointment ID) directly in the appointment data map
                                     appointmentData.put("documentId", document.getId());
@@ -111,7 +112,7 @@ public class ConfirmedAppointments  extends AppCompatActivity {
 
             // Load image from URL using a library like Picasso or Glide
             // Example with Glide:
-            String imageUrl = (String) appointment.get("ImageURL");
+            String imageUrl = (String) appointment.get("imageURL");
             System.out.println(imageUrl);
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 Glide.with(context).load(imageUrl).into(imageView);

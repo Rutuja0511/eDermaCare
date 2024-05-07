@@ -38,6 +38,7 @@
                 android:textColor="@color/white"
                 android:drawableTint="#FFF"
                 android:textSize="17sp"
+
                 android:textStyle="bold"
                 android:layout_marginBottom="12dp" />
 
@@ -48,6 +49,7 @@
                 android:drawableLeft="@drawable/baseline_access_time_24"
                 android:textColor="@color/white"
                 android:textSize="17sp"
+
                 android:textStyle="bold"
                 android:layout_marginBottom="12dp" />
 
@@ -58,6 +60,7 @@
                 android:drawableLeft="@drawable/baseline_calendar_month_24"
                 android:textColor="@color/white"
                 android:textSize="17sp"
+
                 android:drawableTint="@color/white"
                 android:textStyle="bold"
                 android:layout_marginBottom="12dp" />
@@ -69,6 +72,7 @@
                 android:drawableLeft="@drawable/baseline_output_24"
                 android:textColor="@color/white"
                 android:textSize="17sp"
+
                 android:textStyle="bold"
                 android:layout_marginBottom="12dp"/>
 
@@ -80,37 +84,11 @@
                 android:drawableLeft="@drawable/gender"
                 android:textColor="@color/white"
                 android:textSize="17sp"
+
                 android:textStyle="bold" />
 
         </LinearLayout>
 
     </LinearLayout>
-    <Button
-        android:id="@+id/rescheduler"
-        android:layout_width="370dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="200dp"
-        android:text="Reschedule Appointment"
-        android:textSize="25sp"
-        android:layout_marginLeft="2dp"/>
-    <Button
-        android:id="@+id/confirmer"
-        android:layout_width="370dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="260dp"
-        android:text="Confirm Appointment"
-        android:textSize="25sp"
-        android:layout_marginRight="2dp"/>
-
-    <Button
-        android:id="@+id/canceller"
-        android:layout_width="370dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="320dp"
-        android:layout_marginLeft="2dp"
-        android:text="Cancel Appointment"
-        android:textSize="25sp"
-        android:backgroundTint="#FF0000"
-        android:layout_marginRight="10dp"/>
 
 </androidx.cardview.widget.CardView>
