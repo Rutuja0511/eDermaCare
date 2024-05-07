@@ -155,7 +155,9 @@ public class IncomingAppointments extends AppCompatActivity {
             ImageView imageView = cardView.findViewById(R.id.imageView);
             rescheduler = cardView.findViewById(R.id.rescheduler);
             confirmer = cardView.findViewById(R.id.confirmer);
+            String location = String.valueOf(appointment.get("clinicAddress"));
 
+            System.out.println("address"+location);
             // Populate data from the appointment map
             patient_nameTextView.setText(" " + appointment.get("name"));
             timeTextView.setText(" " + appointment.get("time"));
