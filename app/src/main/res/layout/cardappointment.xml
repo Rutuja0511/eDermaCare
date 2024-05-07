@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="4dp"
+    app:cardBackgroundColor="@color/darkl"
     app:cardElevation="6dp"
     app:cornerRadius="12dp"
     app:contentPaddingLeft="3dp"
@@ -14,82 +15,81 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/lavender"
-        android:padding="10dp"
+        android:layout_height="333dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp">
+        android:background="@color/darkl"
+        android:orientation="horizontal"
+        android:padding="10dp">
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_gravity="center_vertical" />
+            android:layout_height="120dp" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginStart="16dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/patient_name"
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/baseline_person_pin_24"
+                android:layout_marginBottom="12dp"
 
-                android:textColor="@color/white"
+                android:drawableLeft="@drawable/baseline_person_pin_24"
                 android:drawablePadding="8dp"
                 android:drawableTint="#FFF"
+                android:textColor="@color/white"
                 android:textSize="19sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="12dp" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
                 android:drawableLeft="@drawable/baseline_access_time_24"
                 android:drawablePadding="8dp"
                 android:textColor="@color/white"
                 android:textSize="17sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="12dp" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
                 android:drawableLeft="@drawable/baseline_calendar_month_24"
                 android:drawablePadding="8dp"
+                android:drawableTint="@color/white"
                 android:textColor="@color/white"
                 android:textSize="17sp"
-                android:drawableTint="@color/white"
                 android:textStyle="bold"
-                android:layout_marginBottom="12dp"
                 tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/result"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
                 android:drawableLeft="@drawable/baseline_output_24"
                 android:drawablePadding="8dp"
                 android:textColor="@color/white"
                 android:textSize="17sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="12dp"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/gender"
-                android:drawableTint="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/gender"
                 android:drawablePadding="8dp"
+                android:drawableTint="@color/white"
                 android:textColor="@color/white"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -101,44 +101,54 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="3dp"
-        android:layout_marginTop="210dp">
+
+        android:layout_marginTop="200dp"> <!-- Reduced margin top to 10dp -->
 
         <Button
             android:id="@+id/rescheduler"
             android:layout_width="0dp"
-          android:layout_margin="1dp"
+            android:layout_margin="1dp"
             app:cornerRadius="10dp"
-            android:layout_height="60dp"
+            android:backgroundTint="#FBE4AF"
+            android:layout_height="50dp"
+            android:textColor="@color/black"
             android:layout_weight="1"
             android:text="Reschedule"
-            android:textSize="21sp" />
+            android:textStyle="bold"
+            android:textSize="13.5sp" />
+        <Button
+            android:id="@+id/confirmer"
+            android:layout_width="1dp"
+            android:layout_margin="1dp"
 
+            android:layout_height="50dp"
+            android:backgroundTint="#DEFBDD"
+            app:cornerRadius="10dp"
+            android:layout_weight="1"
+            android:textColor="#062D08"
+            android:text="Confirm"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:ignore="Suspicious0dp" />
         <Button
             android:id="@+id/canceller"
             android:layout_width="0dp"
+
             app:cornerRadius="10dp"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:layout_margin="1dp"
-            android:backgroundTint="#FF0000"
+            android:backgroundTint="#FF5A6C"
             android:layout_weight="1"
             android:text="Cancel"
-            android:textSize="21sp" />
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="14sp" />
+
+
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/confirmer"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginTop="270dp"
 
-        android:backgroundTint="#007C52"
-        app:cornerRadius="10dp"
 
-        android:text="Confirm Appointment"
-        android:textSize="21sp" />
 
 </androidx.cardview.widget.CardView>
