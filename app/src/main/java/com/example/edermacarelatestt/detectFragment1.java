@@ -159,7 +159,7 @@ public class detectFragment1 extends Fragment {
             String predictedClassName = classList.get(resultClassIndex);
 
             // Update the TextView with the processed result
-            String resultText = "Detected Disease: " + predictedClassName;
+            String resultText = predictedClassName;
             textView2.setText(resultText);
             textView2.setVisibility(View.VISIBLE); // Show result
 
