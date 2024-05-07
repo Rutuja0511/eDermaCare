@@ -139,108 +139,154 @@ public class IncomingAppointments extends AppCompatActivity {
                 });
     }
 
-    private void populateAppointments(ArrayList<Map<String, Object>> appointments, Context context) {
-        LinearLayout parentLayout = rootView.findViewById(R.id.parent_incoming_layout); // assuming parent layout id is parent_layout
-        LayoutInflater inflater = LayoutInflater.from(context);
+//    private void populateAppointments(ArrayList<Map<String, Object>> appointments, Context context) {
+//        LinearLayout parentLayout = rootView.findViewById(R.id.parent_incoming_layout); // assuming parent layout id is parent_layout
+//        LayoutInflater inflater = LayoutInflater.from(context);
+//
+//        for (Map<String, Object> appointment : appointments) {
+//            CardView cardView = (CardView) inflater.inflate(R.layout.cardappointment, parentLayout, false);
+//            parentLayout.addView(cardView);
+//
+//            TextView patient_nameTextView = cardView.findViewById(R.id.patient_name);
+//            TextView timeTextView = cardView.findViewById(R.id.time);
+//            TextView dateTextView = cardView.findViewById(R.id.date);
+//            TextView diseaseTextView = cardView.findViewById(R.id.result);
+//            TextView genderTextView = cardView.findViewById(R.id.gender);
+//            ImageView imageView = cardView.findViewById(R.id.imageView);
+////            TextView clinicAddressView=cardView.findViewById(R.id.location);
+////            rescheduler = cardView.findViewById(R.id.rescheduler);
+//            confirmer = cardView.findViewById(R.id.confirmer);
+//
+//            // Populate data from the appointment map
+//            patient_nameTextView.setText(" " + appointment.get("name"));
+//            timeTextView.setText(" " + appointment.get("time"));
+//            dateTextView.setText(" " + appointment.get("date"));
+//            diseaseTextView.setText(" " + appointment.get("disease"));
+//            genderTextView.setText(" " + appointment.get("gender"));
+////            clinicAddressView.setText(" "+appointment.get("clinicAddress"));
+//            // Load image from URL using a library like Picasso or Glide
+//            // Example with Glide:
+//            String imageUrl = (String) appointment.get("imageURL");
+//            System.out.println(imageUrl);
+//            if (imageUrl != null && !imageUrl.isEmpty()) {
+//                Glide.with(context).load(imageUrl).into(imageView);
+//            } else {
+//                imageView.setImageResource(R.drawable.upload_icon);
+//            }
+//
+//            // Set onClickListener for the rescheduler button
+////            rescheduler.setOnClickListener(new View.OnClickListener() {
+////                @Override
+////                public void onClick(View v) {
+////                    Intent intent = new Intent(IncomingAppointments.this, RescheduleAppointment.class);
+////                    startActivity(intent);
+////                }
+////            });
+//
+//
+//
+//            // Retrieve appointment ID (document ID) from appointment data
+//            String appointmentId = (String) appointment.get("documentId"); // Assuming the field name is "documentId"
+//            System.out.println(appointmentId+"yp");
+//            String userId = getIntent().getStringExtra("user_email");
+//
+//            // Get the dermatologist's name from Firestore
+//            db.collection("dermatologist")
+//                    .document(userId) // Assuming userId is the ID of the dermatologist
+//                    .get()
+//                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                        @Override
+//                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                            if (documentSnapshot.exists()) {
+//                                String dermatologistName = documentSnapshot.getString("Name");
+//                                // Set onClickListener for the confirm button
+//                                confirmer.setOnClickListener(new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View v) {
+//                                        // Confirm the appointment using obtained user ID and appointment ID
+//                                        confirmAppointment(userId, appointmentId);
+//                                        // Get the receiver's email from the appointment data
+//                                        String receiverEmail = (String) appointment.get("email");
+//
+//                                        // Pass the retrieved dermatologist's name to sendEmail method
+//                                        sendEmail(receiverEmail, (String) appointment.get("name"), dermatologistName, (String) appointment.get("date"), (String) appointment.get("time"));
+//                                    }
+//                                });
+//                            } else {
+//                                Log.d(TAG, "Dermatologist document not found");
+//                            }
+//                        }
+//                    })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            Log.e(TAG, "Error retrieving dermatologist document", e);
+//                        }
+//                    });
+//
+//            // Set onClickListener for the confirm button
+//            confirmer.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(IncomingAppointments.this, ConfirmAppointment.class);
+//                    startActivity(intent);
+//                    System.out.println("yaha hu "+appointmentId+" "+userId);
+//                    // Confirm the appointment using obtained user ID and appointment ID
+//                    confirmAppointment(userId, appointmentId);
+//                    // Get the receiver's email from the appointment data
+//                    String receiverEmail = (String) appointment.get("email");
+//
+////                    sendEmail(receiverEmail, (String) appointment.get("name"), "Dermatologist Name", (String) appointment.get("date"), (String) appointment.get("time"));
+//
+//                }
+//            });
+//        }
+//    }
+private void populateAppointments(ArrayList<Map<String, Object>> appointments, Context context) {
+    LinearLayout parentLayout = rootView.findViewById(R.id.parent_incoming_layout); // assuming parent layout id is parent_layout
+    LayoutInflater inflater = LayoutInflater.from(context);
 
-        for (Map<String, Object> appointment : appointments) {
-            CardView cardView = (CardView) inflater.inflate(R.layout.cardappointment, parentLayout, false);
-            parentLayout.addView(cardView);
+    for (Map<String, Object> appointment : appointments) {
+        CardView cardView = (CardView) inflater.inflate(R.layout.cardappointment, parentLayout, false);
+        parentLayout.addView(cardView);
 
-            TextView patient_nameTextView = cardView.findViewById(R.id.patient_name);
-            TextView timeTextView = cardView.findViewById(R.id.time);
-            TextView dateTextView = cardView.findViewById(R.id.date);
-            TextView diseaseTextView = cardView.findViewById(R.id.result);
-            TextView genderTextView = cardView.findViewById(R.id.gender);
-            ImageView imageView = cardView.findViewById(R.id.imageView);
-            rescheduler = cardView.findViewById(R.id.rescheduler);
-            confirmer = cardView.findViewById(R.id.confirmer);
-            String location = String.valueOf(appointment.get("clinicAddress"));
+        TextView patient_nameTextView = cardView.findViewById(R.id.patient_name);
+        TextView timeTextView = cardView.findViewById(R.id.time);
+        TextView dateTextView = cardView.findViewById(R.id.date);
+        TextView diseaseTextView = cardView.findViewById(R.id.result);
+        TextView genderTextView = cardView.findViewById(R.id.gender);
+        ImageView imageView = cardView.findViewById(R.id.imageView);
+        confirmer = cardView.findViewById(R.id.confirmer);
 
-            System.out.println("address"+location);
-            // Populate data from the appointment map
-            patient_nameTextView.setText(" " + appointment.get("name"));
-            timeTextView.setText(" " + appointment.get("time"));
-            dateTextView.setText(" " + appointment.get("date"));
-            diseaseTextView.setText(" " + appointment.get("disease"));
-            genderTextView.setText(" " + appointment.get("gender"));
-
-            // Load image from URL using a library like Picasso or Glide
-            // Example with Glide:
-            String imageUrl = (String) appointment.get("imageURL");
-            System.out.println(imageUrl);
-            if (imageUrl != null && !imageUrl.isEmpty()) {
-                Glide.with(context).load(imageUrl).into(imageView);
-            } else {
-                imageView.setImageResource(R.drawable.upload_icon);
-            }
-
-            // Set onClickListener for the rescheduler button
-            rescheduler.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(IncomingAppointments.this, RescheduleAppointment.class);
-                    startActivity(intent);
-                }
-            });
-
-
-
-            // Retrieve appointment ID (document ID) from appointment data
-            String appointmentId = (String) appointment.get("documentId"); // Assuming the field name is "documentId"
-            System.out.println(appointmentId+"yp");
-            String userId = getIntent().getStringExtra("user_email");
-
-            // Get the dermatologist's name from Firestore
-            db.collection("dermatologist")
-                    .document(userId) // Assuming userId is the ID of the dermatologist
-                    .get()
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if (documentSnapshot.exists()) {
-                                String dermatologistName = documentSnapshot.getString("Name");
-                                // Set onClickListener for the confirm button
-                                confirmer.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        // Confirm the appointment using obtained user ID and appointment ID
-                                        confirmAppointment(userId, appointmentId);
-                                        // Get the receiver's email from the appointment data
-                                        String receiverEmail = (String) appointment.get("email");
-
-                                        // Pass the retrieved dermatologist's name to sendEmail method
-                                        sendEmail(receiverEmail, (String) appointment.get("name"), dermatologistName, (String) appointment.get("date"), (String) appointment.get("time"));
-                                    }
-                                });
-                            } else {
-                                Log.d(TAG, "Dermatologist document not found");
-                            }
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.e(TAG, "Error retrieving dermatologist document", e);
-                        }
-                    });
-
-            // Set onClickListener for the confirm button
-            confirmer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    System.out.println("yaha hu "+appointmentId+" "+userId);
-                    // Confirm the appointment using obtained user ID and appointment ID
-                    confirmAppointment(userId, appointmentId);
-                    // Get the receiver's email from the appointment data
-                    String receiverEmail = (String) appointment.get("email");
-
-                    sendEmail(receiverEmail, (String) appointment.get("name"), "Dermatologist Name", (String) appointment.get("date"), (String) appointment.get("time"));
-
-                }
-            });
+        // Populate data from the appointment map
+        patient_nameTextView.setText(" " + appointment.get("name"));
+        timeTextView.setText(" " + appointment.get("time"));
+        dateTextView.setText(" " + appointment.get("date"));
+        diseaseTextView.setText(" " + appointment.get("disease"));
+        genderTextView.setText(" " + appointment.get("gender"));
+        String imageUrl = (String) appointment.get("imageURL");
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            Glide.with(context).load(imageUrl).into(imageView);
+        } else {
+            imageView.setImageResource(R.drawable.upload_icon);
         }
+
+        String appointmentId = (String) appointment.get("documentId"); // Assuming the field name is "documentId"
+        String userId = getIntent().getStringExtra("user_email");
+
+        // Set onClickListener for the confirm button
+        confirmer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(IncomingAppointments.this, ConfirmAppointment.class);
+                startActivity(intent);
+                confirmAppointment(userId, appointmentId);
+                String receiverEmail = (String) appointment.get("email");
+                sendEmail(receiverEmail, (String) appointment.get("name"), "Dermatologist Name", (String) appointment.get("date"), (String) appointment.get("time"));
+            }
+        });
     }
+}
 
     public void sendEmail(String receiverEmail, String patientName, String dermatologistName, String date, String time) {
         try {
