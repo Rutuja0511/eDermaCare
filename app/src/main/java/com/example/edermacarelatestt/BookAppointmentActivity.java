@@ -5,10 +5,11 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -23,11 +24,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -37,8 +42,12 @@ public class BookAppointmentActivity extends AppCompatActivity {
     private Calendar selectedDate;
     private TextView dateTextView, timeTextView, fbname, fbcity, fbdistrict, fbstate, fbnemail, fbmobile, fbexperience;
     private ImageView dermatologistImageView;
+    private Spinner clinicAddressSpinner;
     private String userId;
     private boolean isAppointmentSaved = false;
+    private String name;
+    private String city;
+    private String selectedClinicAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,13 +68,14 @@ public class BookAppointmentActivity extends AppCompatActivity {
         fbmobile = findViewById(R.id.fbmobile);
         fbexperience = findViewById(R.id.fbexperience);
         dermatologistImageView = findViewById(R.id.dermatologistImageView);
+        clinicAddressSpinner = findViewById(R.id.clinicAddressSpinner);
 
         // Get data from intent
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             userId = extras.getString("user_id");
-            String name = extras.getString("Name");
-            String city = extras.getString("City");
+            name = extras.getString("Name");
+            city = extras.getString("City");
 
             // Set TextViews
             fbname.setText(name);
@@ -104,6 +114,23 @@ public class BookAppointmentActivity extends AppCompatActivity {
                             Log.e("BookAppointmentActivity", "Error fetching dermatologist details", task.getException());
                         }
                     });
+
+            // Fetch clinic addresses
+            fetchClinicAddresses(new OnFetchClinicAddressesListener() {
+                @Override
+                public void onSuccess(List<String> clinicAddresses) {
+                    // Populate Spinner with clinic addresses
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(BookAppointmentActivity.this, android.R.layout.simple_spinner_item, clinicAddresses);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    clinicAddressSpinner.setAdapter(adapter);
+                }
+
+                @Override
+                public void onFailure(String errorMessage) {
+                    // Handle failure
+                    Toast.makeText(BookAppointmentActivity.this, "Failed to fetch clinic addresses: " + errorMessage, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         // Button click listeners
@@ -115,6 +142,58 @@ public class BookAppointmentActivity extends AppCompatActivity {
 
         Button bookAppointmentButton = findViewById(R.id.bookAppointment);
         bookAppointmentButton.setOnClickListener(v -> saveAppointmentToFirestore());
+    }
+
+    private void fetchClinicAddresses(final OnFetchClinicAddressesListener listener) {
+        List<String> clinicAddresses = new ArrayList<>();
+
+        // Assuming you have the dermatologist's name and city
+
+        // Fetch clinic addresses from Firestore
+        db.collection("dermatologist")
+                .whereEqualTo("Name", name)
+                .whereEqualTo("City", city)
+                .limit(1) // Assuming only one dermatologist with the given name and city
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                // Get the document ID of the dermatologist
+                                String dermatologistId = document.getId();
+
+                                // Fetch clinic addresses for the dermatologist
+                                db.collection("dermatologist")
+                                        .document(dermatologistId)
+                                        .collection("address")
+                                        .document("clinic_details")
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    DocumentSnapshot clinicDocument = task.getResult();
+                                                    if (clinicDocument.exists()) {
+                                                        // Add clinic addresses to the list
+                                                        clinicAddresses.add(clinicDocument.getString("clinicAddr1"));
+                                                        clinicAddresses.add(clinicDocument.getString("clinicAddr2"));
+                                                        clinicAddresses.add(clinicDocument.getString("clinicAddr3"));
+                                                        listener.onSuccess(clinicAddresses);
+                                                    } else {
+                                                        listener.onFailure("Clinic details not found");
+                                                    }
+                                                } else {
+                                                    listener.onFailure(task.getException().getMessage());
+                                                }
+                                            }
+                                        });
+                            }
+                        } else {
+                            listener.onFailure(task.getException().getMessage());
+                        }
+                    }
+                });
     }
 
     private void showDatePicker() {
@@ -158,6 +237,10 @@ public class BookAppointmentActivity extends AppCompatActivity {
     private void saveAppointmentToFirestore() {
         if (!isAppointmentSaved && selectedDate != null && userId != null) {
             isAppointmentSaved = true; // Set flag to prevent multiple saves
+
+            // Get the selected clinic address from the Spinner
+            selectedClinicAddress = clinicAddressSpinner.getSelectedItem().toString();
+
             // Get appointment details
             String name = fbname.getText().toString();
             String city = fbcity.getText().toString();
@@ -191,112 +274,76 @@ public class BookAppointmentActivity extends AppCompatActivity {
             appointment.put("experience", experience);
             appointment.put("date", selectedDateString);
             appointment.put("time", selectedTimeString);
+            appointment.put("clinicAddress", selectedClinicAddress); // Add selected clinic address
 
-            // Save appointment to Firestore
+            // Save appointment to patient's collection
             db.collection("patients")
                     .document(userId)
                     .collection("appointment")
                     .add(appointment)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
+                            // Appointment saved successfully to patient's collection
                             Toast.makeText(BookAppointmentActivity.this, "Appointment booked successfully!", Toast.LENGTH_SHORT).show();
+
+                            // Save appointment to dermatologist's collection
+                            saveAppointmentToDermatologist(selectedDateString, selectedTimeString);
                         } else {
+                            // Failed to save appointment to patient's collection
                             Toast.makeText(BookAppointmentActivity.this, "Failed to book appointment. Please try again.", Toast.LENGTH_SHORT).show();
                             Log.e("BookAppointmentActivity", "Error booking appointment", task.getException());
                         }
                     });
-
-            // Fetch patient details
-            db.collection("patients").document(userId).get()
-                    .addOnSuccessListener(documentSnapshot -> {
-                        if (documentSnapshot.exists()) {
-                            String patientName = documentSnapshot.getString("Name");
-                            String patientEmail = documentSnapshot.getString("Email");
-                            String patientGender = documentSnapshot.getString("Gender");
-                            String patientMobile = documentSnapshot.getString("Mobile");
-                            String patientDOB = documentSnapshot.getString("DOB");
-
-                            // Query the patient's history to get the imageURL
-                            db.collection("patients")
-                                    .document(userId)
-                                    .collection("history")
-                                    .get()
-                                    .addOnCompleteListener(historyTask -> {
-                                        if (historyTask.isSuccessful()) {
-                                            for (DocumentSnapshot historyDocument : historyTask.getResult()) {
-                                                String imageURL = historyDocument.getString("imageURL");
-                                                String result = historyDocument.getString("result");
-
-                                                // Create a Map to store the appointment data for the dermatologist
-                                                Map<String, Object> dermatologistAppointment = new HashMap<>();
-                                                dermatologistAppointment.put("name", patientName);
-                                                dermatologistAppointment.put("email", patientEmail);
-                                                dermatologistAppointment.put("gender", patientGender);
-                                                dermatologistAppointment.put("date", selectedDateString); // Add selected date
-                                                dermatologistAppointment.put("time", selectedTimeString); // Add selected time
-                                                dermatologistAppointment.put("imageURL", imageURL); // Add imageURL
-                                                dermatologistAppointment.put("disease", result);
-                                                dermatologistAppointment.put("dob", patientDOB);
-                                                dermatologistAppointment.put("mobile", patientMobile);
-                                                dermatologistAppointment.put("pending", true); // Set pending to true
-                                                dermatologistAppointment.put("confirmed", false); // Set confirm to false
-                                                dermatologistAppointment.put("reschedule", false); // Set rescheduled to false
-                                                dermatologistAppointment.put("cancelled", false); // Set cancelled to false
-
-
-                                                // Query the dermatologist collection
-                                                db.collection("dermatologist")
-                                                        .whereEqualTo("Name", name)
-                                                        .get()
-                                                        .addOnCompleteListener(dermaTask -> {
-                                                            if (dermaTask.isSuccessful()) {
-                                                                for (DocumentSnapshot document : dermaTask.getResult()) {
-                                                                    // Get the document reference of the dermatologist
-                                                                    DocumentReference dermatologistRef = document.getReference();
-
-                                                                    // Add the appointment to the subcollection "appointment"
-                                                                    dermatologistRef.collection("appointments")
-                                                                            .add(dermatologistAppointment)
-                                                                            .addOnCompleteListener(dermaAppointmentTask -> {
-                                                                                if (dermaAppointmentTask.isSuccessful()) {
-                                                                                    Toast.makeText(BookAppointmentActivity.this, "Appointment booked successfully!", Toast.LENGTH_SHORT).show();
-                                                                                } else {
-                                                                                    Toast.makeText(BookAppointmentActivity.this, "Failed to book appointment. Please try again.", Toast.LENGTH_SHORT).show();
-                                                                                    Log.e("BookAppointmentActivity", "Error booking appointment", dermaAppointmentTask.getException());
-                                                                                }
-                                                                            });
-                                                                }
-                                                            } else {
-                                                                // Handle errors
-                                                                Log.e("BookAppointmentActivity", "Error fetching dermatologist details", dermaTask.getException());
-                                                            }
-                                                        });
-                                            }
-                                        } else {
-                                            Log.d("BookAppointmentActivity", "No such document");
-                                        }
-                                    })
-                                    .addOnFailureListener(e -> Log.e("BookAppointmentActivity", "Error fetching patient's history", e));
-                        } else {
-                            Log.d("BookAppointmentActivity", "No such document");
-                        }
-
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.e("BookAppointmentActivity", "Error fetching patient details", e);
-                        }
-                    });
-        }
-        else if (isAppointmentSaved) {
+        } else if (isAppointmentSaved) {
             // Show message indicating appointment is already saved
             Toast.makeText(BookAppointmentActivity.this, "Appointment already booked!", Toast.LENGTH_SHORT).show();
-        }else {
+        } else {
             Toast.makeText(BookAppointmentActivity.this, "Please select date and time", Toast.LENGTH_SHORT).show();
         }
     }
 
+    private void saveAppointmentToDermatologist(String selectedDateString, String selectedTimeString) {
+        // Query the dermatologist collection
+        db.collection("dermatologist")
+                .whereEqualTo("Name", name)
+                .whereEqualTo("City", city)
+                .get()
+                .addOnCompleteListener(dermaTask -> {
+                    if (dermaTask.isSuccessful()) {
+                        for (DocumentSnapshot document : dermaTask.getResult()) {
+                            // Get the document reference of the dermatologist
+                            DocumentReference dermatologistRef = document.getReference();
+
+                            // Create a Map to store the appointment data for the dermatologist
+                            Map<String, Object> dermatologistAppointment = new HashMap<>();
+                            dermatologistAppointment.put("name", fbname.getText().toString());
+                            dermatologistAppointment.put("email", fbnemail.getText().toString());
+                            dermatologistAppointment.put("date", selectedDateString); // Add selected date
+                            dermatologistAppointment.put("time", selectedTimeString); // Add selected time
+                            dermatologistAppointment.put("clinicAddress", selectedClinicAddress); // Add selected clinic address
+                            dermatologistAppointment.put("pending", true); // Set pending to true
+                            dermatologistAppointment.put("confirmed", false); // Set confirm to false
+                            dermatologistAppointment.put("reschedule", false); // Set rescheduled to false
+                            dermatologistAppointment.put("cancelled", false); // Set cancelled to false
+
+                            // Add the appointment to the subcollection "appointments"
+                            dermatologistRef.collection("appointments")
+                                    .add(dermatologistAppointment)
+                                    .addOnCompleteListener(dermaAppointmentTask -> {
+                                        if (dermaAppointmentTask.isSuccessful()) {
+                                            // Appointment saved successfully to dermatologist's collection
+                                            Toast.makeText(BookAppointmentActivity.this, "Appointment booked successfully!", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            // Failed to save appointment to dermatologist's collection
+                                            Toast.makeText(BookAppointmentActivity.this, "Failed to book appointment. Please try again.", Toast.LENGTH_SHORT).show();
+                                            Log.e("BookAppointmentActivity", "Error booking appointment", dermaAppointmentTask.getException());
+                                        }
+                                    });
+                        }
+                    } else {
+                        // Handle errors
+                        Log.e("BookAppointmentActivity", "Error fetching dermatologist details", dermaTask.getException());
+                    }
+                });
+    }
 }
-
-
