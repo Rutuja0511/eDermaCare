@@ -63,7 +63,23 @@ public class Activitydash2 extends AppCompatActivity implements NavigationView.O
           startActivity(intent);
                 // Create a Fragment transaction
 
-        } else  if (item.getItemId() == R.id.logout) {
+        }else if(itemId==R.id.navh4){
+          String userId = getIntent().getStringExtra("user_id");
+          Intent intent = new Intent(Activitydash2.this, ConfirmedAppointments.class);
+          intent.putExtra("user_email", userId);
+          startActivity(intent);
+          // Create a Fragment transaction
+
+      }
+      else if(itemId==R.id.navh5){
+          String userId = getIntent().getStringExtra("user_id");
+          Intent intent = new Intent(Activitydash2.this, CancelledAppointments.class);
+          intent.putExtra("user_email", userId);
+          startActivity(intent);
+          // Create a Fragment transaction
+
+      }
+      else  if (item.getItemId() == R.id.logout) {
             logout();
             return true;
         }

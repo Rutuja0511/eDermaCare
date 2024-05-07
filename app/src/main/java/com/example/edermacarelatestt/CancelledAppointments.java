@@ -32,21 +32,18 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class IncomingAppointments extends AppCompatActivity {
-
+public class CancelledAppointments  extends AppCompatActivity {
     private FirebaseFirestore db;
     private View rootView;
 
-    Button rescheduler, confirmer;
-    String userId; // User ID obtained from Intent
 
-    @Override
+    String userId;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.incoming_appointment);
+        setContentView(R.layout.cancelled_appointment);
 
         Log.d(TAG, "onCreate: Activity created");
-        System.out.println("oncreate incoming");
+        System.out.println("oncereate incoming");
         db = FirebaseFirestore.getInstance();
 
         rootView = findViewById(android.R.id.content);
@@ -54,16 +51,16 @@ public class IncomingAppointments extends AppCompatActivity {
         // Get the user ID from Intent
         userId = getIntent().getStringExtra("user_email");
         if (userId != null) {
-            loadPendingAppointments();
+            loadCancelledAppointments();
         } else {
             System.out.println("user id is null");
         }
     }
-
-    private void loadPendingAppointments() {
+    private void loadCancelledAppointments() {
+        System.out.println("in load");
         db.collection("dermatologist")
                 .document(userId)
-                .collection("appointments")
+                .collection("appointment")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -72,7 +69,7 @@ public class IncomingAppointments extends AppCompatActivity {
                             ArrayList<Map<String, Object>> appointments = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 // Check the "pending" field within each document
-                                Boolean pendingValue = document.getBoolean("pending");
+                                Boolean pendingValue = document.getBoolean("cancelled");
                                 if (pendingValue != null && pendingValue.booleanValue()) {
                                     Map<String, Object> appointmentData = document.getData();
                                     // Store the document ID (appointment ID) directly in the appointment data map
@@ -80,54 +77,17 @@ public class IncomingAppointments extends AppCompatActivity {
                                     appointments.add(appointmentData);
                                 }
                             }
-                            System.out.println("no of incoming appointments" + appointments.size());
-                            System.out.println(userId);
+                            System.out.println("no of a" + appointments.size());
                             Log.d(TAG, "Number of appointments: " + appointments.size());
-                            populateAppointments(appointments, IncomingAppointments.this);
+                            populateAppointments(appointments, CancelledAppointments.this);
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
     }
-
-
-    private void confirmAppointment(String userId, String appointmentId) {
-        if (userId == null || appointmentId == null) {
-            System.out.println("userId or appointmentId is null");
-            return;
-        }else{
-            System.out.println("thike"+ userId +" "+appointmentId);
-        }
-
-        // Get the appointment document reference
-        DocumentReference appointmentRef = db.collection("dermatologist")
-                .document(userId)
-                .collection("appointment")
-                .document(appointmentId);
-
-        // Update fields
-        appointmentRef.update("confirmed", true,
-                        "pending", false)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        // Print confirmation message to console
-                        Log.d(TAG, "Appointment confirmed successfully.");
-                        // Reload pending appointments
-                        loadPendingAppointments();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "Error updating appointment: ", e);
-                    }
-                });
-    }
-
     private void populateAppointments(ArrayList<Map<String, Object>> appointments, Context context) {
-        LinearLayout parentLayout = rootView.findViewById(R.id.parent_incoming_layout); // assuming parent layout id is parent_layout
+        LinearLayout parentLayout = rootView.findViewById(R.id.parent_cancelled_layout); // assuming parent layout id is parent_layout
         LayoutInflater inflater = LayoutInflater.from(context);
 
         for (Map<String, Object> appointment : appointments) {
@@ -140,8 +100,7 @@ public class IncomingAppointments extends AppCompatActivity {
             TextView diseaseTextView = cardView.findViewById(R.id.result);
             TextView genderTextView = cardView.findViewById(R.id.gender);
             ImageView imageView = cardView.findViewById(R.id.imageView);
-            rescheduler = cardView.findViewById(R.id.rescheduler);
-            confirmer = cardView.findViewById(R.id.confirmer);
+
 
             // Populate data from the appointment map
             patient_nameTextView.setText(" " + appointment.get("name"));
@@ -161,27 +120,15 @@ public class IncomingAppointments extends AppCompatActivity {
             }
 
             // Set onClickListener for the rescheduler button
-            rescheduler.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(IncomingAppointments.this, RescheduleAppointment.class);
-                    startActivity(intent);
-                }
-            });
+
+
 
             // Retrieve appointment ID (document ID) from appointment data
-            String appointmentId = (String) appointment.get("documentId"); // Assuming the field name is "documentId"
-            System.out.println(appointmentId+"yp");
-            String userId = getIntent().getStringExtra("user_email");
+//            String appointmentId = (String) appointment.get("documentId"); // Assuming the field name is "documentId"
+//            System.out.println(appointmentId+"yp");
+//            String userId = getIntent().getStringExtra("user_email");
             // Set onClickListener for the confirm button
-            confirmer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    System.out.println("yaha hu "+appointmentId+" "+userId);
-                    // Confirm the appointment using obtained user ID and appointment ID
-                    confirmAppointment(userId, appointmentId);
-                }
-            });
+
         }
     }
 }
