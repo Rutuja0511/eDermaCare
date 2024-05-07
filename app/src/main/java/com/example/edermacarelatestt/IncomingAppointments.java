@@ -31,6 +31,19 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Map;
+import javax.mail.Authenticator;
+import javax.mail.PasswordAuthentication;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 public class IncomingAppointments extends AppCompatActivity {
 
@@ -103,7 +116,7 @@ public class IncomingAppointments extends AppCompatActivity {
         // Get the appointment document reference
         DocumentReference appointmentRef = db.collection("dermatologist")
                 .document(userId)
-                .collection("appointment")
+                .collection("appointments")
                 .document(appointmentId);
 
         // Update fields
@@ -152,7 +165,7 @@ public class IncomingAppointments extends AppCompatActivity {
 
             // Load image from URL using a library like Picasso or Glide
             // Example with Glide:
-            String imageUrl = (String) appointment.get("ImageURL");
+            String imageUrl = (String) appointment.get("imageURL");
             System.out.println(imageUrl);
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 Glide.with(context).load(imageUrl).into(imageView);
@@ -169,10 +182,47 @@ public class IncomingAppointments extends AppCompatActivity {
                 }
             });
 
+
+
             // Retrieve appointment ID (document ID) from appointment data
             String appointmentId = (String) appointment.get("documentId"); // Assuming the field name is "documentId"
             System.out.println(appointmentId+"yp");
             String userId = getIntent().getStringExtra("user_email");
+
+            // Get the dermatologist's name from Firestore
+            db.collection("dermatologist")
+                    .document(userId) // Assuming userId is the ID of the dermatologist
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if (documentSnapshot.exists()) {
+                                String dermatologistName = documentSnapshot.getString("Name");
+                                // Set onClickListener for the confirm button
+                                confirmer.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        // Confirm the appointment using obtained user ID and appointment ID
+                                        confirmAppointment(userId, appointmentId);
+                                        // Get the receiver's email from the appointment data
+                                        String receiverEmail = (String) appointment.get("email");
+
+                                        // Pass the retrieved dermatologist's name to sendEmail method
+                                        sendEmail(receiverEmail, (String) appointment.get("name"), dermatologistName, (String) appointment.get("date"), (String) appointment.get("time"));
+                                    }
+                                });
+                            } else {
+                                Log.d(TAG, "Dermatologist document not found");
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e(TAG, "Error retrieving dermatologist document", e);
+                        }
+                    });
+
             // Set onClickListener for the confirm button
             confirmer.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -180,8 +230,66 @@ public class IncomingAppointments extends AppCompatActivity {
                     System.out.println("yaha hu "+appointmentId+" "+userId);
                     // Confirm the appointment using obtained user ID and appointment ID
                     confirmAppointment(userId, appointmentId);
+                    // Get the receiver's email from the appointment data
+                    String receiverEmail = (String) appointment.get("email");
+
+                    sendEmail(receiverEmail, (String) appointment.get("name"), "Dermatologist Name", (String) appointment.get("date"), (String) appointment.get("time"));
+
                 }
             });
         }
     }
+
+    public void sendEmail(String receiverEmail, String patientName, String dermatologistName, String date, String time) {
+        try {
+            String stringSenderEmail = "edermacare01@gmail.com";
+            String passwordSenderEmail = "eeal uvjd crje rvxs";
+
+            String stringHost = "smtp.gmail.com";
+
+            Properties properties = System.getProperties();
+
+            properties.put("mail.smtp.host", stringHost);
+            properties.put("mail.smtp.port", "465");
+            properties.put("mail.smtp.ssl.enable", "true");
+            properties.put("mail.smtp.auth", "true");
+
+            javax.mail.Session session = Session.getInstance(properties, new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(stringSenderEmail, passwordSenderEmail);
+                }
+            });
+            MimeMessage mimeMessage = new MimeMessage(session);
+            mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(receiverEmail));
+            mimeMessage.setSubject("eDermaCare: Appointment with dermatologist has been confirmed");
+            String emailBody = "Dear " + patientName + ",\n\n" +
+                    "Your appointment with dermatologist Dr. " + dermatologistName + " has been confirmed.\n" +
+                    "Appointment details:\n" +
+                    "Date: " + date + "\n" +
+                    "Time: " + time + "\n"+
+//                    "Address: " + address + "\n\n" +
+                    "Thank you.\n" +
+                    "\n"+
+                    "Best regards,\neDermaCare Team";
+            mimeMessage.setText(emailBody);
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Transport.send(mimeMessage);
+                    } catch (MessagingException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            thread.start();
+
+        } catch (AddressException e) {
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

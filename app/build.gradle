@@ -27,6 +27,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    packagingOptions{
+        exclude 'META-INF/NOTICE.md'
+        exclude 'META-INF/LICENSE.md'
+    }
 }
 
 dependencies {
@@ -43,6 +48,7 @@ dependencies {
     implementation libs.firebase.storage
 //    implementation files('src\\main\\res\\values\\jsoup-1.17.2.jar')
     implementation 'org.jsoup:jsoup:1.14.3'
+
 //    implementation libs.firebase_auth
     implementation 'com.squareup.picasso:picasso:2.71828'
 
@@ -58,4 +64,6 @@ dependencies {
     implementation 'org.tensorflow:tensorflow-lite:2.5.0'
     implementation 'androidx.annotation:annotation:1.3.0'
 
+    implementation 'com.sun.mail:android-mail:1.6.6'
+    implementation 'com.sun.mail:android-activation:1.6.7'
 }
