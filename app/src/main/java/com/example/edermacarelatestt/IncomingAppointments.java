@@ -279,6 +279,7 @@ private void populateAppointments(ArrayList<Map<String, Object>> appointments, C
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(IncomingAppointments.this, ConfirmAppointment.class);
+                intent.putExtra("user_id", userId);
                 startActivity(intent);
                 confirmAppointment(userId, appointmentId);
                 String receiverEmail = (String) appointment.get("email");
