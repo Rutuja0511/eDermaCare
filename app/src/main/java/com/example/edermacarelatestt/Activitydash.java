@@ -73,11 +73,12 @@ public class Activitydash extends AppCompatActivity implements NavigationView.On
             }
         } else if (itemId == R.id.navhs) {
             String userEmail = getIntent().getStringExtra("user_email");
-
+            String userId = getIntent().getStringExtra("user_id");
             if (userEmail != null) {
                 // Pass user email to profileFragment
                 Bundle bundle = new Bundle();
                 bundle.putString("user_email", userEmail);
+                bundle.putString("user_id",userId);
                 profileFragment fragment = new profileFragment();
                 fragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();

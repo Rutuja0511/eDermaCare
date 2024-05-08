@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -18,11 +19,13 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class profileFragment extends Fragment {
 
-    private TextView nameTextView, emailTextView, dobTextView, mobileTextView;
-
-    Button goBackButton;
+    private EditText nameTextView, emailTextView, dobTextView, mobileTextView;
+    private Button saveButton;
 
     @Nullable
     @Override
@@ -34,11 +37,17 @@ public class profileFragment extends Fragment {
         emailTextView = view.findViewById(R.id.editTextTextPersonName4);
         dobTextView = view.findViewById(R.id.editTextTextPersonName2);
         mobileTextView = view.findViewById(R.id.editTextTextPersonName3);
+        saveButton = view.findViewById(R.id.saveButton);
+
         // Retrieve user's email ID from arguments
-        String userEmail = null;
+        String userEmail,userID;
         Bundle args = getArguments();
         if (args != null) {
             userEmail = args.getString("user_email");
+            userID = args.getString("user_id");
+        } else {
+            userID = null;
+            userEmail = null;
         }
 
         if (userEmail != null) {
@@ -49,8 +58,10 @@ public class profileFragment extends Fragment {
             Toast.makeText(getContext(), "User email not found", Toast.LENGTH_SHORT).show();
         }
 
-        return view;
+        // Set OnClickListener to the save button
+        saveButton.setOnClickListener(v -> saveUserData(userID));
 
+        return view;
     }
 
     private void fetchUserData(String userEmail) {
@@ -83,5 +94,28 @@ public class profileFragment extends Fragment {
         });
     }
 
+    private void saveUserData(String userID) {
 
+        // Access Firestore instance
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Get data from EditText fields
+        String name = nameTextView.getText().toString().trim();
+        String email = emailTextView.getText().toString().trim();
+        String dob = dobTextView.getText().toString().trim();
+        String mobile = mobileTextView.getText().toString().trim();
+
+        // Create a map to update the document in Firestore
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("Name", name);
+        userData.put("Email", email);
+        userData.put("DOB", dob);
+        userData.put("Mobile", mobile);
+
+        // Update the document in Firestore
+        db.collection("patients").document(userID)
+                .update(userData)
+                .addOnSuccessListener(aVoid -> Toast.makeText(getContext(), "User data updated successfully", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to update user data", Toast.LENGTH_SHORT).show());
+    }
 }
