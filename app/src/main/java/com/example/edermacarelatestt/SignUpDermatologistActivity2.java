@@ -169,8 +169,7 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
     private void checkIfRecordExists(String name, String registrationNo, RecordExistsCallback callback) {
         // Create a query to check for matching name and registration number
         CollectionReference dermatologistRef = db.collection("Dermatologist_IADVL");
-        Query query = dermatologistRef.whereEqualTo("Name", name)
-                .whereEqualTo("Membership Number", registrationNo);
+        Query query = dermatologistRef.whereEqualTo("Membership Number", registrationNo);
 
         query.get()
                 .addOnCompleteListener(task -> {

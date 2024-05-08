@@ -30,7 +30,7 @@ public class DermatologistProfile extends AppCompatActivity {
                 // Check if userEmail is not null before proceeding
                 if (userEmail != null) {
                     // Create an Intent to navigate to the profileActivity2
-                    Intent intent = new Intent(DermatologistProfile.this, profileFragment2.class);
+                    Intent intent = new Intent(DermatologistProfile.this, ProfileFragment2.class);
 
                     // Pass the user email as an extra to the intent
                     intent.putExtra("user_email", userEmail);
