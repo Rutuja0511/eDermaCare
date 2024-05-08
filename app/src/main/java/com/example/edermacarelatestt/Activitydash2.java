@@ -45,10 +45,14 @@ public class Activitydash2 extends AppCompatActivity implements NavigationView.O
         int itemId = item.getItemId();
       if (itemId == R.id.navhs2) {
 
-            String userId = getIntent().getStringExtra("user_email");
+            String userEmail = getIntent().getStringExtra("user_email");
+          String userId = getIntent().getStringExtra("user_id");
+
             Intent intent = new Intent(Activitydash2.this, DermatologistProfile.class);
             System.out.println("user email"+userId);
-            intent.putExtra("user_email", userId);
+          System.out.println("userid in profile"+userId);
+            intent.putExtra("user_email", userEmail);
+          intent.putExtra("user_id", userId);
             startActivity(intent);
         }else if(itemId==R.id.navh6){
             String userId = getIntent().getStringExtra("user_id");
