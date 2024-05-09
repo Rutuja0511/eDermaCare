@@ -224,11 +224,17 @@ private void populateAppointments(ArrayList<Map<String, Object>> appointments, C
         canceller.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String receiverEmail = (String) appointment.get("email");
                 Intent intent = new Intent(IncomingAppointments.this, CancelAppointment.class);
                 intent.putExtra("user_id", userId);
+                intent.putExtra("receivermail", receiverEmail);
+                intent.putExtra("Patientname", (String) appointment.get("name"));
+                intent.putExtra("Dname", "Dermatologist Name");
+                intent.putExtra("date", (String) appointment.get("date"));
+                intent.putExtra("time", (String) appointment.get("time"));
+                intent.putExtra("appointmentId",  appointmentId);
                 startActivity(intent);
-                cancelAppointment(userId, appointmentId);
-                String receiverEmail = (String) appointment.get("email");
+
 //                sendEmail(receiverEmail, (String) appointment.get("name"), "Dermatologist Name", (String) appointment.get("date"), (String) appointment.get("time"));
             }
         });
