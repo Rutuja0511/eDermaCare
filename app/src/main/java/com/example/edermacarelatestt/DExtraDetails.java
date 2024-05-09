@@ -23,9 +23,9 @@ import java.util.Map;
 
 public class DExtraDetails extends AppCompatActivity {
 
-    private EditText clinicAddr1, clinicAddr2;
-    private TextView startTime, endTime, startTime2, endTime2;
-    private Button saveButton, startTimeButton, endTimeButton, startTimeButton2, endTimeButton2;
+    private EditText clinicAddr1, clinicAddr2,clinicAddr3;
+    private TextView startTime, endTime, startTime2, endTime2,startTime3, endTime3;
+    private Button saveButton, startTimeButton, endTimeButton, startTimeButton2, endTimeButton2,startTimeButton3, endTimeButton3;
     private FirebaseFirestore mFirestore;
     private FirebaseAuth mAuth;
 
@@ -43,14 +43,19 @@ public class DExtraDetails extends AppCompatActivity {
 
         clinicAddr1 = findViewById(R.id.dermatologist_clinic_addr_1);
         clinicAddr2 = findViewById(R.id.dermatologist_clinic_addr_2);
+        clinicAddr3 = findViewById(R.id.dermatologist_clinic_addr_3);
         startTime = findViewById(R.id.start_time);
         endTime = findViewById(R.id.end_time);
         startTime2 = findViewById(R.id.start_time2);
         endTime2 = findViewById(R.id.end_time2);
+        startTime3 = findViewById(R.id.start_time3);
+        endTime3 = findViewById(R.id.end_time3);
         startTimeButton = findViewById(R.id.start_time_button);
         endTimeButton = findViewById(R.id.end_time_button);
         startTimeButton2 = findViewById(R.id.start_time_button2);
         endTimeButton2 = findViewById(R.id.end_time_button2);
+        startTimeButton3 = findViewById(R.id.start_time_button3);
+        endTimeButton3 = findViewById(R.id.end_time_button3);
         saveButton = findViewById(R.id.search);
 
         // Load data from Firestore and display in EditText fields
@@ -64,13 +69,16 @@ public class DExtraDetails extends AppCompatActivity {
             // Get edited data from EditText fields
             String editedAddr1 = clinicAddr1.getText().toString().trim();
             String editedAddr2 = clinicAddr2.getText().toString().trim();
+            String editedAddr3 = clinicAddr3.getText().toString().trim();
             String editedStart = startTime.getText().toString().trim();
             String editedEnd = endTime.getText().toString().trim();
             String editedStart2 = startTime2.getText().toString().trim();
             String editedEnd2 = endTime2.getText().toString().trim();
+            String editedStart3 = startTime3.getText().toString().trim();
+            String editedEnd3 = endTime3.getText().toString().trim();
 
             // Update data in Firestore
-            updateClinicData(userId, editedAddr1, editedAddr2, editedStart, editedEnd, editedStart2, editedEnd2);
+            updateClinicData(userId, editedAddr1, editedAddr2,editedAddr3, editedStart, editedEnd, editedStart2, editedEnd2,editedStart3, editedEnd3);
         });
     }
 
@@ -108,6 +116,21 @@ public class DExtraDetails extends AppCompatActivity {
             // Handle failure
             Toast.makeText(DExtraDetails.this, "Failed to load clinic data", Toast.LENGTH_SHORT).show();
         });
+        DocumentReference docRef3 = mFirestore.collection("dermatologist").document(userId).collection("address").document("clinicAddress3");
+        docRef3.get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                // Populate EditText fields with clinic data
+                clinicAddr3.setText(documentSnapshot.getString("name"));
+                startTime3.setText(documentSnapshot.getString("start"));
+                endTime3.setText(documentSnapshot.getString("end"));
+            } else {
+                // Display message to the user if clinic details don't exist
+                Toast.makeText(DExtraDetails.this, "Clinic details for Address 3 don't exist. Please fill these and click on save.", Toast.LENGTH_LONG).show();
+            }
+        }).addOnFailureListener(e -> {
+            // Handle failure
+            Toast.makeText(DExtraDetails.this, "Failed to load clinic data", Toast.LENGTH_SHORT).show();
+        });
     }
 
 
@@ -116,6 +139,8 @@ public class DExtraDetails extends AppCompatActivity {
         endTimeButton.setOnClickListener(v -> showTimePickerDialog(endTime));
         startTimeButton2.setOnClickListener(v -> showTimePickerDialog(startTime2));
         endTimeButton2.setOnClickListener(v -> showTimePickerDialog(endTime2));
+        startTimeButton3.setOnClickListener(v -> showTimePickerDialog(startTime3));
+        endTimeButton3.setOnClickListener(v -> showTimePickerDialog(endTime3));
     }
 
     private void showTimePickerDialog(final TextView timeTextView) {
@@ -133,7 +158,7 @@ public class DExtraDetails extends AppCompatActivity {
         timePickerDialog.show();
     }
 
-    private void updateClinicData(String userId, String editedAddr1, String editedAddr2, String editedStart, String editedEnd, String editedStart2, String editedEnd2) {
+    private void updateClinicData(String userId, String editedAddr1, String editedAddr2, String editedAddr3, String editedStart, String editedEnd, String editedStart2, String editedEnd2, String editedStart3, String editedEnd3) {
         // Update clinic data in Firestore for clinicAddress1
         DocumentReference docRef1 = mFirestore.collection("dermatologist").document(userId).collection("address").document("clinicAddress1");
         Map<String, Object> clinic1Data = new HashMap<>();
@@ -150,7 +175,7 @@ public class DExtraDetails extends AppCompatActivity {
                         finish();
                     } else {
                         // Update clinic data in Firestore for clinicAddress2
-                        updateAddress2(userId, editedAddr2, editedStart2, editedEnd2);
+                        updateAddress2(userId, editedAddr2, editedStart2, editedEnd2, editedAddr3, editedStart3, editedEnd3);
                     }
                 })
                 .addOnFailureListener(e -> {
@@ -159,7 +184,7 @@ public class DExtraDetails extends AppCompatActivity {
                 });
     }
 
-    private void updateAddress2(String userId, String editedAddr2, String editedStart2, String editedEnd2) {
+    private void updateAddress2(String userId, String editedAddr2, String editedStart2, String editedEnd2, String editedAddr3, String editedStart3, String editedEnd3) {
         // Update clinic data in Firestore for clinicAddress2
         DocumentReference docRef2 = mFirestore.collection("dermatologist").document(userId).collection("address").document("clinicAddress2");
         Map<String, Object> clinic2Data = new HashMap<>();
@@ -170,12 +195,38 @@ public class DExtraDetails extends AppCompatActivity {
                 .addOnSuccessListener(aVoid -> {
                     // Data updated successfully for Address 2
                     Toast.makeText(DExtraDetails.this, "Data updated successfully for Clinic Address 2", Toast.LENGTH_SHORT).show();
-                    // Finish the activity since both Address 1 and Address 2 are saved
-                    finish();
+                    // Check if Address 3 is empty
+                    if (TextUtils.isEmpty(editedAddr3)) {
+                        // Finish the activity since Address 3 is empty
+                        finish();
+                    } else {
+                        // Update clinic data in Firestore for clinicAddress3
+                        updateAddress3(userId, editedAddr3, editedStart3, editedEnd3);
+                    }
                 })
                 .addOnFailureListener(e -> {
                     // Handle failure
                     Toast.makeText(DExtraDetails.this, "Failed to update data for Clinic Address 2", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void updateAddress3(String userId, String editedAddr3, String editedStart3, String editedEnd3) {
+        // Update clinic data in Firestore for clinicAddress3
+        DocumentReference docRef3 = mFirestore.collection("dermatologist").document(userId).collection("address").document("clinicAddress3");
+        Map<String, Object> clinic3Data = new HashMap<>();
+        clinic3Data.put("name", editedAddr3);
+        clinic3Data.put("start", editedStart3);
+        clinic3Data.put("end", editedEnd3);
+        docRef3.set(clinic3Data)
+                .addOnSuccessListener(aVoid -> {
+                    // Data updated successfully for Address 3
+                    Toast.makeText(DExtraDetails.this, "Data updated successfully for Clinic Address 3", Toast.LENGTH_SHORT).show();
+                    // Finish the activity since all addresses are saved
+                    finish();
+                })
+                .addOnFailureListener(e -> {
+                    // Handle failure
+                    Toast.makeText(DExtraDetails.this, "Failed to update data for Clinic Address 3", Toast.LENGTH_SHORT).show();
                 });
     }
 

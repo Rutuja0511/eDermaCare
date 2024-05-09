@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF"
+    android:orientation="vertical">
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -43,10 +50,11 @@
             <EditText
                 android:id="@+id/dermatologist_clinic_addr_1"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="100dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/light_grey_border"
                 android:drawablePadding="8dp"
+
                 android:hint="Name"
                 android:padding="10dp"
                 android:textColor="@color/black" />
@@ -149,11 +157,12 @@
             <EditText
                 android:id="@+id/dermatologist_clinic_addr_2"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="100dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/light_grey_border"
                 android:drawablePadding="8dp"
                 android:hint="Name"
+
                 android:padding="10dp"
                 android:textColor="@color/black" />
 
@@ -242,6 +251,113 @@
                     android:text="Select End Time"
                     android:layout_marginStart="8dp"/>
             </LinearLayout>
+            <TextView
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="Clinic Address 3"
+                android:textAlignment="textStart"
+                android:textColor="@color/darkgray"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/dermatologist_clinic_addr_3"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/light_grey_border"
+                android:drawablePadding="8dp"
+                android:hint="Name"
+
+                android:padding="10dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="Enter Clinic Time"
+                android:textAlignment="textStart"
+                android:textColor="@color/darkgray"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:gravity="center_vertical"
+                    android:text="Start Time:"
+                    android:textColor="@color/darkgray"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/start_time3"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/light_grey_border"
+                    android:drawablePadding="8dp"
+                    android:hint="HH:MM"
+                    android:inputType="time"
+                    android:padding="10dp"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/start_time_button3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:onClick="selectStartTime"
+                    android:text="Select Start Time"
+                    android:layout_marginStart="8dp"/>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="End Time:    "
+                    android:textColor="@color/darkgray"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/end_time3"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/light_grey_border"
+                    android:drawablePadding="8dp"
+                    android:hint="HH:MM"
+                    android:inputType="time"
+                    android:padding="10dp"
+                    android:textColor="@color/black" />
+
+
+                <Button
+                    android:id="@+id/end_time_button3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="selectStartTime"
+                    android:text="Select End Time"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
 
             <Button
                 android:id="@+id/search"
@@ -257,3 +373,4 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

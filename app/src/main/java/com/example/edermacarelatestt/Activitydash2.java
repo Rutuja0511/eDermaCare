@@ -48,7 +48,7 @@ public class Activitydash2 extends AppCompatActivity implements NavigationView.O
             String userEmail = getIntent().getStringExtra("user_email");
           String userId = getIntent().getStringExtra("user_id");
 
-            Intent intent = new Intent(Activitydash2.this, ProfileFragment2.class);
+            Intent intent = new Intent(Activitydash2.this, profileFragment2.class);
             System.out.println("user email"+userId);
           System.out.println("userid in profile"+userId);
             intent.putExtra("user_email", userEmail);
