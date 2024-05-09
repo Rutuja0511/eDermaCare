@@ -1,4 +1,5 @@
 package com.example.edermacarelatestt;
+import android.content.Intent;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -397,6 +398,8 @@ public class BookAppointmentActivity extends AppCompatActivity {
         else if (isAppointmentSaved) {
             // Show message indicating appointment is already saved
             Toast.makeText(BookAppointmentActivity.this, "Appointment already booked!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(BookAppointmentActivity.this, fragment_home.class);
+            startActivity(intent);
         }else {
             Toast.makeText(BookAppointmentActivity.this, "Please select date and time", Toast.LENGTH_SHORT).show();
         }
