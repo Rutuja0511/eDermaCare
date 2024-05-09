@@ -153,13 +153,14 @@ public class detectFragment1 extends Fragment {
 
             // Call the findResultClassIndex method after running inference
             int resultClassIndex = findResultClassIndex(outputArray);
+            float confidenceScore = outputArray[0][resultClassIndex];
             List<String> classList = loadClassLabels();
 
             // Get the class name corresponding to the predicted class index
             String predictedClassName = classList.get(resultClassIndex);
 
             // Update the TextView with the processed result
-            String resultText = predictedClassName;
+            String resultText = predictedClassName + " (Confidence: " + (confidenceScore * 100) + "%)";
             textView2.setText(resultText);
             textView2.setVisibility(View.VISIBLE); // Show result
 
