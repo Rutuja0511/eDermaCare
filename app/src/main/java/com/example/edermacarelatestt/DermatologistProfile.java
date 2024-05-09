@@ -3,7 +3,7 @@ package com.example.edermacarelatestt;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -30,7 +30,7 @@ userId= getIntent().getStringExtra("user_id");
                 // Check if userEmail is not null before proceeding
                 if (userEmail != null) {
                     // Create an Intent to navigate to the profileActivity2
-                    Intent intent = new Intent(DermatologistProfile.this, ProfileFragment2.class);
+                    Intent intent = new Intent(DermatologistProfile.this, profileFragment2.class);
 
                     // Pass the user email as an extra to the intent
                     intent.putExtra("user_email", userEmail);
