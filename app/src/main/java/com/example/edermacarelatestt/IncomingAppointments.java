@@ -172,109 +172,6 @@ public class IncomingAppointments extends AppCompatActivity {
                 });
     }
 
-//    private void populateAppointments(ArrayList<Map<String, Object>> appointments, Context context) {
-//        LinearLayout parentLayout = rootView.findViewById(R.id.parent_incoming_layout); // assuming parent layout id is parent_layout
-//        LayoutInflater inflater = LayoutInflater.from(context);
-//
-//        for (Map<String, Object> appointment : appointments) {
-//            CardView cardView = (CardView) inflater.inflate(R.layout.cardappointment, parentLayout, false);
-//            parentLayout.addView(cardView);
-//
-//            TextView patient_nameTextView = cardView.findViewById(R.id.patient_name);
-//            TextView timeTextView = cardView.findViewById(R.id.time);
-//            TextView dateTextView = cardView.findViewById(R.id.date);
-//            TextView diseaseTextView = cardView.findViewById(R.id.result);
-//            TextView genderTextView = cardView.findViewById(R.id.gender);
-//            ImageView imageView = cardView.findViewById(R.id.imageView);
-////            TextView clinicAddressView=cardView.findViewById(R.id.location);
-////            rescheduler = cardView.findViewById(R.id.rescheduler);
-//            confirmer = cardView.findViewById(R.id.confirmer);
-//
-//            // Populate data from the appointment map
-//            patient_nameTextView.setText(" " + appointment.get("name"));
-//            timeTextView.setText(" " + appointment.get("time"));
-//            dateTextView.setText(" " + appointment.get("date"));
-//            diseaseTextView.setText(" " + appointment.get("disease"));
-//            genderTextView.setText(" " + appointment.get("gender"));
-////            clinicAddressView.setText(" "+appointment.get("clinicAddress"));
-//            // Load image from URL using a library like Picasso or Glide
-//            // Example with Glide:
-//            String imageUrl = (String) appointment.get("imageURL");
-//            System.out.println(imageUrl);
-//            if (imageUrl != null && !imageUrl.isEmpty()) {
-//                Glide.with(context).load(imageUrl).into(imageView);
-//            } else {
-//                imageView.setImageResource(R.drawable.upload_icon);
-//            }
-//
-//            // Set onClickListener for the rescheduler button
-////            rescheduler.setOnClickListener(new View.OnClickListener() {
-////                @Override
-////                public void onClick(View v) {
-////                    Intent intent = new Intent(IncomingAppointments.this, RescheduleAppointment.class);
-////                    startActivity(intent);
-////                }
-////            });
-//
-//
-//
-//            // Retrieve appointment ID (document ID) from appointment data
-//            String appointmentId = (String) appointment.get("documentId"); // Assuming the field name is "documentId"
-//            System.out.println(appointmentId+"yp");
-//            String userId = getIntent().getStringExtra("user_email");
-//
-//            // Get the dermatologist's name from Firestore
-//            db.collection("dermatologist")
-//                    .document(userId) // Assuming userId is the ID of the dermatologist
-//                    .get()
-//                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                        @Override
-//                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                            if (documentSnapshot.exists()) {
-//                                String dermatologistName = documentSnapshot.getString("Name");
-//                                // Set onClickListener for the confirm button
-//                                confirmer.setOnClickListener(new View.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(View v) {
-//                                        // Confirm the appointment using obtained user ID and appointment ID
-//                                        confirmAppointment(userId, appointmentId);
-//                                        // Get the receiver's email from the appointment data
-//                                        String receiverEmail = (String) appointment.get("email");
-//
-//                                        // Pass the retrieved dermatologist's name to sendEmail method
-//                                        sendEmail(receiverEmail, (String) appointment.get("name"), dermatologistName, (String) appointment.get("date"), (String) appointment.get("time"));
-//                                    }
-//                                });
-//                            } else {
-//                                Log.d(TAG, "Dermatologist document not found");
-//                            }
-//                        }
-//                    })
-//                    .addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-//                            Log.e(TAG, "Error retrieving dermatologist document", e);
-//                        }
-//                    });
-//
-//            // Set onClickListener for the confirm button
-//            confirmer.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent intent = new Intent(IncomingAppointments.this, ConfirmAppointment.class);
-//                    startActivity(intent);
-//                    System.out.println("yaha hu "+appointmentId+" "+userId);
-//                    // Confirm the appointment using obtained user ID and appointment ID
-//                    confirmAppointment(userId, appointmentId);
-//                    // Get the receiver's email from the appointment data
-//                    String receiverEmail = (String) appointment.get("email");
-//
-////                    sendEmail(receiverEmail, (String) appointment.get("name"), "Dermatologist Name", (String) appointment.get("date"), (String) appointment.get("time"));
-//
-//                }
-//            });
-//        }
-//    }
 private void populateAppointments(ArrayList<Map<String, Object>> appointments, Context context) {
     LinearLayout parentLayout = rootView.findViewById(R.id.parent_incoming_layout); // assuming parent layout id is parent_layout
     LayoutInflater inflater = LayoutInflater.from(context);
@@ -311,12 +208,16 @@ private void populateAppointments(ArrayList<Map<String, Object>> appointments, C
         confirmer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String receiverEmail = (String) appointment.get("email");
                 Intent intent = new Intent(IncomingAppointments.this, ConfirmAppointment.class);
                 intent.putExtra("user_id", userId);
+                intent.putExtra("receivermail", receiverEmail);
+                intent.putExtra("Patientname", (String) appointment.get("name"));
+                intent.putExtra("Dname", "Dermatologist Name");
+                intent.putExtra("date", (String) appointment.get("date"));
+                intent.putExtra("time", (String) appointment.get("time"));
+                intent.putExtra("appointmentId",  appointmentId);
                 startActivity(intent);
-                confirmAppointment(userId, appointmentId);
-                String receiverEmail = (String) appointment.get("email");
-                sendEmail(receiverEmail, (String) appointment.get("name"), "Dermatologist Name", (String) appointment.get("date"), (String) appointment.get("time"));
             }
         });
 
@@ -328,62 +229,9 @@ private void populateAppointments(ArrayList<Map<String, Object>> appointments, C
                 startActivity(intent);
                 cancelAppointment(userId, appointmentId);
                 String receiverEmail = (String) appointment.get("email");
-                sendEmail(receiverEmail, (String) appointment.get("name"), "Dermatologist Name", (String) appointment.get("date"), (String) appointment.get("time"));
+//                sendEmail(receiverEmail, (String) appointment.get("name"), "Dermatologist Name", (String) appointment.get("date"), (String) appointment.get("time"));
             }
         });
     }
 }
-
-    public void sendEmail(String receiverEmail, String patientName, String dermatologistName, String date, String time) {
-        try {
-            String stringSenderEmail = "edermacare01@gmail.com";
-            String passwordSenderEmail = "eeal uvjd crje rvxs";
-
-            String stringHost = "smtp.gmail.com";
-
-            Properties properties = System.getProperties();
-
-            properties.put("mail.smtp.host", stringHost);
-            properties.put("mail.smtp.port", "465");
-            properties.put("mail.smtp.ssl.enable", "true");
-            properties.put("mail.smtp.auth", "true");
-
-            javax.mail.Session session = Session.getInstance(properties, new Authenticator() {
-                @Override
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(stringSenderEmail, passwordSenderEmail);
-                }
-            });
-            MimeMessage mimeMessage = new MimeMessage(session);
-            mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(receiverEmail));
-            mimeMessage.setSubject("eDermaCare: Appointment with dermatologist has been confirmed");
-            String emailBody = "Dear " + patientName + ",\n\n" +
-                    "Your appointment with dermatologist Dr. " + dermatologistName + " has been confirmed.\n" +
-                    "Appointment details:\n" +
-                    "Date: " + date + "\n" +
-                    "Time: " + time + "\n"+
-//                    "Address: " + address + "\n\n" +
-                    "Thank you.\n" +
-                    "\n"+
-                    "Best regards,\neDermaCare Team";
-            mimeMessage.setText(emailBody);
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Transport.send(mimeMessage);
-                    } catch (MessagingException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            thread.start();
-
-        } catch (AddressException e) {
-            e.printStackTrace();
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
-    }
-
 }
