@@ -195,20 +195,24 @@ public class BookAppointmentActivity extends AppCompatActivity {
                                         clinicAddresses.add(clinicName);
                                     }
                                 } else {
-                                    listener.onFailure("Clinic details not found");
+                                    // If clinicAddress2 or clinicAddress3 is not found, add clinicAddress1 to the list
+                                    if (subcollection.equals("clinicAddress1")) {
+                                        listener.onFailure("Clinic details not found for clinicAddress1");
+                                    }
                                 }
                             } else {
                                 listener.onFailure(task.getException().getMessage());
                             }
 
-                            // Assuming all subcollections have been processed, trigger onSuccess
-                            if (clinicAddresses.size() == subcollections.size()) {
+                            // Assuming all subcollections have been processed or clinicAddress1 is added, trigger onSuccess
+                            if (clinicAddresses.size() >= 1 || subcollection.equals("clinicAddress1")) {
                                 listener.onSuccess(clinicAddresses);
                             }
                         }
                     });
         }
     }
+
 
 
 
