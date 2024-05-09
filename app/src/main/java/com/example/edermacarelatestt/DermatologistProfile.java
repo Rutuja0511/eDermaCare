@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 public class DermatologistProfile extends AppCompatActivity {
 
-    Button mybutton, mybutton1;
+    Button mybutton, mybutton1,submitButton;
     String userEmail,userId; // Variable to store user email
 
     @Override

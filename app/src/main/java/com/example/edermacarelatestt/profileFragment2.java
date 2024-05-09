@@ -11,6 +11,8 @@ import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,13 +24,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class profileFragment2 extends AppCompatActivity {
 
-    private TextView editDocname, editMembershipNo, editPhoneNo, editEmail, editCity, editState, editExperience;
+    private TextView  editMembershipNo ;
+    private EditText editDocname,  editPhoneNo, editEmail, editCity, editState, editExperience;
     private FloatingActionButton changeImageButton;
     private ImageView doctorImage;
     private ActivityResultLauncher<String> imagePickerLauncher;
@@ -37,7 +44,8 @@ public class profileFragment2 extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_profile2);
-
+        Button saveButton = findViewById(R.id.submitButton);
+        saveButton.setOnClickListener(v -> saveUserData());
         changeImageButton = findViewById(R.id.changeImageButton);
         doctorImage = findViewById(R.id.doctorImage);
 
@@ -70,6 +78,63 @@ public class profileFragment2 extends AppCompatActivity {
         String user_email = getIntent().getStringExtra("user_email");
         fetchUserData(user_email);
     }
+    // Inside onCreate() method
+
+
+    // Add the saveUserData() method
+    private void saveUserData() {
+        // Access Firestore instance
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Retrieve user email from Intent extras
+        String userEmail = getIntent().getStringExtra("user_email");
+
+        // Initialize the map for user data
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("Name", editDocname.getText().toString());
+        userData.put("RegID", editMembershipNo.getText().toString());
+        userData.put("Email", editEmail.getText().toString());
+        userData.put("Mobile", editPhoneNo.getText().toString());
+        userData.put("City", editCity.getText().toString());
+        userData.put("State", editState.getText().toString());
+        userData.put("Exp", editExperience.getText().toString());
+
+        // Query to get the document reference
+        db.collection("dermatologist")
+                .whereEqualTo("Email", userEmail)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    // Check if query returned any documents
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        // Get the document reference
+                        DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                        String documentId = documentSnapshot.getId();
+
+                        // Update the document in Firestore
+                        db.collection("dermatologist").document(documentId).update(userData)
+                                .addOnSuccessListener(aVoid -> {
+                                    // Document updated successfully
+                                    Toast.makeText(profileFragment2.this, "User data updated successfully", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                })
+                                .addOnFailureListener(e -> {
+                                    // Failed to update document
+                                    Toast.makeText(profileFragment2.this, "Failed to update user data", Toast.LENGTH_SHORT).show();
+                                    Log.e("TAG", "Error updating document", e);
+                                });
+                    } else {
+                        // Document not found
+                        Toast.makeText(profileFragment2.this, "User data not found", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Failed to retrieve document
+                    Toast.makeText(profileFragment2.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
+                    Log.e("TAG", "Error retrieving document", e);
+                });
+    }
+
+
 
     private void fetchUserData(String userEmail) {
         // Access Firestore instance
