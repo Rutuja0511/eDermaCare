@@ -30,6 +30,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -145,11 +146,10 @@ public class BookAppointmentActivity extends AppCompatActivity {
     }
 
     private void fetchClinicAddresses(final OnFetchClinicAddressesListener listener) {
+        // Initialize list to hold clinic addresses
         List<String> clinicAddresses = new ArrayList<>();
 
-        // Assuming you have the dermatologist's name and city
-
-        // Fetch clinic addresses from Firestore
+        // Fetch dermatologist document from Firestore based on name and city
         db.collection("dermatologist")
                 .whereEqualTo("Name", name)
                 .whereEqualTo("City", city)
@@ -163,31 +163,8 @@ public class BookAppointmentActivity extends AppCompatActivity {
                                 // Get the document ID of the dermatologist
                                 String dermatologistId = document.getId();
 
-                                // Fetch clinic addresses for the dermatologist
-                                db.collection("dermatologist")
-                                        .document(dermatologistId)
-                                        .collection("address")
-                                        .document("clinic_details")
-                                        .get()
-                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                if (task.isSuccessful()) {
-                                                    DocumentSnapshot clinicDocument = task.getResult();
-                                                    if (clinicDocument.exists()) {
-                                                        // Add clinic addresses to the list
-                                                        clinicAddresses.add(clinicDocument.getString("clinicAddr1"));
-                                                        clinicAddresses.add(clinicDocument.getString("clinicAddr2"));
-                                                        clinicAddresses.add(clinicDocument.getString("clinicAddr3"));
-                                                        listener.onSuccess(clinicAddresses);
-                                                    } else {
-                                                        listener.onFailure("Clinic details not found");
-                                                    }
-                                                } else {
-                                                    listener.onFailure(task.getException().getMessage());
-                                                }
-                                            }
-                                        });
+                                // Fetch clinic addresses from subcollections
+                                fetchClinicAddressesFromSubcollections(dermatologistId, clinicAddresses, listener);
                             }
                         } else {
                             listener.onFailure(task.getException().getMessage());
@@ -195,6 +172,45 @@ public class BookAppointmentActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    private void fetchClinicAddressesFromSubcollections(String dermatologistId, List<String> clinicAddresses, OnFetchClinicAddressesListener listener) {
+        // Define subcollections to fetch clinic addresses from
+        List<String> subcollections = Arrays.asList("clinicAddress1", "clinicAddress2", "clinicAddress3");
+
+        // Fetch clinic addresses from each subcollection
+        for (String subcollection : subcollections) {
+            db.collection("dermatologist")
+                    .document(dermatologistId)
+                    .collection("address")
+                    .document(subcollection)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot clinicDocument = task.getResult();
+                                if (clinicDocument.exists()) {
+                                    String clinicName = clinicDocument.getString("name");
+                                    if (clinicName != null) {
+                                        clinicAddresses.add(clinicName);
+                                    }
+                                } else {
+                                    listener.onFailure("Clinic details not found");
+                                }
+                            } else {
+                                listener.onFailure(task.getException().getMessage());
+                            }
+
+                            // Assuming all subcollections have been processed, trigger onSuccess
+                            if (clinicAddresses.size() == subcollections.size()) {
+                                listener.onSuccess(clinicAddresses);
+                            }
+                        }
+                    });
+        }
+    }
+
+
 
     private void showDatePicker() {
         final Calendar currentDate = Calendar.getInstance();
