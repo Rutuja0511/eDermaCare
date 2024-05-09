@@ -77,7 +77,7 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
                 <TextView
-                    android:id="@+id/fbstate"
+                    android:id="@+id/fbgender"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"

@@ -10,7 +10,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.Button;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-public class ProfileFragment2 extends AppCompatActivity {
+public class profileFragment2 extends AppCompatActivity {
 
     private TextView editDocname, editMembershipNo, editPhoneNo, editEmail, editCity, editState, editExperience;
     private FloatingActionButton changeImageButton;
@@ -67,15 +67,8 @@ public class ProfileFragment2 extends AppCompatActivity {
         editExperience = findViewById(R.id.editExperience);
 
         // Retrieve user email from Intent extras
-        String userEmail = getIntent().getStringExtra("user_email");
-
-        if (userEmail != null) {
-            // Fetch user data from Firestore
-            fetchUserData(userEmail);
-        } else {
-            // Handle the case where user_email is not found in Intent extras
-            Toast.makeText(this, "User email not found", Toast.LENGTH_SHORT).show();
-        }
+        String user_email = getIntent().getStringExtra("user_email");
+        fetchUserData(user_email);
     }
 
     private void fetchUserData(String userEmail) {
@@ -110,12 +103,12 @@ public class ProfileFragment2 extends AppCompatActivity {
 
                     // Load image using Glide
                     if (image != null && !image.isEmpty()) {
-                        Glide.with(ProfileFragment2.this).load(image).into(doctorImage);
+                        Glide.with(profileFragment2.this).load(image).into(doctorImage);
                     }
                 }
             } else {
                 // Handle errors
-                Toast.makeText(ProfileFragment2.this, "Failed to fetch user data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(profileFragment2.this, "Failed to fetch user data", Toast.LENGTH_SHORT).show();
             }
         });
     }

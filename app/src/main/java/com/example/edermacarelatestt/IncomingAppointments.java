@@ -50,7 +50,7 @@ public class IncomingAppointments extends AppCompatActivity {
     private FirebaseFirestore db;
     private View rootView;
 
-    Button rescheduler, confirmer;
+    Button canceller, confirmer;
     String userId; // User ID obtained from Intent
 
     @Override
@@ -127,6 +127,39 @@ public class IncomingAppointments extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         // Print confirmation message to console
                         Log.d(TAG, "Appointment confirmed successfully.");
+                        // Reload pending appointments
+                        loadPendingAppointments();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "Error updating appointment: ", e);
+                    }
+                });
+    }
+    private void cancelAppointment(String userId, String appointmentId) {
+        if (userId == null || appointmentId == null) {
+            System.out.println("userId or appointmentId is null");
+            return;
+        } else {
+            System.out.println("thike" + userId + " " + appointmentId);
+        }
+
+        // Get the appointment document reference
+        DocumentReference appointmentRef = db.collection("dermatologist")
+                .document(userId)
+                .collection("appointments")
+                .document(appointmentId);
+
+        // Update fields
+        appointmentRef.update("cancelled", true,
+                        "pending", false)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // Print confirmation message to console
+                        Log.d(TAG, "Appointment cancelled successfully.");
                         // Reload pending appointments
                         loadPendingAppointments();
                     }
@@ -257,7 +290,7 @@ private void populateAppointments(ArrayList<Map<String, Object>> appointments, C
         TextView genderTextView = cardView.findViewById(R.id.gender);
         ImageView imageView = cardView.findViewById(R.id.imageView);
         confirmer = cardView.findViewById(R.id.confirmer);
-
+        canceller = cardView.findViewById(R.id.canceller);
         // Populate data from the appointment map
         patient_nameTextView.setText(" " + appointment.get("name"));
         timeTextView.setText(" " + appointment.get("time"));
@@ -282,6 +315,18 @@ private void populateAppointments(ArrayList<Map<String, Object>> appointments, C
                 intent.putExtra("user_id", userId);
                 startActivity(intent);
                 confirmAppointment(userId, appointmentId);
+                String receiverEmail = (String) appointment.get("email");
+                sendEmail(receiverEmail, (String) appointment.get("name"), "Dermatologist Name", (String) appointment.get("date"), (String) appointment.get("time"));
+            }
+        });
+
+        canceller.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(IncomingAppointments.this, CancelAppointment.class);
+                intent.putExtra("user_id", userId);
+                startActivity(intent);
+                cancelAppointment(userId, appointmentId);
                 String receiverEmail = (String) appointment.get("email");
                 sendEmail(receiverEmail, (String) appointment.get("name"), "Dermatologist Name", (String) appointment.get("date"), (String) appointment.get("time"));
             }
