@@ -103,7 +103,7 @@ public class CancelAppointment extends AppCompatActivity {
                 cancelAppointmentee(userId, appointmentId);
                 fetchDermatologistNameAndSendEmail();
 
-                Toast.makeText(CancelAppointment.this, "Appointment has been booked successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CancelAppointment.this, "Appointment has been cancelled successfully", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(CancelAppointment.this, CancelledAppointments.class);
                 intent.putExtra("user_email", userId);
                 startActivity(intent);

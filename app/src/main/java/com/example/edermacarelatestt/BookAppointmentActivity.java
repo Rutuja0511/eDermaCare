@@ -93,8 +93,18 @@ public class BookAppointmentActivity extends AppCompatActivity {
                             for (DocumentSnapshot document : task.getResult()) {
                                 // Load image URL
                                 String imageURL = document.getString("ImageURL");
+                                System.out.println("drkimage"+imageURL);
                                 if (imageURL != null && !imageURL.isEmpty()) {
-                                    Glide.with(BookAppointmentActivity.this).load(imageURL).into(dermatologistImageView);
+                                    // Clear any existing image before loading the new one
+                                    Glide.with(BookAppointmentActivity.this).clear(dermatologistImageView);
+
+                                    // Load image using Glide with specified dimensions
+                                    Glide.with(BookAppointmentActivity.this)
+                                            .load(imageURL)
+                                            .override(dermatologistImageView.getWidth(), dermatologistImageView.getHeight())
+                                            .into(dermatologistImageView);
+                                } else {
+                                   dermatologistImageView.setImageResource(R.drawable.doctor_image);
                                 }
 
                                 // Set TextViews with details
@@ -328,9 +338,11 @@ public class BookAppointmentActivity extends AppCompatActivity {
                                     .get()
                                     .addOnCompleteListener(historyTask -> {
                                         if (historyTask.isSuccessful()) {
-                                            for (DocumentSnapshot historyDocument : historyTask.getResult()) {
-                                                String imageURL = historyDocument.getString("imageURL");
-                                                String result = historyDocument.getString("result");
+                                            // Assuming there's only one history document, retrieve it directly
+                                            DocumentSnapshot historyDocument = historyTask.getResult().getDocuments().get(0);
+
+                                            String imageURL = historyDocument.getString("imageURL");
+                                            String result = historyDocument.getString("result");
 
                                                 // Create a Map to store the appointment data for the dermatologist
                                                 Map<String, Object> dermatologistAppointment = new HashMap<>();
@@ -348,36 +360,39 @@ public class BookAppointmentActivity extends AppCompatActivity {
                                                 dermatologistAppointment.put("confirmed", false); // Set confirm to false
                                                 dermatologistAppointment.put("reschedule", false); // Set rescheduled to false
                                                 dermatologistAppointment.put("cancelled", false); // Set cancelled to false
+                                                System.out.println("ab jaunga");
 
-
-                                                // Query the dermatologist collection
                                                 db.collection("dermatologist")
                                                         .whereEqualTo("Name", name)
                                                         .get()
                                                         .addOnCompleteListener(dermaTask -> {
                                                             if (dermaTask.isSuccessful()) {
-                                                                for (DocumentSnapshot document : dermaTask.getResult()) {
-                                                                    // Get the document reference of the dermatologist
-                                                                    DocumentReference dermatologistRef = document.getReference();
+                                                                DocumentSnapshot document = dermaTask.getResult().getDocuments().get(0); // Assuming only one dermatologist
+                                                                // Get the document reference of the dermatologist
+                                                                System.out.println(document);
+                                                                System.out.println("mai zero");
+                                                                DocumentReference dermatologistRef = document.getReference();
+                                                                System.out.println("yeha hu");
 
-                                                                    // Add the appointment to the subcollection "appointment"
-                                                                    dermatologistRef.collection("appointments")
-                                                                            .add(dermatologistAppointment)
-                                                                            .addOnCompleteListener(dermaAppointmentTask -> {
-                                                                                if (dermaAppointmentTask.isSuccessful()) {
-                                                                                    Toast.makeText(BookAppointmentActivity.this, "Appointment booked successfully!", Toast.LENGTH_SHORT).show();
-                                                                                } else {
-                                                                                    Toast.makeText(BookAppointmentActivity.this, "Failed to book appointment. Please try again.", Toast.LENGTH_SHORT).show();
-                                                                                    Log.e("BookAppointmentActivity", "Error booking appointment", dermaAppointmentTask.getException());
-                                                                                }
-                                                                            });
-                                                                }
+                                                                // Add the appointment to the subcollection "appointments"
+                                                                dermatologistRef.collection("appointments")
+                                                                        .add(dermatologistAppointment)
+                                                                        .addOnCompleteListener(dermaAppointmentTask -> {
+                                                                            if (dermaAppointmentTask.isSuccessful()) {
+                                                                                System.out.println("kar diya kam");
+                                                                                Toast.makeText(BookAppointmentActivity.this, "Appointment booked successfully!", Toast.LENGTH_SHORT).show();
+                                                                            } else {
+                                                                                Toast.makeText(BookAppointmentActivity.this, "Failed to book appointment. Please try again.", Toast.LENGTH_SHORT).show();
+                                                                                Log.e("BookAppointmentActivity", "Error booking appointment", dermaAppointmentTask.getException());
+                                                                            }
+                                                                        });
                                                             } else {
                                                                 // Handle errors
                                                                 Log.e("BookAppointmentActivity", "Error fetching dermatologist details", dermaTask.getException());
                                                             }
                                                         });
-                                            }
+
+
                                         } else {
                                             Log.d("BookAppointmentActivity", "No such document");
                                         }
