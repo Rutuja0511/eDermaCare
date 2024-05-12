@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,6 +21,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +31,17 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
+
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 public class SignUpDermatologistActivity2 extends AppCompatActivity {
 
@@ -37,11 +51,13 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
     Button buttonSignUpD;
     private FirebaseFirestore db;
     private String imageUri;
+    private  String imageUrl;
     private String verified;
     private String qualification;
     private String qualificationYear;
     private String universityName;
     private String permanent_address;
+    private StorageReference storageReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,8 +75,11 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("imageUri")) {
-            imageUri = intent.getStringExtra("imageUri"); // Get the image URI
+            imageUri = intent.getStringExtra("imageUri");
+            System.out.println("i got imageuriii");
         }
+
+        storageReference = FirebaseStorage.getInstance().getReference();
 
         buttonSignUpD = findViewById(R.id.dermatologist_signup_button);
 
@@ -75,8 +94,6 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
         initializeDropdowns();
 
     }
-
-
 
     private void showVerificationAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(SignUpDermatologistActivity2.this);
@@ -94,11 +111,9 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
         String password = editTextPasswordD.getText().toString();
         String experience = editTextExperience.getText().toString();
         String mobileNo = editTextMobileNo.getText().toString();
-//        String city = spinnerCity.getSelectedItem().toString();
         String city = editTextCity.getText().toString();
         String district = spinnerDistrict.getSelectedItem().toString();
         String state = spinnerState.getSelectedItem().toString();
-
 
         if (TextUtils.isEmpty(experience) || TextUtils.isEmpty(mobileNo)) {
             Toast.makeText(SignUpDermatologistActivity2.this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
@@ -117,54 +132,55 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
         String stateMedicalCouncil = getIntent().getStringExtra("stateMedicalCouncil");
         String name = getIntent().getStringExtra("name");
 
-//        DermatologistVerification.performVerification(registrationNo, yearOfRegistration, stateMedicalCouncil, new DermatologistVerification.VerificationCallback() {
-//            @Override
-//            public void onVerificationComplete(JSONObject result) {
-//                try {
-//                    JSONObject resultObj = result.getJSONObject("result");
-//                    System.out.println(resultObj);
-//                    JSONObject sourceOutput = resultObj.getJSONObject("source_output");
-//                    String status = sourceOutput.getString("status");
-//                    verified = status.equals("id_found") ? "true" : "false";
-//                    if (status.equals("id_found")) {
-//                        JSONObject imrDetails = sourceOutput.getJSONObject("imr_details");
-//                        qualification = imrDetails.getString("qualification");
-//                        qualificationYear = imrDetails.getString("qualification_year");
-//                        universityName = imrDetails.getString("university_name");
-//                        permanent_address=imrDetails.getString("permanent_address");
-//                    }
-//                    Log.d(TAG, "Verification Status: " + verified);
-//                    System.out.println(verified);
-//                    Log.d(TAG, "Qualification: " + qualification);
-//                    Log.d(TAG, "Qualification Year: " + qualificationYear);
-//                    Log.d(TAG, "University Name: " + universityName);
-//                    Log.d(TAG, "add: " + permanent_address);
-//
-//                    // Post data to Firebase only after verification is complete
-//                    postDataToFirebase();
-//                } catch (JSONException e) {
-//                    Log.e(TAG, "JSONException occurred: " + e.getMessage());
-//                }
-//            }
-//
-//            @Override
-//            public void onVerificationFailed(String errorMessage) {
-//                Log.e(TAG, "Verification failed: " + errorMessage);
-//            }
-//        });
+//        uploadImageToStorage(imageUri, name, registrationNo);
 
+        // Check if the record exists in Dermatologist_IADVL
         checkIfRecordExists(name, registrationNo, new RecordExistsCallback() {
             @Override
             public void onRecordChecked(boolean exists) {
                 if (exists) {
-                    postDataToFirebase();
+                    // Check if the record exists in dermatologist
+                    checkIfRecordExistsInDermatologist(name, registrationNo, new RecordExistsCallback() {
+                        @Override
+                        public void onRecordChecked(boolean existsInDermatologist) {
+                            if (existsInDermatologist) {
+                                showAlert("Record already exists in dermatologist");
+                            } else {
+                                // Post data to Firebase
+                                uploadImageToStorage(imageUri,name, registrationNo);
+                            }
+                        }
+                    });
                 } else {
-                    showAlert("Record doesn't exist");
+                    showAlert("Record doesn't exist in Dermatologist_IADVL");
                 }
             }
         });
-
     }
+
+    private void uploadImageToStorage(String imageUri, String name, String registrationNo) {
+        if (imageUri != null) {
+            Uri file = Uri.parse(imageUri);
+            StorageReference imageRef = storageReference.child("Dermaimages/" + name + "_" + registrationNo);
+            imageRef.putFile(file)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        // Image uploaded successfully, now get the download URL
+                        imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                            // Get the download URL
+                            imageUrl = uri.toString();
+                            System.out.println(imageUrl);
+                            // Now proceed to save the data with the image URL
+                            postDataToFirebase();
+                            System.out.println("posted data");
+
+                        });
+                    })
+                    .addOnFailureListener(e -> {
+                        showAlert("Failed to upload image");
+                    });
+        }
+    }
+
 
     private void checkIfRecordExists(String name, String registrationNo, RecordExistsCallback callback) {
         // Create a query to check for matching name and registration number
@@ -181,6 +197,22 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
                         callback.onRecordChecked(false); // Consider it doesn't exist on error
                     }
                 });
+    }
+
+    private void checkIfRecordExistsInDermatologist(String name, String registrationNo, RecordExistsCallback callback) {
+        // Create a query to check for matching registration number
+        CollectionReference dermatologistRef = db.collection("dermatologist");
+        Query query = dermatologistRef.whereEqualTo("RegID", registrationNo);
+
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                boolean exists = !task.getResult().isEmpty();
+                callback.onRecordChecked(exists);
+            } else {
+                Log.w(TAG, "Error getting documents: ", task.getException());
+                callback.onRecordChecked(false);
+            }
+        });
     }
 
 
@@ -203,13 +235,18 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
             dermatologist.put("qualification", qualification);
             dermatologist.put("qualificationYear", qualificationYear);
             dermatologist.put("universityName", universityName);
-            dermatologist.put("ImageURL", imageUri);
+            dermatologist.put("ImageURL", imageUrl);
             dermatologist.put("permanent_address",permanent_address);
+
+            String emailDerma= getIntent().getStringExtra("email");
+            String nameDerma= getIntent().getStringExtra("name");
 
             db.collection("dermatologist")
                     .add(dermatologist)
                     .addOnSuccessListener(documentReference -> {
                         showVerificationAlertDialog();
+                        sendEmail(emailDerma, nameDerma);
+                        redirectToLogin();
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(SignUpDermatologistActivity2.this, "Error adding dermatologist: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -301,21 +338,59 @@ public class SignUpDermatologistActivity2 extends AppCompatActivity {
         }
     }
 
-    // Populate city dropdown based on selected district
-//    private void populateCityDropdown(String selectedDistrict) {
-//        int citiesArrayId = getResources().getIdentifier(
-//                "cities_" + selectedDistrict.toLowerCase().replace(" ", "_"),
-//                "array",
-//                getPackageName());
-//        if (citiesArrayId != 0) {
-//            ArrayAdapter<CharSequence> cityAdapter = ArrayAdapter.createFromResource(
-//                    this, citiesArrayId, android.R.layout.simple_spinner_item);
-//            cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//            spinnerCity.setAdapter(cityAdapter);
-//        } else {
-////            Toast.makeText(this, "No cities found for selected district", Toast.LENGTH_SHORT).show();
-//        }
-//    }
+    public void sendEmail(String receiverEmail,String dermatologistName) {
+        try {
+            String stringSenderEmail = "edermacare01@gmail.com";
+            String passwordSenderEmail = "eeal uvjd crje rvxs";
 
+            String stringHost = "smtp.gmail.com";
 
+            Properties properties = System.getProperties();
+
+            properties.put("mail.smtp.host", stringHost);
+            properties.put("mail.smtp.port", "465");
+            properties.put("mail.smtp.ssl.enable", "true");
+            properties.put("mail.smtp.auth", "true");
+
+            javax.mail.Session session = Session.getInstance(properties, new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(stringSenderEmail, passwordSenderEmail);
+                }
+            });
+            MimeMessage mimeMessage = new MimeMessage(session);
+            mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(receiverEmail));
+            mimeMessage.setSubject("eDermaCare: Welcome to eDermaCare - Doctor Verification Complete!");
+            String emailBody = "Dr. " + dermatologistName + ",\n\n" +
+                    "We are thrilled to inform you that your verification process for eDermaCare has been successfully completed! \n" +
+                    "Welcome aboard to our esteemed network of healthcare professionals dedicated to providing top-notch dermatological care.\n"+
+                    "\n" +
+                    "We look forward to a fruitful collaboration and making a positive impact on the lives of our patients together.\n"+
+                    "\n" +
+                    "Best regards,\neDermaCare Team";
+            mimeMessage.setText(emailBody);
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Transport.send(mimeMessage);
+                    } catch (MessagingException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            thread.start();
+
+        } catch (AddressException e) {
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void redirectToLogin() {
+        Intent intent = new Intent(SignUpDermatologistActivity2.this, LoginDermatologistActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

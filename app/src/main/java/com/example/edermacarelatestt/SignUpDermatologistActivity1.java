@@ -33,7 +33,7 @@ public class SignUpDermatologistActivity1 extends AppCompatActivity {
 
     EditText editTextNameD, editTextEmailD, editTextRegistrationNo, editTextRegistrationYear;
     Spinner spinnerStateMedicalCouncil, spinnerGender;
-    TextView loginRedirectD, licenseFileName;
+    TextView loginRedirectD, ImageName;
     Button buttonNextD, buttonUpload;
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri imageUri;
@@ -62,7 +62,7 @@ public class SignUpDermatologistActivity1 extends AppCompatActivity {
         spinnerStateMedicalCouncil = findViewById(R.id.spinner_state_medical_council);
         buttonUpload = findViewById(R.id.dermatologist_upload_button);
         buttonNextD = findViewById(R.id.dermatologist_next_button);
-        licenseFileName=findViewById(R.id.dermatologistFilename);
+        ImageName=findViewById(R.id.dermatologistFilename);
 
         // Set up spinner for State Medical Council selection
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -140,6 +140,7 @@ public class SignUpDermatologistActivity1 extends AppCompatActivity {
                     intent.putExtra("stateMedicalCouncil", stateMedicalCouncil);
                     intent.putExtra("gender", gender);
                     intent.putExtra("imageUri", imageUri.toString());
+                    System.out.println("i passed image uri");
                     startActivity(intent);
                 } else {
                     showAlert("Please upload an image");
@@ -161,8 +162,8 @@ public class SignUpDermatologistActivity1 extends AppCompatActivity {
             if (uri != null) {
                 imageUri = uri;
                 imageNameStr = getFileNameFromUri(imageUri);
-                licenseFileName.setText(imageNameStr);
-                uploadImage(); // Upload image and handle URL in uploadImage method
+                ImageName.setText(imageNameStr);
+//                uploadImage(); // Upload image and handle URL in uploadImage method
             }
         });
 
@@ -238,22 +239,5 @@ public class SignUpDermatologistActivity1 extends AppCompatActivity {
             }
         }
         return result;
-    }
-
-    private void uploadImage() {
-        if (imageUri != null) {
-            String imageName = getFileNameFromUri(imageUri);
-            StorageReference imageRef = storage.getReference().child("dermatologist_images").child(imageName);
-            imageRef.putFile(imageUri)
-                    .addOnSuccessListener(taskSnapshot -> {
-                        imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                            String downloadUrl = uri.toString();
-                            // Store the URL in a global variable or pass it directly to next activity
-                        });
-                    })
-                    .addOnFailureListener(e -> {
-                        showAlert("Failed to upload image");
-                    });
-        }
     }
 }
