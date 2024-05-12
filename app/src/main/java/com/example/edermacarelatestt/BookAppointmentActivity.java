@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -101,6 +102,7 @@ public class BookAppointmentActivity extends AppCompatActivity {
                                     // Load image using Glide with specified dimensions
                                     Glide.with(BookAppointmentActivity.this)
                                             .load(imageURL)
+                                            .transform(new CircleCrop())
                                             .override(dermatologistImageView.getWidth(), dermatologistImageView.getHeight())
                                             .into(dermatologistImageView);
                                 } else {

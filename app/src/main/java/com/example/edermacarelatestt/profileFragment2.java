@@ -23,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -166,9 +167,20 @@ public class profileFragment2 extends AppCompatActivity {
                     editState.setText(state);
                     editExperience.setText(exp);
 
-                    // Load image using Glide
-                    if (image != null && !image.isEmpty()) {
-                        Glide.with(profileFragment2.this).load(image).into(doctorImage);
+                    String imageURL = document.getString("ImageURL");
+                    System.out.println("drkimage"+imageURL);
+                    if (imageURL != null && !imageURL.isEmpty()) {
+                        // Clear any existing image before loading the new one
+                        Glide.with(profileFragment2.this).clear(doctorImage);
+
+                        // Load image using Glide with specified dimensions
+                        Glide.with(profileFragment2.this)
+                                .load(imageURL)
+                                .transform(new CircleCrop())
+                                .override(doctorImage.getWidth(), doctorImage.getHeight())
+                                .into(doctorImage);
+                    } else {
+                        doctorImage.setImageResource(R.drawable.doctor_image);
                     }
                 }
             } else {
@@ -179,35 +191,35 @@ public class profileFragment2 extends AppCompatActivity {
     }
 
     private void resizeAndSetImage(Uri uri) {
-        try {
-            // Decode the URI into a Bitmap
-            Bitmap originalBitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+            try {
+                // Decode the URI into a Bitmap
+                Bitmap originalBitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
 
-            // Resize the originalBitmap to match the target dimensions
-            Bitmap resizedBitmap = Bitmap.createScaledBitmap(originalBitmap, 100, 100, true);
+                // Resize the originalBitmap to match the target dimensions
+                Bitmap resizedBitmap = Bitmap.createScaledBitmap(originalBitmap, 100, 100, true);
 
-            // Create a circular bitmap
-            Bitmap circularBitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(circularBitmap);
-            Paint paint = new Paint();
-            Rect rect = new Rect(0, 0, 100, 100);
-            RectF rectF = new RectF(rect);
-            float radius = Math.min(rectF.width(), rectF.height()) / 2f;
+                // Create a circular bitmap
+                Bitmap circularBitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(circularBitmap);
+                Paint paint = new Paint();
+                Rect rect = new Rect(0, 0, 100, 100);
+                RectF rectF = new RectF(rect);
+                float radius = Math.min(rectF.width(), rectF.height()) / 2f;
 
-            // Draw a circle on the canvas
-            paint.setAntiAlias(true);
-            canvas.drawARGB(0, 0, 0, 0);
-            paint.setColor(0xFF000000);
-            canvas.drawCircle(rectF.centerX(), rectF.centerY(), radius, paint);
+                // Draw a circle on the canvas
+                paint.setAntiAlias(true);
+                canvas.drawARGB(0, 0, 0, 0);
+                paint.setColor(0xFF000000);
+                canvas.drawCircle(rectF.centerX(), rectF.centerY(), radius, paint);
 
-            // Apply the circular mask
-            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-            canvas.drawBitmap(resizedBitmap, rect, rect, paint);
+                // Apply the circular mask
+                paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+                canvas.drawBitmap(resizedBitmap, rect, rect, paint);
 
-            // Set the circularBitmap to doctorImage
-            doctorImage.setImageBitmap(circularBitmap);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+                // Set the circularBitmap to doctorImage
+                doctorImage.setImageBitmap(circularBitmap);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
     }
 }
